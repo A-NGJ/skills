@@ -75,6 +75,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | `research` | either | Fans a question out to parallel `researcher` subagents and reports cited findings. |
 | `pr` | either | Template for pull request bodies: summary, evidence, manual testing, merge danger. |
 | `commit` | either | Atomic commits with `type(scope):` subjects. |
+| `feynman-explain` | either | Explains a topic step by step with one concrete example before the general rule, pitched at the audience. Triggers on "explain" or "clarify". |
 
 ## Agents
 
