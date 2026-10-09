@@ -75,6 +75,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | `research` | either | Fans a question out to parallel `researcher` subagents and reports cited findings. |
 | `pr` | either | Template for pull request bodies: summary, evidence, manual testing, merge danger. |
 | `commit` | either | Atomic commits with `type(scope):` subjects. |
+| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `wayfinding` calls it when you hand off to `orchestrating`. |
 | `feynman-explain` | either | Explains a topic step by step with one concrete example before the general rule, pitched at the audience. Triggers on "explain" or "clarify". |
 
 ## Agents
@@ -104,11 +105,12 @@ These skills come from [mattpocock/skills](https://github.com/mattpocock/skills)
 
 Upstream `grill-with-docs` sets `disable-model-invocation`, which stops the model from loading it. For that reason the skills in this repo load `grilling` and `domain-modeling` directly instead of calling `grill-with-docs`. Run `/grill-with-docs` yourself when you want a grilling session that updates `GLOSSARY.md` and ADRs.
 
-Do not install upstream `triage`, `to-tickets`, `research` or `pr` next to this repo. They share names with the copies here, and the upstream versions differ:
+Do not install upstream `triage`, `to-tickets`, `research`, `pr` or `handoff` next to this repo. They share names with the copies here, and the upstream versions differ:
 
 - `triage` and `to-tickets` set `disable-model-invocation`, so `managing-projects` cannot call them.
 - `research` runs one background agent and ignores the `researcher` tiers.
 - `pr` lacks the Manual Testing section and the Undo field that `orchestrating` relies on.
+- `handoff` sets `disable-model-invocation`, so `wayfinding` cannot call it.
 
 ## Layout
 
@@ -124,6 +126,6 @@ LICENSES/                upstream license texts
 
 ## Credits and licenses
 
-`triage`, `to-tickets`, `research` and `pr` are adapted from [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT, see `LICENSES/mattpocock-skills.txt`). Each carries a `metadata.upstream` entry in its frontmatter. The `pr` summary section comes from Dex Horthy's [`show-me`](https://github.com/humanlayer/humanlayer), described in `skills/pr/CREDITS.md`.
+`triage`, `to-tickets`, `research`, `pr` and `handoff` are adapted from [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT, see `LICENSES/mattpocock-skills.txt`). Each carries a `metadata.upstream` entry in its frontmatter. The `pr` summary section comes from Dex Horthy's [`show-me`](https://github.com/humanlayer/humanlayer), described in `skills/pr/CREDITS.md`.
 
 This repo has no license of its own yet.
