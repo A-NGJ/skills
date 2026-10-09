@@ -38,9 +38,12 @@ sources for gaps in your knowledge, or state what remains unresolved.
 Finish this check when each step follows from an explained relationship
 or an explicitly stated assumption or limit.
 
-During an interactive teaching exchange, ask a short prediction or
-rephrasing question to check the operator's understanding. Use their answer
-to identify gaps and revise the explanation.
+After a substantive explanation, end with one brief "Quick check" question.
+Prefer changing one detail in the worked example and asking the operator
+to predict the result, so they apply the reasoning rather than repeat it.
+Leave the answer for their reply, then use it to identify gaps and revise
+the explanation. Skip the check for simple factual clarifications or when
+the operator requests only an answer.
 
 ## Sources
 
