@@ -56,6 +56,13 @@ A **progress summary** is a pause. It holds Destination, Decisions so far, Open 
 
 ## Finish
 
-The exit criterion is a converged summary the operator confirms as a shared understanding. Write it as the final checkpoint and show it in chat. It is the handoff: to a builder, in this session or a fresh one, or to `managing-projects`, which turns it into an issue for `orchestrating`. Build in this session only on the operator's explicit go-ahead.
+The exit criterion is a converged summary the operator confirms as a shared understanding. Write it as the final checkpoint and show it in chat. Then ask how to hand off, offering these routes:
+
+1. **Fresh session runs `orchestrating`:** call the `handoff` skill, with the issue number and the next-session focus as its argument. Name the handoff file path in chat. Do not load `orchestrating` in this session. Tell the operator to open a new session, load `orchestrating`, and point it at the file.
+2. **`managing-projects`:** turns the summary into an issue for `orchestrating`.
+3. **Build here:** only on the operator's explicit go-ahead.
+4. **Stop:** the summary stays on the issue for a later session.
+
+Done means the operator has picked a route and the route's artifact exists: the handoff file path in chat, the issue updated, or the build started. Choosing a route is not the handoff itself.
 
 Commit durable artifacts, such as glossary entries, ADRs, and scripts, on the issue's linked branch when one exists, otherwise by repository convention. A branch exists only once there is something to commit on it.
