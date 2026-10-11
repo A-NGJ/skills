@@ -75,8 +75,8 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | `research` | either | Fans a question out to parallel `researcher` subagents and reports cited findings. |
 | `pr` | either | Template for pull request bodies: summary, evidence, manual testing, merge danger. |
 | `commit` | either | Atomic commits with `type(scope):` subjects. |
-| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `wayfinding`, `managing-projects`, `orchestrating` and `triage` call it at their session seams, each with its own payload. |
-| `feynman-explain` | either | Explains a topic step by step with one concrete example before the general rule, pitched at the audience. Triggers on "explain" or "clarify". |
+| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `wayfinding` calls it when you hand off to `orchestrating`. |
+| `explain` | either | Explains a topic step by step with one concrete example before the general rule, pitched at the audience. Triggers on "explain" or "clarify". |
 
 ## Agents
 
