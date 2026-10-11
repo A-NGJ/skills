@@ -1,5 +1,5 @@
 ---
-name: feynman-explain
+name: explain
 description: Explain or clarify topics in Feynman style using audience-appropriate language, concrete examples, and reasoning that shows how the topic works. Use when the operator asks to "explain" or "clarify".
 ---
 
