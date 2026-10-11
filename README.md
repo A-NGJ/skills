@@ -75,7 +75,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | `research` | either | Fans a question out to parallel `researcher` subagents and reports cited findings. |
 | `pr` | either | Template for pull request bodies: summary, evidence, manual testing, merge danger. |
 | `commit` | either | Atomic commits with `type(scope):` subjects. |
-| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `wayfinding` calls it when you hand off to `orchestrating`. |
+| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `wayfinding`, `managing-projects`, `orchestrating` and `triage` call it at their session seams, each with its own payload. |
 | `feynman-explain` | either | Explains a topic step by step with one concrete example before the general rule, pitched at the audience. Triggers on "explain" or "clarify". |
 
 ## Agents
@@ -110,7 +110,7 @@ Do not install upstream `triage`, `to-tickets`, `research`, `pr` or `handoff` ne
 - `triage` and `to-tickets` set `disable-model-invocation`, so `managing-projects` cannot call them.
 - `research` runs one background agent and ignores the `researcher` tiers.
 - `pr` lacks the Manual Testing section and the Undo field that `orchestrating` relies on.
-- `handoff` sets `disable-model-invocation`, so `wayfinding` cannot call it.
+- `handoff` sets `disable-model-invocation`, so other skills cannot call it, and it lacks the fixed skeleton and stable path the callers rely on.
 
 ## Layout
 
@@ -122,6 +122,7 @@ skills/roadmap/render.py roadmap renderer (md, html, pptx)
 skills/setup-engineering-skills/
                          templates for GitHub, GitLab and local trackers, labels and domain docs
 LICENSES/                upstream license texts
+GLOSSARY.md              shared vocabulary for handoff documents and their payloads
 ```
 
 ## Credits and licenses
