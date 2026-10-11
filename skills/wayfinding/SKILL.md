@@ -8,7 +8,7 @@ Wayfinding turns a foggy idea into one **fixed-scope work item**: a destination,
 
 ## Start
 
-1. **Load the input.** For an issue, read its body, comments, sub-issues, dependencies, and linked branch; its original purpose bounds the destination, and an earlier wayfinding summary comment is where you resume. For a summary file or a pasted summary, resume from its open questions and fog. Otherwise take the loose idea as stated.
+1. **Load the input.** For an issue, read its body, comments, sub-issues, dependencies, and linked branch; its original purpose bounds the destination, and an earlier wayfinding summary comment is where you resume. For a handoff document or a pasted summary, resume from its open questions and fog. Otherwise take the loose idea as stated.
 2. **Name the destination.** Call the Skill tool for "grilling" and "domain-modeling". The first round settles what the work item delivers.
 3. **Draft candidate research.** List the research questions the destination raises, and hold them until grilling narrows them.
 
@@ -29,7 +29,7 @@ After about six rounds, offer to pause with a progress summary; the operator may
 Write the running summary before dispatching research or a prototype, after a session compaction, and at session end:
 
 - **Issue:** one summary comment, created at the first checkpoint and edited in place after that, so the issue carries a single current summary.
-- **Loose idea:** overwrite `${XDG_STATE_HOME:-~/.local/state}/wayfinding/<slug>.md` and name the path in chat. It survives reboots, and the operator deletes it once the summary has been handed off.
+- **Loose idea:** call the Skill tool for "handoff" with the running summary as Payload and `/wayfinding <slug>` as Next session. The temp directory may lose it; a summary that must last needs an issue, which `managing-projects` creates.
 
 After a session compaction, re-read the checkpoint before continuing; it is the record, and your memory of the session is a lossy copy of it.
 
@@ -58,11 +58,11 @@ A **progress summary** is a pause. It holds Destination, Decisions so far, Open 
 
 The exit criterion is a converged summary the operator confirms as a shared understanding. Write it as the final checkpoint and show it in chat. Then ask how to hand off, offering these routes:
 
-1. **Fresh session runs `orchestrating`:** call the `handoff` skill, with the issue number and the next-session focus as its argument. Name the handoff file path in chat. Do not load `orchestrating` in this session. Tell the operator to open a new session, load `orchestrating`, and point it at the file.
-2. **`managing-projects`:** turns the summary into an issue for `orchestrating`.
+1. **Fresh session runs `orchestrating`** (issue only): call the Skill tool for "handoff" with a link to the summary comment as Payload and `/orchestrating #<n>` as Next session. Do not load `orchestrating` in this session. Tell the operator to open a new session, load `orchestrating`, and point it at the file.
+2. **Fresh session runs `managing-projects`:** call the Skill tool for "handoff" with the converged summary as Payload (a link to it for an issue) and `/managing-projects` as Next session; it turns the summary into an issue for `orchestrating`.
 3. **Build here:** only on the operator's explicit go-ahead.
-4. **Stop:** the summary stays on the issue for a later session.
+4. **Stop:** the summary stays on the issue, or in the loose-idea handoff document, for a later session.
 
-Done means the operator has picked a route and the route's artifact exists: the handoff file path in chat, the issue updated, or the build started. Choosing a route is not the handoff itself.
+The handoff document's Suggested skills section points to the summary's own. Done means the operator has picked a route and the route's artifact exists: the handoff file path in chat, the issue updated, or the build started. Choosing a route is not the handoff itself.
 
 Commit durable artifacts, such as glossary entries, ADRs, and scripts, on the issue's linked branch when one exists, otherwise by repository convention. A branch exists only once there is something to commit on it.
