@@ -9,12 +9,37 @@ metadata:
     license: MIT
 ---
 
-Write a handoff document summarising the current conversation so a fresh agent can continue the work. Save to the temporary directory of the user's OS - not the current workspace.
+Write a handoff document summarising the current conversation so a fresh agent can continue the work.
 
-Include a "suggested skills" section in the document, naming which skills the next agent should call the Skill tool for.
+## Location
 
-Do not duplicate content already captured in other artifacts (specs, plans, ADRs, issues, commits, diffs). Reference them by path or URL instead.
+Save to `$TMPDIR/handoff/<skill>-<target>.md`, using the OS temporary directory, never the workspace. `<skill>` is the skill the next session loads and `<target>` is the issue number or a short slug. Overwrite any existing file at that path: the latest handoff for a target is the only one that counts. Writing it needs no confirmation; name the path in chat once it is written.
+
+## Skeleton
+
+```markdown
+## Next session
+<skill to load> <target>, e.g. `/orchestrating #42`
+## Payload
+<the calling skill's contract, or a link to the tracker record that holds it>
+## Artifacts
+<paths, URLs, branches, worktrees, commit ranges>
+## Live thread
+<what was in flight and why: decisions, rejected options, operator preferences>
+## Suggested skills
+<skills the next agent should call the Skill tool for>
+```
+
+A calling skill names what goes in Payload and Next session. Called directly, leave Payload out unless the conversation produced one, and take Next session from the arguments.
+
+## Rules
+
+The tracker is the record. A handoff document carries only the between-session context not worth a tracker record. Content already captured in other artifacts (issues, comments, specs, plans, ADRs, commits, diffs) is referenced by path or URL, never copied.
 
 Redact any sensitive information, such as API keys, passwords, or personally identifiable information.
 
 If the user passed arguments, treat them as a description of what the next session will focus on and tailor the doc accordingly.
+
+## Receiving
+
+A session started from a handoff document reads it, then re-reads every tracker record it links before acting; where they disagree, the tracker wins.
