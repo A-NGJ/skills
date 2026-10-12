@@ -66,7 +66,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | --- | --- | --- |
 | `setup-engineering-skills` | operator | Configures a repo: tracker, labels, domain docs, workflow states. |
 | `managing-projects` | either | Ranks priorities, manages dependencies and duplicates, and picks the next issue with a brief for the orchestrator. |
-| `wayfinding` | operator | Converges a foggy idea into one fixed-scope work item through grilling, research and prototypes. Ends with a summary comment. |
+| `wayfinding` | operator | Converges a foggy idea into one fixed-scope work item through grilling, research and prototypes. Ends with a converged summary. |
 | `orchestrating` | operator | Runs the implement and review loop on one issue in a worktree, then opens a pull request. Stops after three `Changes Required` verdicts. |
 | `roadmap` | either | Builds a milestone roadmap from the tracker as theme swimlanes over weeks, in Markdown, HTML or PowerPoint. |
 | `model-routing` | either | Picks the fast, standard or deep agent tier before a subagent is dispatched. |
@@ -75,7 +75,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | `research` | either | Fans a question out to parallel `researcher` subagents and reports cited findings. |
 | `pr` | either | Template for pull request bodies: summary, evidence, manual testing, merge danger. |
 | `commit` | either | Atomic commits with `type(scope):` subjects. |
-| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `wayfinding` calls it when you hand off to `orchestrating`. |
+| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `wayfinding` calls it to save a loose idea's progress and to hand off to `orchestrating` or `managing-projects`. |
 | `explain` | either | Explains a topic step by step with one concrete example before the general rule, pitched at the audience. Triggers on "explain" or "clarify". |
 
 ## Agents

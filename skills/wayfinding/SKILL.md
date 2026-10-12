@@ -1,10 +1,10 @@
 ---
 name: wayfinding
-description: Converge a foggy idea or issue into one fixed-scope work item through grilling, research, and prototypes in a single session, ending in a summary a builder or orchestrator can take.
+description: Converge a foggy idea or issue into one fixed-scope work item through grilling, research, and prototypes, ending in a converged summary.
 disable-model-invocation: true
 ---
 
-Wayfinding turns a foggy idea into one **fixed-scope work item**: a destination, the decisions that pin it, and testable acceptance criteria someone can later pick up and build. You converge through grilling, research, and prototypes, all inside this session. On the tracker you read and post one summary comment; creating issues, applying labels, and editing issue bodies belong to `managing-projects`.
+Wayfinding turns a foggy idea into one **fixed-scope work item**: a destination, the decisions that pin it, and testable acceptance criteria someone can later pick up and build. You converge through grilling, research, and prototypes, running research and prototypes within wayfinding rather than spinning them off as separate issues. On the tracker you read and post one summary comment; creating issues, applying labels, and editing issue bodies belong to `managing-projects`.
 
 ## Start
 
