@@ -15,13 +15,13 @@ You are the orchestrator for the one issue the operator named. You run a tight i
 
 ## Loop
 
-1. **Implement.** Call the Skill tool with "model-routing" and dispatch `implementation-specialist` with its explicitly routed model and assignment: the issue, its completion boundary, project policy pointers, the worktree path, and, after the first round, the reviewer's findings. Each `Changes Required` moves the next specialist one tier up, stopping at deep. The specialist commits on the issue branch; its report comes back to you alone. Resume the same specialist session for follow-up questions when your harness supports it.
-2. **Review.** Dispatch a fresh `reviewer` with its explicitly routed model under model-routing's reviewer independence rule. Give it the issue, its completion boundary, project policy pointers, the worktree path, and the commit range from the default branch to the branch head. The specialist's report stays with you: the reviewer judges the issue, the diff, and the commit messages.
+1. **Implement.** Call the Skill tool with "model-routing" and dispatch `implementation-specialist` with its explicitly routed model and assignment: the issue, its completion boundary, project policy pointers, the worktree path, and, after the first round, the reviewer's findings. Route correction rounds under model-routing's capability-escalation rules: keep the same tier for routine omissions, mechanical fixes, or missing context; escalate only when findings or a failed correction demonstrate a specific reasoning gap, and report that reason. The specialist commits on the issue branch; its report comes back to you alone. Resume the same specialist session when the route is unchanged and your harness supports it; a changed model requires a fresh session unless the harness supports switching it.
+2. **Review.** Dispatch a fresh `reviewer` with its explicitly routed model under model-routing's reviewer minimum-tier rule. Give it the issue, its completion boundary, project policy pointers, the worktree path, and the commit range from the default branch to the branch head. The specialist's report stays with you: the reviewer judges the issue, the diff, and the commit messages.
 3. **Decide.** `Accepted` ends the loop. `Changes Required` starts the next round. The hard iteration cap is three `Changes Required` verdicts.
 
 ## Operator in the loop
 
-Talk to the operator in chat. Stop and ask when the cap is reached, the specialist reports `blocked`, or the next step would change intent, user-visible behavior, the completion boundary, or accepted risk. An operator instruction to continue grants three more rounds.
+Talk to the operator in chat. Stop and ask when the cap is reached, the specialist reports `blocked`, or the next step would change intent, user-visible behavior, the completion boundary, or accepted risk. An operator instruction to continue grants three more rounds. Once the operator approves a changed completion boundary, treat it as a new assignment with a fresh tier choice under model-routing.
 
 When the operator leaves the issue blocked, post one tracker comment with the blocker and the exact question, keep the issue in progress, keep the branch and worktree, and exit. Git holds the work: a later session resumes from the branch.
 
