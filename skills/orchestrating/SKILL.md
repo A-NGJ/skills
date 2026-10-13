@@ -15,8 +15,8 @@ You are the orchestrator for the one issue the operator named. You run a tight i
 
 ## Loop
 
-1. **Implement.** Call the Skill tool with "model-routing" and dispatch the routed `implementation-specialist` tier variant with: the issue, its completion boundary, project policy pointers, the worktree path, and, after the first round, the reviewer's findings. Each `Changes Required` moves the next specialist one tier up, stopping at deep. The specialist commits on the issue branch; its report comes back to you alone. Resume the same specialist session for follow-up questions when your harness supports it.
-2. **Review.** Route a fresh `reviewer` tier variant under model-routing's reviewer rule. Give it the issue, its completion boundary, project policy pointers, the worktree path, and the commit range from the default branch to the branch head. The specialist's report stays with you: the reviewer judges the issue, the diff, and the commit messages.
+1. **Implement.** Call the Skill tool with "model-routing" and dispatch `implementation-specialist` with its explicitly routed model and assignment: the issue, its completion boundary, project policy pointers, the worktree path, and, after the first round, the reviewer's findings. Each `Changes Required` moves the next specialist one tier up, stopping at deep. The specialist commits on the issue branch; its report comes back to you alone. Resume the same specialist session for follow-up questions when your harness supports it.
+2. **Review.** Dispatch a fresh `reviewer` with its explicitly routed model under model-routing's reviewer independence rule. Give it the issue, its completion boundary, project policy pointers, the worktree path, and the commit range from the default branch to the branch head. The specialist's report stays with you: the reviewer judges the issue, the diff, and the commit messages.
 3. **Decide.** `Accepted` ends the loop. `Changes Required` starts the next round. The hard iteration cap is three `Changes Required` verdicts.
 
 ## Operator in the loop
@@ -35,7 +35,7 @@ When the session ends at the cap without an instruction to continue, or on a blo
 
 ## Boundaries
 
-- **Subagents.** Tier variants of `implementation-specialist` and `reviewer` are the only subagents you dispatch.
+- **Subagents.** `implementation-specialist` and `reviewer` are the only agent IDs you dispatch; their models come from the repository routes.
 - **Writes.** You own the issue's state, its branch link, the blocked comment, the handoff document, the worktree, and the pull request. Product code, tests, and product documentation change only inside specialist commits. Approval and merge belong to the operator.
 
 ## Exit criterion
