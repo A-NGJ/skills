@@ -1,6 +1,6 @@
 ---
 name: setup-engineering-skills
-description: "Configure this repo for the engineering skills: set up its issue tracker, label vocabulary, and domain doc layout. Run once before first use of the other engineering skills."
+description: "Configure this repo for the engineering skills: capture project context and set up its issue tracker, label vocabulary, and domain doc layout. Run once before first use of the other engineering skills."
 disable-model-invocation: true
 ---
 
@@ -8,6 +8,7 @@ disable-model-invocation: true
 
 Scaffold the per-repo configuration that the engineering skills assume:
 
+- **Project context**: a short description in the repo's root agent instruction file, alongside the policy links
 - **Issue tracker**: where issues live (GitHub by default; local markdown is also supported out of the box)
 - **Labels**: the strings used for the five canonical triage roles, plus any category or priority labels this repo's tracker already carries
 - **Domain docs**: where `GLOSSARY.md` and ADRs live, and the consumer rules for reading them (single-GLOSSARY only — this variant has no map layout)
@@ -21,7 +22,8 @@ This is a prompt-driven skill, not a deterministic script. Explore, present what
 Look at the current repo to understand its starting state. Read whatever exists; don't assume:
 
 - `git remote -v` and `.git/config`: is this a GitHub, GitHub Enterprise Server, or GitLab repo? Which one, and which host?
-- `AGENTS.md` and `CLAUDE.md` at the repo root: does either exist? Is there already an `## Agent skills` section in either?
+- `AGENTS.md` and `CLAUDE.md` at the repo root: does either exist? Is there already an `## Agent skills` section in either? Identify any existing project description, whether under `## Project` or elsewhere.
+- `README.md` and relevant project docs: what evidence is there for the project's purpose, audience, responsibilities, and non-goals?
 - `GLOSSARY.md` at the repo root and `docs/adr/`
 - `docs/agents/`: does this skill's prior output already exist?
 - `.scratch/`: a sign that a local-markdown issue tracker convention is already in use
@@ -34,6 +36,16 @@ Look at the current repo to understand its starting state. Read whatever exists;
 Summarise what's present and what's missing. Then take the sections in order. One section, one answer, then the next.
 
 Lead each section with the recommended answer so the user can accept it in a word. Give a one-line explainer only when the choice genuinely branches; skip the section entirely when exploration already settled it (Section B when `triage` isn't installed).
+
+**Project context.** Before Section A, ask these three questions one at a time, leading each with an answer suggested by repository evidence. Ask the user to confirm or correct it; where the repo leaves a gap, ask rather than inventing an answer.
+
+1. What does this project do?
+2. Who is it for?
+3. What are its main responsibilities and explicit non-goals?
+
+If a project description already exists, first propose keeping it or revising it. Keeping it satisfies this section; revising it uses the three questions to settle the changes. Preserve the existing description unless the user approves a revision, and include any proposed move or consolidation in the draft.
+
+Condense confirmed answers into 2–4 sentences for `## Project` in the root instruction file selected in step 4. Keep this inline, alongside `## Agent skills`; the existing policy configuration and links stay intact. Include the description in step 3's draft before writing.
 
 **Section A: Issue tracker.**
 
@@ -75,7 +87,8 @@ If neither tier's labels exist in the tracker, skip both silently — don't crea
 
 Show the user a draft of:
 
-- The `## Agent skills` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules)
+- The `## Project` section, or the existing description to keep, including any proposed move or consolidation
+- The `## Agent skills` block to add to the same `CLAUDE.md` / `AGENTS.md` (see step 4 for selection rules)
 - The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, and `docs/agents/labels.md` (the last only when `triage` is installed)
 
 Let them edit before writing.
@@ -89,6 +102,16 @@ Let them edit before writing.
 - If neither exists, ask the user which one to create; don't pick for them.
 
 Never create `AGENTS.md` when `CLAUDE.md` already exists (or vice versa); always edit the one that's already there.
+
+For a new description, add this section in the same file before `## Agent skills`:
+
+```markdown
+## Project
+
+[2–4 confirmed sentences about purpose, audience, main responsibilities, and explicit non-goals.]
+```
+
+When keeping an existing description, leave it unchanged in its current location. When revising, update it in-place; move or consolidate it into `## Project` only as approved in step 3. If none exists, add the section once. Preserve unrelated instruction text.
 
 If an `## Agent skills` block already exists in the chosen file, update its contents in-place rather than appending a duplicate. Don't overwrite user edits to the surrounding sections.
 

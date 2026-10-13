@@ -56,7 +56,9 @@ Every agent file ships with `model: ""`. Set a model in each one before use. See
 
 ### Per-repo setup
 
-In each repo you want to use these skills on, run `/setup-engineering-skills` once. It asks for your issue tracker (GitHub, GitLab or local markdown), your label names and where domain docs live. It writes `docs/agents/issue-tracker.md`, `docs/agents/labels.md` and `docs/agents/domain.md`, and adds an `## Agent skills` block to `AGENTS.md` or `CLAUDE.md`. `orchestrating` refuses to start until `issue-tracker.md` has a **Workflow state** section.
+In each repo you want to use these skills on, run `/setup-engineering-skills` once. It asks what the project does, who it serves, and its main responsibilities and non-goals, suggesting answers from the repo for you to confirm. It puts the confirmed 2–4 sentence description under `## Project` in `AGENTS.md` or `CLAUDE.md`, alongside the existing `## Agent skills` policy links. Existing project context is kept or revised only with your approval.
+
+The existing setup also configures your issue tracker (GitHub, GitLab or local markdown), label vocabulary and domain docs. It writes `docs/agents/issue-tracker.md` and `docs/agents/domain.md`, plus `docs/agents/labels.md` when `triage` is installed. `orchestrating` refuses to start until `issue-tracker.md` has a **Workflow state** section.
 
 ## Skills
 
@@ -64,7 +66,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 
 | Skill | Started by | What it does |
 | --- | --- | --- |
-| `setup-engineering-skills` | operator | Configures a repo: tracker, labels, domain docs, workflow states. |
+| `setup-engineering-skills` | operator | Captures project context and configures a repo: tracker, labels, domain docs, workflow states. |
 | `managing-projects` | either | Ranks priorities, manages dependencies and duplicates, and picks the next issue with a brief for the orchestrator. |
 | `wayfinding` | operator | Converges a foggy idea into one fixed-scope work item through grilling, research and prototypes. Ends with a converged summary. |
 | `orchestrating` | operator | Runs the implement and review loop on one issue in a worktree, then opens a pull request. Stops after three `Changes Required` verdicts. |
