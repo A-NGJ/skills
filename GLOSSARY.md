@@ -16,6 +16,10 @@ _Avoid_: content, body
 A payload that tells an orchestrator which issue to implement, why now, and its completion boundary quoted from the issue.
 _Avoid_: brief block, start prompt
 
+**Alignment gate**:
+The final check that the operator and orchestrator share an understanding of an issue's outcome, scope, acceptance criteria, chosen design, and consequential assumptions or trade-offs.
+_Avoid_: quick grilling, preflight grilling
+
 **Agent brief**:
 A tracker comment that is the authoritative specification an AFK agent works from when an issue is ready for an agent.
 _Avoid_: spec comment, ticket brief
