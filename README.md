@@ -63,7 +63,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | `setup-engineering-skills` | operator | Captures project context and configures a repo: tracker, labels, domain docs, workflow states. |
 | `managing-projects` | either | Ranks priorities, manages dependencies and duplicates, and picks the next issue with a brief for the orchestrator. |
 | `wayfinding` | operator | Converges a foggy idea into one fixed-scope work item through grilling, research and prototypes. Ends with a converged summary. |
-| `orchestrating` | operator | Runs the implement and review loop on one issue in a worktree, then opens a pull request. Stops after three `Changes Required` verdicts. |
+| `orchestrating` | operator | Plans one issue into steps, implements each step in a fresh specialist session in one worktree, reviews the result, then opens a pull request. Stops after three `Changes Required` verdicts per issue. |
 | `roadmap` | either | Builds a milestone roadmap from the tracker as theme swimlanes over weeks, in Markdown, HTML or PowerPoint. |
 | `model-routing` | either | Resolves a required repository model route per agent and tier before dispatch. |
 | `triage` | either | Moves issues and external PRs through triage roles and writes agent-ready briefs. |
@@ -80,7 +80,7 @@ The skills expect these externally supplied roles, with one definition each. `mo
 
 | Role | Permissions | Used by |
 | --- | --- | --- |
-| `implementation-specialist` | Edits and commits in the issue worktree. Cannot dispatch other agents. | `orchestrating` |
+| `implementation-specialist` | Plan mode reads only and returns an implementation plan; step mode edits and commits one step in the issue worktree. Cannot dispatch other agents. | `orchestrating` |
 | `reviewer` | Read-only. Returns `Accepted` or `Changes Required`. | `orchestrating` |
 | `researcher` | Read-only, no shell. Reads files and the web. | `research`, `managing-projects` |
 

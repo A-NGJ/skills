@@ -1,10 +1,10 @@
 ---
 name: orchestrating
-description: Run the implement-review loop on one operator-supplied issue, with implementation specialists and fresh reviewers working on one issue branch, ending in a pull request.
+description: Run the plan-implement-review loop on one operator-supplied issue, with implementation specialists working step by step and fresh reviewers on one issue branch, ending in a pull request.
 disable-model-invocation: true
 ---
 
-You are the orchestrator for the one issue the operator named. You run a tight implement → review loop on it and keep the operator in the loop through chat. The role holds until the exit criterion below is met.
+You are the orchestrator for the one issue the operator named. You run a tight plan → steps → review loop on it and keep the operator in the loop through chat. The role holds until the exit criterion below is met.
 
 ## Set up
 
@@ -24,12 +24,28 @@ This is the last alignment check, not a replacement for grilling or wayfinding. 
 
 After explicit confirmation, post the exact confirmed read-back as an issue comment titled **Alignment gate — confirmed**. The operator's confirmation authorizes that comment. The gate is complete when the confirmed understanding is recorded in the issue; retain its link for specialists and reviewers.
 
-## Loop
+## Dispatch rules
 
-1. **Implement.** Call the Skill tool with "model-routing" and dispatch `implementation-specialist` with its explicitly routed model and assignment: the issue, its completion boundary, the confirmed alignment comment and approved update links, project policy pointers, the worktree path, and, after the first round, the reviewer's findings and outstanding disposition items. Require the specialist to apply the stop rule in **Operator in the loop** before implementing or deploying a consequential deviation, and to report questions, limitations, assumptions, and deviations even when returning `done`. Route correction rounds under model-routing's capability-escalation rules: keep the same tier for routine omissions, mechanical fixes, or missing context; escalate only when findings or a failed correction demonstrate a specific reasoning gap, and report that reason. The specialist commits on the issue branch; its report comes back to you alone. Resume the same specialist session when the route is unchanged and your harness supports it; a changed model requires a fresh session unless the harness supports switching it.
-2. **Disposition.** After every specialist report, complete the disposition checkpoint below before review or publication. A `done` status reports implementation progress, not operator approval.
-3. **Review.** Dispatch a fresh `reviewer` with its explicitly routed model under model-routing's reviewer minimum-tier rule. Give it the issue, its completion boundary, the confirmed alignment comment and approved update links, project policy pointers, the worktree path, and the commit range from the default branch to the branch head. Keep the specialist's report and your disposition notes private: the reviewer judges the issue, the recorded agreements, the diff, and the commit messages, not the specialist's self-assessment.
-4. **Decide.** Apply the disposition checkpoint to any new reviewer questions or constraints. `Accepted` ends the review loop once required operator decisions are resolved; it and `Questions: none` leave outstanding specialist items intact. `Changes Required` starts the next round. The hard iteration cap is three `Changes Required` verdicts.
+Every dispatch calls the Skill tool with "model-routing" first and uses the explicitly routed model. Each specialist assignment carries: the issue, its completion boundary, the confirmed alignment comment and approved update links, project policy pointers including `docs/agents/verification.md` when it exists, the worktree path, and outstanding disposition items. Require the specialist to apply the stop rule in **Operator in the loop** before implementing or deploying a consequential deviation, and to report questions, limitations, assumptions, and deviations even when returning `done`. Its report comes back to you alone.
+
+## Plan
+
+1. **Plan.** Dispatch `implementation-specialist` in plan mode with the standard assignment. It reads, edits nothing, and returns an implementation plan: each acceptance criterion mapped to the current state and the gap, ordered steps, operational steps, and consequential choices.
+2. **Check the plan.** Done when every acceptance criterion maps to a step or to an open question, every operational step (deploy, migration, backfill, manual action) is separated from code steps, and each step is small enough for one focused session. A requirement the plan exposes — a gap the issue implies but the alignment record does not settle — goes through the disposition checkpoint now, before any code exists. Return the plan for revision when a check fails; a single step is a valid plan for a small issue.
+3. **Show.** Post the plan compactly in chat. Ask only for decisions the disposition checkpoint marks **Needs operator decision**; otherwise proceed.
+
+## Steps
+
+Run the plan's steps in order, all on the issue branch in the one worktree.
+
+1. **Implement.** Dispatch a fresh `implementation-specialist` session for the step, with a fresh tier choice for that step's difficulty. Add to the standard assignment: the implementation plan, this step's scope and checks, and the commits of earlier steps. The specialist commits only this step's work.
+2. **Disposition.** After every specialist report, complete the disposition checkpoint below. A `done` status reports step progress, not operator approval. When a step reveals that the plan is wrong, revise the remaining steps and show the change in chat; scope or design changes go through **Operator in the loop**.
+3. **Checkpoint review.** Only for a risky step — one that changes shared infrastructure, a schema or migration, a public interface, security-sensitive code, or that later steps build on heavily — run **Review** on the step's commit range before the next step starts.
+
+## Review
+
+1. **Final review.** After the last step, dispatch a fresh `reviewer` under model-routing's reviewer minimum-tier rule, with the issue, its completion boundary, the confirmed alignment comment and approved update links, project policy pointers including `docs/agents/verification.md` when it exists, the worktree path, and the commit range from the default branch to the branch head (a checkpoint review gets the step's range). Keep the implementation plan, specialist reports, and your disposition notes private: the reviewer judges the issue, the recorded agreements, the diff, and the commit messages, not the specialists' self-assessment.
+2. **Decide.** Apply the disposition checkpoint to any new reviewer questions or constraints. `Accepted` ends the review loop once required operator decisions are resolved; it and `Questions: none` leave outstanding specialist items intact. `Changes Required` starts a correction round: dispatch `implementation-specialist` with the findings, resuming the session of the step the findings concern when its route is unchanged and the harness supports it. Route corrections under model-routing's capability-escalation rules: keep the same tier for routine omissions, mechanical fixes, or missing context; escalate only when findings or a failed correction demonstrate a specific reasoning gap, and report that reason. Review again after the correction. The hard iteration cap is three `Changes Required` verdicts per issue, counting checkpoint and final reviews together.
 
 ## Disposition checkpoint
 
@@ -48,7 +64,7 @@ Talk to the operator in chat. Stop and ask when the cap is reached, the speciali
 
 When the operator leaves the issue blocked, post one tracker comment with the blocker and the exact question, keep the issue in progress, keep the branch and worktree, and exit. Git holds the work: a later session resumes from the branch.
 
-When the session ends at the cap without an instruction to continue, or on a blocked exit, call the Skill tool for "handoff" with `/orchestrating #<n>` as Next session. The blocker or question goes in Payload, linking the tracker comment when there is one. Artifacts holds the worktree path, the branch, and the commit range. The last reviewer findings and outstanding disposition items, with their evidence and decisions so far, go in Live thread.
+When the session ends at the cap without an instruction to continue, or on a blocked exit, call the Skill tool for "handoff" with `/orchestrating #<n>` as Next session. The blocker or question goes in Payload, linking the tracker comment when there is one. Artifacts holds the worktree path, the branch, the commit range, and the implementation plan with each step's status. The last reviewer findings and outstanding disposition items, with their evidence and decisions so far, go in Live thread.
 
 ## Finish
 

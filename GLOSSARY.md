@@ -20,6 +20,14 @@ _Avoid_: brief block, start prompt
 The final check that the operator and orchestrator share an understanding of an issue's outcome, scope, acceptance criteria, chosen design, and consequential assumptions or trade-offs.
 _Avoid_: quick grilling, preflight grilling
 
+**Implementation plan**:
+The output of an implementation specialist's plan mode: each acceptance criterion mapped to its current state and gap, ordered steps, operational steps, and consequential choices.
+_Avoid_: task list, breakdown
+
+**Step**:
+One ordered unit of an implementation plan, implemented by a fresh implementation specialist session on the shared issue branch.
+_Avoid_: subtask, phase
+
 **Agent brief**:
 A tracker comment that is the authoritative specification an AFK agent works from when an issue is ready for an agent.
 _Avoid_: spec comment, ticket brief
