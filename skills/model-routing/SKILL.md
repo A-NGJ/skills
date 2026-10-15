@@ -48,4 +48,6 @@ These model references are placeholders, not defaults. A tier may use the same m
 
 A `reviewer` must use at least equal or more capable model than the `implementation-specialist` whose work it reviews.
 
-`fast` implementation specialst can be reviewed by `fast`, `standard`, or `deep` tier reviewers. `standard` by `standard` or `deep`. `deep` only by `deep`.
+`fast` implementation specialist can be reviewed by `fast`, `standard`, or `deep` tier reviewers. `standard` by `standard` or `deep`. `deep` only by `deep`.
+
+When several specialist sessions contributed to the reviewed commit range, the reviewer's minimum is the highest tier among them.
