@@ -12,6 +12,7 @@ Scaffold the per-repo configuration that the engineering skills assume:
 - **Issue tracker**: where issues live (GitHub by default; local markdown is also supported out of the box)
 - **Labels**: the strings used for the five canonical triage roles, plus any category or priority labels this repo's tracker already carries
 - **Domain docs**: where `GLOSSARY.md` and ADRs live, and the consumer rules for reading them (single-GLOSSARY only — this variant has no map layout)
+- **Verification**: the test and check commands agents run, when `orchestrating` is installed
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
 
@@ -29,7 +30,7 @@ Look at the current repo to understand its starting state. Read whatever exists;
 - `.scratch/`: a sign that a local-markdown issue tracker convention is already in use
 - Existing tracker labels (`gh label list` / `glab label list`, or ask if neither CLI is available): do labels beyond the five triage roles already exist — a bug/enhancement/decision-style category split, or a priority scale? Their presence decides whether Section B offers those extra tiers.
 - Is the `triage` skill installed? (a `triage` skill folder alongside this one, or `triage` in your available skills.) This decides whether Section B runs at all.
-- Is the `orchestrating` skill installed? This decides whether Section D runs. If it is, also check for a GitHub Project linked to the repo (`gh project list --owner <owner>`), existing `todo` / `in-progress` labels, and any documented branch naming convention (`CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`).
+- Is the `orchestrating` skill installed? This decides whether Section D runs. If it is, also check for a GitHub Project linked to the repo (`gh project list --owner <owner>`), existing `todo` / `in-progress` labels, and any documented branch naming convention (`CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`), plus test and check commands for Section E.
 
 ### 2. Present findings and ask
 
@@ -83,13 +84,15 @@ If neither tier's labels exist in the tracker, skip both silently — don't crea
 - **State.** If exploration found a project board, propose recording it: its name or URL and its in-progress column. Otherwise propose the fallback labels `todo` and `in-progress`; a closed issue counts as done, so there is no `done` label. Create any missing fallback labels once the user confirms.
 - **Branch naming.** If exploration found a documented convention, propose recording it. Otherwise propose the fallback `<type>/<issue-id>-<slug>`, where type is `feature`, `bugfix`, or `hotfix`.
 
+**Section E: Verification.** Skip this section entirely if the `orchestrating` skill isn't installed. Propose the targeted-test, full-suite, and static-check commands found in exploration (`package.json` scripts, `Makefile`, `pyproject.toml`, CI workflows, `CONTRIBUTING.md`), and ask for the full suite's typical duration and any environment needs or slow, flaky, or interfering fixtures. Record them in `docs/agents/verification.md`; specialists and reviewers run these instead of rediscovering them.
+
 ### 3. Confirm and edit
 
 Show the user a draft of:
 
 - The `## Project` section, or the existing description to keep, including any proposed move or consolidation
 - The `## Agent skills` block to add to the same `CLAUDE.md` / `AGENTS.md` (see step 4 for selection rules)
-- The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, and `docs/agents/labels.md` (the last only when `triage` is installed)
+- The contents of `docs/agents/issue-tracker.md`, `docs/agents/domain.md`, `docs/agents/labels.md` (only when `triage` is installed), and `docs/agents/verification.md` (only when `orchestrating` is installed)
 
 Let them edit before writing.
 
@@ -131,9 +134,13 @@ The block:
 ### Domain docs
 
 Single-GLOSSARY (`GLOSSARY.md` and `docs/adr/` at root). See `docs/agents/domain.md`.
+
+### Verification
+
+Targeted, full-suite, and static-check commands. See `docs/agents/verification.md`.
 ```
 
-Include the `### Labels` sub-block, and write `docs/agents/labels.md`, only when `triage` is installed and Section B ran. When it isn't, both are omitted.
+Include the `### Labels` sub-block, and write `docs/agents/labels.md`, only when `triage` is installed and Section B ran. When it isn't, both are omitted. Include the `### Verification` sub-block, and write `docs/agents/verification.md`, only when `orchestrating` is installed and Section E ran.
 
 Then write the docs files using the seed templates in this skill folder as a starting point:
 
@@ -142,6 +149,7 @@ Then write the docs files using the seed templates in this skill folder as a sta
 - [issue-tracker-local.md](./issue-tracker-local.md): local-markdown issue tracker
 - [labels.md](./labels.md): label mapping — triage roles always; category and priority tiers only if Section B found and confirmed them
 - [domain.md](./domain.md): domain doc consumer rules, single-GLOSSARY layout
+- [verification.md](./verification.md): verification commands, only when Section E ran
 
 For "other" issue trackers, write `docs/agents/issue-tracker.md` from scratch using the user's description.
 

@@ -52,7 +52,7 @@ This repository ships skills, not agent definitions. Supply the required agent p
 
 In each repo you want to use these skills on, run `/setup-engineering-skills` once. It asks what the project does, who it serves, and its main responsibilities and non-goals, suggesting answers from the repo for you to confirm. It puts the confirmed 2–4 sentence description under `## Project` in `AGENTS.md` or `CLAUDE.md`, alongside the existing `## Agent skills` policy links. Existing project context is kept or revised only with your approval.
 
-The existing setup also configures your issue tracker (GitHub, GitLab or local markdown), label vocabulary and domain docs. It writes `docs/agents/issue-tracker.md` and `docs/agents/domain.md`, plus `docs/agents/labels.md` when `triage` is installed. `orchestrating` refuses to start until `issue-tracker.md` has a **Workflow state** section.
+The existing setup also configures your issue tracker (GitHub, GitLab or local markdown), label vocabulary and domain docs. It writes `docs/agents/issue-tracker.md` and `docs/agents/domain.md`, plus `docs/agents/labels.md` when `triage` is installed and `docs/agents/verification.md` (test and check commands) when `orchestrating` is installed. `orchestrating` refuses to start until `issue-tracker.md` has a **Workflow state** section.
 
 ## Skills
 
