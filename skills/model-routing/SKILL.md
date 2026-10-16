@@ -1,13 +1,15 @@
 ---
 name: model-routing
-description: Route subagents through the repository's model map, starting at fast and escalating only for concrete task needs. Use whenever you are about to call a subagent, or when another skill asks you to route one.
+description: Route subagents through the repository's model map, starting at fast and escalating only for concrete task needs. Load before dispatching subagents when these instructions are not retained in context; apply them before every dispatch.
 ---
 
 Keep one agent definition per role, with its instructions and permissions. The definition may omit a model or supply a default for use outside this workflow. In this workflow, the coordinator keeps the agent ID fixed and selects its model from the repository's `.model-routing` file. Built-in and custom agents follow the same process.
 
 ## Route before dispatch
 
-1. **Locate.** Identify the repository or worktree root for the assignment, not necessarily the coordinator's working directory. Read `.model-routing` at that exact root. It is a JSON map from agent IDs to tier-specific model references; see the example below.
+Reuse these instructions while they remain in context; reload the skill when they are no longer retained, including after session compaction. Keep validated maps and resolved model references session-local, keyed by assignment root and runtime. Before each dispatch, confirm the map is still readable and compare its content fingerprint. A changed root or fingerprint requires reading and validating that root's map; a missing or unreadable map closes the required-route gate. Reuse model-availability lookups within the same runtime; refresh them when the runtime or provider/model configuration changes, or the selected model becomes unavailable. Reuse saves lookups, not the fresh tier choice or required-route gate.
+
+1. **Locate.** Identify the repository or worktree root for the assignment, not necessarily the coordinator's working directory. Read and validate `.model-routing` at that exact root on first use or when revalidation is required above. It is a JSON map from agent IDs to tier-specific model references; see the example below.
 2. **Choose.** Start at **fast** for each assignment, including each parallel assignment and new follow-up. Select the lowest tier that can meet its completion boundary; when uncertain, try fast with a bounded brief and check its result.
    - **fast — default.** Codebase exploration, finding files or symbols, mapping callers and data flow, gathering documented facts, routine edits, and focused reviews with explicit checks. The location may be unknown and the work may span many files or sources: search breadth and tool-call count are legwork, not reasoning difficulty.
    - **standard — justified escalation.** The assignment requires substantive synthesis or judgment beyond gathering and checking facts: interacting behavioral changes, non-obvious edge cases, or resolving a concrete conflict in evidence. Name that difficulty and why fast is insufficient.

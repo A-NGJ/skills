@@ -26,7 +26,7 @@ After explicit confirmation, post the exact confirmed read-back as an issue comm
 
 ## Dispatch rules
 
-Every dispatch calls the Skill tool with "model-routing" first and uses the explicitly routed model. Each specialist assignment carries: the issue, its completion boundary, the confirmed alignment comment and approved update links, project policy pointers including `docs/agents/verification.md` when it exists, the worktree path, and outstanding disposition items. Require the specialist to apply the stop rule in **Operator in the loop** before implementing or deploying a consequential deviation, and to report questions, limitations, assumptions, and deviations even when returning `done`. Its report comes back to you alone.
+Before the first dispatch, load `model-routing` if its instructions are not retained in context. Apply it before every dispatch, reusing the loaded instructions and following its revalidation rules. Each specialist assignment carries: the issue, its completion boundary, the confirmed alignment comment and approved update links, project policy pointers including `docs/agents/verification.md` when it exists, the worktree path, and outstanding disposition items. Require the specialist to apply the stop rule in **Operator in the loop** before implementing or deploying a consequential deviation, and to report questions, limitations, assumptions, and deviations even when returning `done`. Its report comes back to you alone.
 
 ## Plan
 
