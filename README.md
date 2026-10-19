@@ -84,7 +84,7 @@ The skills expect these externally supplied roles, with one definition each. `mo
 | `reviewer` | Read-only. Returns `Accepted` or `Changes Required`. | `orchestrating` |
 | `researcher` | Read-only, no shell. Reads files and the web. | `research`, `managing-projects` |
 
-Configure `.model-routing` at each repository/worktree root as a JSON map from agent IDs to `fast`, `standard`, and `deep` model references. Built-in agents can have their own entries alongside custom roles. See [`model-routing`](skills/model-routing/SKILL.md) for the format, required-route gate, and reviewer independence rule. Missing or invalid routes block dispatch; agent defaults and global maps are not fallbacks.
+Configure `.model-routing` at the repository's main checkout as a JSON map from agent IDs to `fast`, `standard`, and `deep` model references. Built-in agents can have their own entries alongside custom roles. See [`model-routing`](skills/model-routing/SKILL.md) for the format, required-route gate, and reviewer tier floor. Missing or invalid routes block dispatch; agent defaults and global maps are not fallbacks.
 
 The file is a skill convention, not native runtime configuration. The coordinator must be able to select the routed model explicitly when dispatching. Existing installations should keep one profile per role and remove old `-fast` and `-deep` copies after preserving their model choices in repository routes. Removing the templates from this repository does not migrate or delete installed profiles.
 
