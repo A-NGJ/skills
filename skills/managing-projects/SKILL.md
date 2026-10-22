@@ -18,32 +18,7 @@ The operator manages people and makes product decisions. You keep the issue trac
 9. **Return top picks.** Product implementation happens elsewhere; the operator picks what to start. When asked what to work on, return up to three ranked issues, more only when several are urgent at the same time. For each: number, title, one line on why now, and any open blocker. When the operator picks one, write an [orchestrator brief](#orchestrator-brief) for it.
 10. **Close out.** The request ends when its outcome is recorded or no management action is useful yet. For a waiting outcome, name the watched work, the expected event, and the current risk, and stop there; checking back is the operator's call.
 
-## Issue descriptions
-
-When drafting or rewriting an issue body, use this concise default. Keep repository-required fields and disclaimers.
-
-- Preserve confirmed facts and requirements as established context.
-- Describe concrete technical work with enough specificity for a developer to act; match detail to the work.
-- Add coordination, approvals, open questions, prerequisites, or other sections only when the request or known constraints require them.
-- Keep context in Goal, work in Scope, and verifiable outcomes in Acceptance criteria. Omit Related when there are no useful links.
-
-```markdown
-## Goal
-
-<Short intended outcome and essential established context.>
-
-## Scope
-
-- <Concrete technical work.>
-
-## Acceptance criteria
-
-- [ ] <Observable outcome a developer can verify.>
-
-## Related
-
-<Useful issue or reference links.>
-```
+**Issue descriptions.** When drafting or rewriting an issue body, read [ISSUE-DESCRIPTION.md](ISSUE-DESCRIPTION.md). Pass its guidance to delegated issue-body writing.
 
 ## Orchestrator brief
 
@@ -62,7 +37,6 @@ Orchestrating reads its completion boundary from the issue, so quote the criteri
 
 ## Other skills and subagents
 
-- **Issue writing.** Pass the issue-description guidance above to delegated issue-body writing, including `to-tickets`; retain genuine blocking relationships. Triage's agent brief is a separate specification, not a replacement issue-body template.
 - **Workflow skills.** Call the Skill tool with "triage" when an issue or external PR needs evaluation, verification, or an agent-ready brief. Call it with "to-tickets" when a plan, spec, or issue needs decomposition into implementation issues. Call it with "prototype" when an issue or sub-issue needs a throwaway prototype to answer a question about logic, a state model, or UI design. Scope prototype work to an existing issue or propose a dedicated sub-issue, naming the question it must answer and its exit criterion. Call it with "roadmap" when the operator wants a stakeholder roadmap of milestones. When the operator supplies a converged summary from `wayfinding`, usually as a handoff document, propose one issue from it, with its acceptance criteria as the completion boundary and its follow-ups and Blocked-on items as candidate further issues. Carry forward the relevant context, exit criterion, and write boundary, then resume managing-projects with the result. Tracker and repository writes still require confirmation under step 6.
 - **Grilling.** Call the Skill tool twice, for "grilling" and "domain-modeling", only when the operator asks, or when focused questions cannot resolve a structural ambiguity.
 - **Investigation.** Tracker reads stay in this session. For codebase or documentation questions, call the Skill tool with "model-routing" and dispatch a `researcher` with its explicitly routed model, one bounded question each. `researcher` is the only subagent this skill dispatches; prioritization, operator interaction, and tracker writes stay with you.
