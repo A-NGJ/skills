@@ -18,7 +18,7 @@ Run grilling rounds until the frontier is empty. Within the rounds:
 
 - **Read back** each ambiguous or garbled answer: state your interpretation and have the operator confirm it in the next round before anything builds on it.
 - **Research.** Resolve straightforward facts directly through read-only inspection. For substantive investigations requiring delegated legwork, call the Skill tool for "research"; its approval of the question list is a question in the current round. Gather the findings before asking the operator to choose an option that depends on them; continue independent frontier questions while research is pending. Findings land in chat and shape the next round. When evidence invalidates an assumption, reopen the affected decision and any decisions that depended on it.
-- **Prototype.** Use concrete scenarios for questions answerable in prose. When running or seeing something can resolve a named uncertainty, identify the question and the decision it will settle, then call the Skill tool for "prototype". The call is exploration-only: capture validated decisions in the summary; the prototype skill's production-integration step waits for a separately authorized build. Build the smallest prototype that answers it within the round, and have the operator pick in the next. Capture it on a throwaway `prototype/<slug>` branch and record the question, verdict, and branch under Evidence.
+- **Prototype.** Use concrete scenarios for questions answerable in prose. When running or seeing something can resolve a named uncertainty, identify the question and the decision it will settle, then call the Skill tool for "prototype". The call is exploration-only: capture validated decisions in the summary; the prototype skill's production-integration step waits for a separately authorized build. Choose isolation before building: repository-dependent prototypes use a separate worktree on a throwaway `prototype/<slug>` branch; standalone demos use the scratchpad. Keep the operator's checkout untouched. Build the smallest prototype that answers the question within the round, and have the operator pick in the next. Commit repository-dependent prototypes on that branch. Record the question, verdict, and branch or standalone artifact path under Evidence.
 - **Scope.** When the idea holds several work items, narrow to one and record the rest as follow-ups.
 - **Blocked on someone else.** Work only another person can do goes under Blocked on, with a precise checklist for them.
 
@@ -46,7 +46,7 @@ A **converged summary** is the exit:
 <For an issue, link to the body's criteria and list any proposed edits as pending; for a loose idea, state verifiable outcomes.>
 ## Files and artifacts
 ## Evidence
-<prototype branches, research citations>
+<prototype branches or standalone artifact paths, research citations>
 ## Follow-ups
 ## Blocked on
 ## Open questions
