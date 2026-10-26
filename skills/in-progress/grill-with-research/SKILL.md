@@ -1,14 +1,14 @@
 ---
-name: wayfinding
+name: grill-with-research
 description: Converge a foggy idea or issue into one fixed-scope work item through grilling, research, and prototypes, ending in a converged summary.
 disable-model-invocation: true
 ---
 
-Wayfinding turns a foggy idea into one **fixed-scope work item**: a destination, the decisions that pin it, and testable acceptance criteria someone can later pick up and build. You converge through grilling, research, and prototypes, running research and prototypes within wayfinding rather than spinning them off as separate issues. On the tracker you read and post one summary comment; creating issues, applying labels, and editing issue bodies belong to `managing-projects`.
+`grill-with-research` turns a foggy idea into one **fixed-scope work item**: a destination, the decisions that pin it, and testable acceptance criteria someone can later pick up and build. You converge through grilling, research, and prototypes, running research and prototypes within grill-with-research rather than spinning them off as separate issues. On the tracker you read and post one summary comment; creating issues, applying labels, and editing issue bodies belong to `managing-projects`.
 
 ## Start
 
-1. **Load the input.** For an issue, read its body, comments, sub-issues, dependencies, and linked branch; its original purpose bounds the destination, and an earlier wayfinding summary comment is where you resume. For a handoff document or a pasted summary, resume from its open questions and fog. Otherwise take the loose idea as stated.
+1. **Load the input.** For an issue, read its body, comments, sub-issues, dependencies, and linked branch; its original purpose bounds the destination, and an earlier grill-with-research summary comment is where you resume. For a handoff document or a pasted summary, resume from its open questions and fog. Otherwise take the loose idea as stated.
 2. **Name the destination.** Call the Skill tool for "grilling" and "domain-modeling". The first round settles what the work item delivers.
 3. **Draft candidate research.** List the research questions the destination raises, and hold them until grilling narrows them.
 
@@ -29,7 +29,7 @@ After about six rounds, offer to pause with a progress summary; the operator may
 Write the running summary before dispatching research or a prototype, after a session compaction, and at session end:
 
 - **Issue:** one summary comment, created at the first checkpoint and edited in place after that. Link to the authoritative body; record decisions, evidence, and proposed body changes rather than maintaining a second specification. Proposed changes remain pending until `managing-projects` applies the operator-approved body update.
-- **Loose idea:** call the Skill tool for "handoff" with the running summary as Payload and `/wayfinding <slug>` as Next session. The temp directory may lose it; a summary that must last needs an issue, which `managing-projects` creates.
+- **Loose idea:** call the Skill tool for "handoff" with the running summary as Payload and `/grill-with-research <slug>` as Next session. The temp directory may lose it; a summary that must last needs an issue, which `managing-projects` creates.
 
 After a session compaction, re-read the checkpoint before continuing; it is the record, and your memory of the session is a lossy copy of it.
 

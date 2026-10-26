@@ -5,11 +5,11 @@ Composable agent skills for working an issue tracker: researching, scoping, prio
 Each skill stands alone. Start from whichever fits your situation and skip the rest.
 
 - **`research`**: you need facts from docs, APIs or code, gathered with citations.
-- **`wayfinding`**: an idea or issue is still foggy and needs to become one fixed-scope work item.
+- **`grill-with-research`**: an idea or issue is still foggy and needs to become one fixed-scope work item.
 - **`managing-projects`**: you don't know what to work on next, or the tracker needs re-ranking.
 - **`orchestrating`**: the issue is clear and you want it implemented, reviewed and opened as a pull request.
 
-They compose in any order, but none requires another. For example, `orchestrating` works on any issue you name, whether or not `wayfinding` touched it first. The one prerequisite is running `setup-engineering-skills` once per repo, because `orchestrating` won't start without it.
+They compose in any order, but none requires another. For example, `orchestrating` works on any issue you name, whether or not `grill-with-research` touched it first. The one prerequisite is running `setup-engineering-skills` once per repo, because `orchestrating` won't start without it.
 
 ## Requirements
 
@@ -62,7 +62,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | --- | --- | --- |
 | `setup-engineering-skills` | operator | Captures project context and configures a repo: tracker, labels, domain docs, workflow states. |
 | `managing-projects` | either | Ranks priorities, manages dependencies and duplicates, and picks the next issue with a brief for the orchestrator. |
-| `wayfinding` | operator | Converges a foggy idea into one fixed-scope work item through grilling, research and prototypes. Ends with a converged summary. |
+| `grill-with-research` | operator | Converges a foggy idea into one fixed-scope work item through grilling, research and prototypes. Ends with a converged summary. |
 | `orchestrating` | operator | Plans one issue into steps, implements each step in a fresh specialist session in one worktree, reviews the result, then opens a pull request. Stops after three `Changes Required` verdicts per issue. |
 | `roadmap` | either | Builds a milestone roadmap from the tracker as theme swimlanes over weeks, in Markdown, HTML or PowerPoint. |
 | `model-routing` | either | Resolves a required repository model route per agent and tier before dispatch. |
@@ -71,7 +71,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | `research` | either | Fans a question out to parallel `researcher` subagents and reports cited findings. |
 | `pr` | either | Template for pull request bodies: summary, evidence, manual testing, merge danger. |
 | `commit` | either | Atomic commits with `type(scope):` subjects. |
-| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `wayfinding` calls it to save a loose idea's progress and to hand off to `orchestrating` or `managing-projects`. |
+| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `grill-with-research` calls it to save a loose idea's progress and to hand off to `orchestrating` or `managing-projects`. |
 | `explain` | either | Explains a topic step by step with one concrete example before the general rule, pitched at the audience. Triggers on "explain" or "clarify". |
 
 ## Agents
@@ -94,9 +94,9 @@ These skills come from [mattpocock/skills](https://github.com/mattpocock/skills)
 
 | Skill | Used by |
 | --- | --- |
-| `grilling` | `wayfinding`, `managing-projects`, `research`, `triage` |
-| `domain-modeling` | `wayfinding`, `managing-projects`, `triage` |
-| `prototype` | `wayfinding`, `managing-projects` |
+| `grilling` | `grill-with-research`, `managing-projects`, `research`, `triage` |
+| `domain-modeling` | `grill-with-research`, `managing-projects`, `triage` |
+| `prototype` | `grill-with-research`, `managing-projects` |
 | `grill-with-docs` | You, as the entry point for design interviews. |
 
 Upstream `grill-with-docs` sets `disable-model-invocation`, which stops the model from loading it. For that reason the skills in this repo load `grilling` and `domain-modeling` directly instead of calling `grill-with-docs`. Run `/grill-with-docs` yourself when you want a grilling session that updates `GLOSSARY.md` and ADRs.

@@ -33,9 +33,9 @@ A tracker comment that is the authoritative specification an AFK agent works fro
 _Avoid_: spec comment, ticket brief
 
 **Converged summary**:
-The record of a finished wayfinding session: destination, decisions, scope, and testable acceptance criteria for one work item.
-_Avoid_: final summary, wayfinding output
+The record of a finished grill-with-research session: destination, decisions, scope, and testable acceptance criteria for one work item.
+_Avoid_: final summary, grill-with-research output
 
 **Progress summary**:
-The record of a paused wayfinding session: destination, decisions so far, open questions, and remaining fog.
+The record of a paused grill-with-research session: destination, decisions so far, open questions, and remaining fog.
 _Avoid_: partial summary, draft summary
