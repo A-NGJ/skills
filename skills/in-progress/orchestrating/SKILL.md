@@ -8,7 +8,7 @@ You are the orchestrator for the one issue the operator named. You run a tight p
 
 ## Set up
 
-1. **Load policy.** Read the issue, then the repo's project policy: `AGENTS.md` / `CLAUDE.md` and `docs/agents/issue-tracker.md`. When the operator points you at a handoff document, read it for context; the issue stays authoritative. The issue's acceptance criteria are its completion boundary. If `issue-tracker.md` has no **Workflow state** section, stop and tell the operator to run `/setup-engineering-skills`.
+1. **Load policy.** Read the issue, then the repo's project policy: `AGENTS.md` / `CLAUDE.md` and `docs/agents/issue-tracker.md`. Read the issue body as the authoritative specification and its acceptance criteria as the completion boundary. Briefs, discussion, and handoffs provide context and approval history, not a replacement specification. If confirmed requirements exist only in comments or the body lacks testable acceptance criteria, stop setup and request an approved body update before proceeding. If `issue-tracker.md` has no **Workflow state** section, stop and tell the operator to run `/setup-engineering-skills`.
 2. **Align.** Complete the alignment gate below before branch/worktree creation, tracker-state changes, or implementation dispatch.
 3. **Branch.** Reuse the branch already linked to the issue. Otherwise create one from the default branch and link it to the issue, using the commands in `issue-tracker.md`. Name it by the convention recorded there, falling back to `<type>/<issue-id>-<slug>`. The type comes from the issue's category label: `bugfix` for a bug, `hotfix` for a hotfix or urgent label or when the operator says so, `feature` otherwise.
 4. **Worktree.** First sweep: remove every clean worktree whose branch is merged or whose issue is closed, and report the rest. Then run `git worktree list` and match the issue id in the branch name, whatever its type or slug. Reuse a single match; with several, stop and ask the operator which to keep. With none, create one git worktree for the issue branch outside the operator's checkout. Never create a second one. Every specialist and reviewer works in it; the operator's checkout stays untouched.
@@ -58,7 +58,7 @@ Give the operator a compact chat disposition of meaningful items, including agre
 
 ## Operator in the loop
 
-Talk to the operator in chat. Stop and ask when the round limit is reached, the specialist reports `blocked`, or the next step would change intent, the chosen design, scope, user-visible behavior, the completion boundary, or accepted risk. An operator instruction to continue resets the round count. Record explicitly approved boundary updates in the issue and retain their links for specialists and reviewers; reconcile them with the authoritative specification before resuming. Once the operator approves a changed completion boundary, treat it as a new assignment with a fresh tier choice under model-routing.
+Talk to the operator in chat. Stop and ask when the round limit is reached, the specialist reports `blocked`, or the next step would change intent, the chosen design, scope, user-visible behavior, the completion boundary, or accepted risk. An operator instruction to continue resets the round count. Present the exact issue-body edit for a boundary update and get explicit approval. Apply it to the authoritative body before resuming; record the approval and rationale in a comment linking to the body, and retain that link for specialists and reviewers. Once the operator approves a changed completion boundary, treat it as a new assignment with a fresh tier choice under model-routing.
 
 When the operator leaves the issue blocked, post one tracker comment with the blocker and the exact question, keep the issue in progress, keep the branch and worktree, delete the scratchpad, and exit. Git holds the work: a later session resumes from the branch.
 
@@ -76,7 +76,7 @@ When the session ends with neither a pull request nor a block, ask the operator 
 ## Boundaries
 
 - **Subagents.** `implementation-specialist` and `reviewer` are the only agent IDs you dispatch; their models come from the repository routes.
-- **Writes.** You own the issue's state, its branch link, the confirmed alignment and approved update comments, the blocked comment, the handoff document, the scratchpad, the worktree and its removal under the rules above, and the pull request. Product code, tests, and product documentation change only inside specialist commits. Approval and merge belong to the operator.
+- **Writes.** You own the issue's state, its branch link, explicitly approved boundary edits to its body, the confirmed alignment and approved update comments, the blocked comment, the handoff document, the scratchpad, the worktree and its removal under the rules above, and the pull request. Product code, tests, and product documentation change only inside specialist commits. Approval and merge belong to the operator.
 
 ## Exit criterion
 

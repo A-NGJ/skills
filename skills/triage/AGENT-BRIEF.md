@@ -1,14 +1,32 @@
 # Writing Agent Briefs
 
-An agent brief is a structured comment posted on a GitHub issue or PR when it moves to `ready-for-agent`. It is the authoritative specification that an AFK agent will work from. The original body and discussion are context: the agent brief is the contract.
+The issue body is the authoritative specification an AFK agent works from: intended outcome, scope, and testable acceptance criteria. An agent brief is a navigation comment posted when the issue moves to `ready-for-agent`; it links to that body and records verification evidence or unresolved constraints, without copying scope or acceptance criteria. Discussion and handoffs provide context, not a second contract.
 
-The brief states **what the agent should do**, which stretches to both surfaces: for an issue, that's building the change from nothing; for a PR, it's what's left to do *to the existing diff*: finish it, close gaps, address review points. Same principles either way; the PR example below shows the difference.
+For an external PR governed by an issue, use the issue body and link it from the PR. Without a governing issue, the PR body specifies what remains to finish or fix in the existing diff.
 
-## Principles
+## Prepare the body
+
+Read existing briefs and discussion for confirmed requirements. Merge them into the authoritative body within the approved write boundary before marking work ready. Present conflicts or unapproved requirements to the operator; neither silently discard them nor promote them into scope. Keep older comments as history, and add a pointer to the body when an old brief would otherwise look current.
+
+Use caller-provided or repository issue-body guidance. The template and examples below are body drafts, not brief comments.
+
+## Brief comment
+
+```markdown
+## Agent Brief
+
+**Specification:** <link to the authoritative issue or PR body>
+**Verification:** <observed result and evidence links, or "not verified">
+**Constraints:** <known limitations or open questions; omit when none>
+```
+
+A brief that reveals missing scope or acceptance criteria needs an approved body update before handoff. Its constraints record evidence or questions, not new requirements.
+
+## Body principles
 
 ### Durability over precision
 
-The issue may sit in `ready-for-agent` for days or weeks. The codebase will change in the meantime. Write the brief so it stays useful even as files are renamed, moved, or refactored.
+The issue may sit in `ready-for-agent` for days or weeks. The codebase will change in the meantime. Write the body so it stays useful even as files are renamed, moved, or refactored.
 
 - **Do** describe interfaces, types, and behavioral contracts
 - **Do** name specific types, function signatures, or config shapes that the agent should look for or modify
@@ -27,7 +45,7 @@ Describe **what** the system should do, not **how** to implement it. The agent w
 
 ### Complete acceptance criteria
 
-The agent needs to know when it's done. Every agent brief must have concrete, testable acceptance criteria. Each criterion should be independently verifiable.
+The agent needs to know when it's done. Every authoritative body must have concrete, testable acceptance criteria. Each criterion should be independently verifiable.
 
 - **Good:** "Running `gh issue list --label needs-triage` returns issues that have been through initial classification"
 - **Bad:** "Triage should work correctly"
@@ -36,10 +54,10 @@ The agent needs to know when it's done. Every agent brief must have concrete, te
 
 State what is out of scope. This prevents the agent from gold-plating or making assumptions about adjacent features.
 
-## Template
+## Default body template
 
 ```markdown
-## Agent Brief
+## Specification
 
 **Category:** bug / enhancement
 **Summary:** one-line description of what needs to happen
@@ -69,10 +87,10 @@ Be specific about edge cases and error conditions.
 
 ## Examples
 
-### Good agent brief (bug)
+### Good body specification (bug)
 
 ```markdown
-## Agent Brief
+## Specification
 
 **Category:** bug
 **Summary:** Skill description truncation drops mid-word, producing broken output
@@ -104,10 +122,10 @@ and append "..." to indicate truncation.
 - Multi-line description support
 ```
 
-### Good agent brief (enhancement)
+### Good body specification (enhancement)
 
 ```markdown
-## Agent Brief
+## Specification
 
 **Category:** enhancement
 **Summary:** Add `.out-of-scope/` directory support for tracking rejected feature requests
@@ -145,12 +163,12 @@ checked for matches.
 - Bug reports (only enhancement rejections go to `.out-of-scope/`)
 ```
 
-### Good agent brief (PR)
+### Good body specification (PR)
 
-For a PR, "Current behavior" describes the state of the diff, and the brief asks the agent to finish or fix it rather than build from scratch.
+For a PR without a governing issue, "Current behavior" describes the state of the diff, and the PR body asks the agent to finish or fix it rather than build from scratch. With a governing issue, put the requirements in that issue's body instead.
 
 ```markdown
-## Agent Brief
+## Specification
 
 **Category:** enhancement
 **Summary:** Finish the contributor's `--json` output flag for `triage list`
@@ -182,10 +200,10 @@ is untouched when the flag is absent.
 - Changing the JSON shape of the success payload the PR already defined
 ```
 
-### Bad agent brief
+### Bad body specification
 
 ```markdown
-## Agent Brief
+## Specification
 
 **Summary:** Fix the triage bug
 

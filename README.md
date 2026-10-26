@@ -1,6 +1,6 @@
 # skills
 
-Composable agent skills for working an issue tracker: researching, scoping, prioritizing and implementing issues. The issue tracker is the record: skills read and write issues, labels and comments, and keep no state of their own.
+Composable agent skills for working an issue tracker: researching, scoping, prioritizing and implementing issues. The issue tracker is the record: each issue body is its authoritative specification; briefs and handoffs link to it rather than maintain another contract. Skills read and write issues, labels and comments, and keep no state of their own.
 
 Each skill stands alone. Start from whichever fits your situation and skip the rest.
 

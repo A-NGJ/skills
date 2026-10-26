@@ -21,7 +21,7 @@ Save to `$TMPDIR/handoff/<skill>-<target>.md`, using the OS temporary directory,
 ## Next session
 <skill to load> <target>, e.g. `/orchestrating #42`
 ## Payload
-<the calling skill's contract, or a link to the tracker record that holds it>
+<link to the authoritative issue body; without an issue, the calling skill's payload or a link to its artifact>
 ## Artifacts
 <paths, URLs, branches, worktrees, commit ranges>
 ## Live thread
@@ -42,4 +42,4 @@ If the user passed arguments, treat them as a description of what the next sessi
 
 ## Receiving
 
-A session started from a handoff document reads it, then re-reads every tracker record it links before acting; where they disagree, the tracker wins.
+A session started from a handoff document reads it, then re-reads every tracker record it links before acting. For issue work, the issue body is the specification; comments and the handoff provide context and approval history. If they reveal confirmed requirements missing from or conflicting with the body, pause for an approved body update rather than implementing from the handoff.

@@ -61,7 +61,7 @@ Iterate until the user approves the breakdown.
 
 ### 5. Publish the tickets to the configured tracker
 
-Use caller-provided or repository issue-body guidance when present; the templates below are defaults. Preserve blocking edges and local status in either format.
+Use caller-provided or repository issue-body guidance when present; the templates below are defaults. Each issue body (or per-ticket local file) holds the complete approved specification and testable acceptance criteria. Any brief or handoff links to it rather than maintaining another specification. Preserve blocking edges and local status in either format.
 
 Publish the approved tickets. **How** depends on the tracker `/setup-engineering-skills` configured; the tickets are the same either way, only the shape of the blocking edges changes:
 

@@ -25,4 +25,4 @@ When drafting or rewriting an issue body, use this concise default. Keep reposit
 <Useful issue or reference links.>
 ```
 
-When delegating issue-body writing, including `to-tickets`, retain genuine blocking relationships. Triage's agent brief is a separate specification, not a replacement issue-body template.
+The issue body is the authoritative specification. When delegating issue-body writing, including `to-tickets`, retain genuine blocking relationships. Briefs and handoffs link to the body; they carry evidence, decisions, or history rather than a separate set of scope and acceptance criteria. Merge confirmed requirements from older briefs or approved discussion into the body with operator approval; surface conflicts before changing it.

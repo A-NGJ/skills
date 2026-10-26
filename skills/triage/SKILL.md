@@ -40,7 +40,7 @@ Five **state** roles:
 - `ready-for-human`: needs human implementation
 - `wontfix`: will not be actioned
 
-For a PR, the same states read against the attached code: `ready-for-agent` means a brief is attached and an agent should take the next step on the diff; `ready-for-human` means it's ready for a human to merge.
+For a PR, the same states read against the attached code: `ready-for-agent` means the governing issue body (or PR body when there is no governing issue) specifies the remaining work and a brief links to it; `ready-for-human` means it's ready for a human to merge.
 
 Every triaged issue should carry exactly one category role and one state role. If state roles conflict, flag it and ask the maintainer before doing anything else.
 
@@ -80,8 +80,8 @@ Show counts and a one-line summary per item. Let the maintainer pick.
 4. **Grill (if needed).** If the request needs fleshing out, call the Skill tool twice, for "grilling" and "domain-modeling", and grill it into shape a round of questions at a time, sharpening domain terms and updating `GLOSSARY.md`/ADRs inline as decisions land. When grilling pauses before an outcome is applied, call the Skill tool for "handoff" with `/triage #<n>` as Next session and the decisions so far plus the open questions in Live thread.
 
 5. **Apply the outcome:**
-   - `ready-for-agent`: post an agent brief comment ([AGENT-BRIEF.md](AGENT-BRIEF.md)). Then offer a fresh `orchestrating` session: on acceptance, call the Skill tool for "handoff" with a link to the agent brief comment as Payload and `/orchestrating #<n>` as Next session.
-   - `ready-for-human`: same structure as an agent brief, but note why it can't be delegated (judgment calls, external access, design decisions, manual testing).
+   - `ready-for-agent`: prepare the authoritative issue body with confirmed scope and testable acceptance criteria, following [AGENT-BRIEF.md](AGENT-BRIEF.md). For a PR without a governing issue, prepare its PR body instead. Get approval for the exact body edits within the inherited write boundary before marking it ready; if approval or requirements are missing, stop and ask. Post a brief comment linking to the body and verification evidence, without duplicating the specification. Then offer a fresh `orchestrating` session for an issue: on acceptance, call the Skill tool for "handoff" with a link to the issue body as Payload and `/orchestrating #<n>` as Next session.
+   - `ready-for-human`: prepare the same authoritative body and pointer brief, noting why it can't be delegated (judgment calls, external access, design decisions, manual testing).
    - `needs-info`: post triage notes (template below).
    - For `wontfix`, close the issue, with the comment depending on *why*:
      - **Already implemented**: the change already exists in the codebase. Point to where it lives; do **not** write to `.out-of-scope/` (that KB is for *rejected* requests, not built ones).
@@ -91,7 +91,7 @@ Show counts and a one-line summary per item. Let the maintainer pick.
 
 ## Quick state override
 
-If the maintainer says "move #42 to ready-for-agent", trust them and apply the role directly. Confirm what you're about to do (role changes, comment, close), then act. Skip grilling. If moving to `ready-for-agent` without a grilling session, ask whether they want to write an agent brief.
+If the maintainer says "move #42 to ready-for-agent", skip grilling and check the authoritative body for confirmed scope and testable acceptance criteria. If it is missing requirements or conflicts with confirmed discussion, present the required body edit and ask for approval before marking it ready. Otherwise confirm the role change and any pointer brief, then act.
 
 ## Needs-info template
 

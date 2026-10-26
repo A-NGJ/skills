@@ -28,7 +28,7 @@ After about six rounds, offer to pause with a progress summary; the operator may
 
 Write the running summary before dispatching research or a prototype, after a session compaction, and at session end:
 
-- **Issue:** one summary comment, created at the first checkpoint and edited in place after that, so the issue carries a single current summary.
+- **Issue:** one summary comment, created at the first checkpoint and edited in place after that. Link to the authoritative body; record decisions, evidence, and proposed body changes rather than maintaining a second specification. Proposed changes remain pending until `managing-projects` applies the operator-approved body update.
 - **Loose idea:** call the Skill tool for "handoff" with the running summary as Payload and `/wayfinding <slug>` as Next session. The temp directory may lose it; a summary that must last needs an issue, which `managing-projects` creates.
 
 After a session compaction, re-read the checkpoint before continuing; it is the record, and your memory of the session is a lossy copy of it.
@@ -43,6 +43,7 @@ A **converged summary** is the exit:
 - <question>: <answer>
 ## Out of scope
 ## Acceptance criteria
+<For an issue, link to the body's criteria and list any proposed edits as pending; for a loose idea, state verifiable outcomes.>
 ## Files and artifacts
 ## Evidence
 <prototype branches, research citations>
@@ -58,9 +59,9 @@ A **progress summary** is a pause. It holds Destination, Decisions so far, Open 
 
 The exit criterion is a converged summary the operator confirms as a shared understanding. Write it as the final checkpoint and show it in chat. Then ask how to hand off, offering these routes:
 
-1. **Fresh session runs `orchestrating`** (issue only): call the Skill tool for "handoff" with a link to the summary comment as Payload and `/orchestrating #<n>` as Next session. Do not load `orchestrating` in this session. Tell the operator to open a new session, load `orchestrating`, and point it at the file.
-2. **Fresh session runs `managing-projects`:** call the Skill tool for "handoff" with the converged summary as Payload (a link to it for an issue) and `/managing-projects` as Next session; it turns the summary into an issue for `orchestrating`.
-3. **Build here:** only on the operator's explicit go-ahead.
+1. **Fresh session runs `orchestrating`** (issue only, when the confirmed design agrees with the authoritative body): call the Skill tool for "handoff" with a link to the issue body as Payload, the summary comment link in Live thread, and `/orchestrating #<n>` as Next session. Do not load `orchestrating` in this session. Tell the operator to open a new session, load `orchestrating`, and point it at the file.
+2. **Fresh session runs `managing-projects`:** required when confirmed scope or acceptance criteria still need a body update. Call the Skill tool for "handoff" with the issue body link as Payload and the summary link and pending changes in Live thread; for a loose idea, use the converged summary as Payload. Set `/managing-projects` as Next session; it obtains approval and updates the existing issue body or creates an issue before implementation.
+3. **Build here:** only on the operator's explicit go-ahead; for an existing issue, the body must already contain the confirmed requirements, otherwise use route 2 first.
 4. **Stop:** the summary stays on the issue, or in the loose-idea handoff document, for a later session.
 
 The handoff document's Suggested skills section points to the summary's own. Done means the operator has picked a route and the route's artifact exists: the handoff file path in chat, the issue updated, or the build started. Choosing a route is not the handoff itself.
