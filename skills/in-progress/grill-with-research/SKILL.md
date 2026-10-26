@@ -58,7 +58,7 @@ A **progress summary** is a pause. It holds Destination, Decisions so far, Open 
 
 ## Finish
 
-The exit criterion is a converged summary the operator confirms as a shared understanding. Write it as the final checkpoint and show it in chat. Ask whether to stop, hand off, or build; offer tracker integrations only when relevant:
+The exit criterion is an operator-confirmed converged summary recorded in the chosen checkpoint and shown in chat. This completes the interview. Offer relevant next steps without requiring a choice; execute a chosen handoff or explicitly authorized build as a separate assignment:
 
 1. **Stop or save for later:** leave the summary in the chosen checkpoint and name its path or URL. A lasting standalone record may live at an operator-chosen path without an issue.
 2. **Fresh standalone session:** call the Skill tool for "handoff" with the converged summary as Payload, or a link to its durable record, and the operator's next assignment as Next session. Continuing this interview uses `/grill-with-research <issue-or-slug>`; another assignment needs no tracker workflow.
@@ -66,6 +66,6 @@ The exit criterion is a converged summary the operator confirms as a shared unde
 4. **Fresh session runs `orchestrating`, if chosen** (issue only, when the confirmed design agrees with the authoritative body): call the Skill tool for "handoff" with a link to the issue body as Payload, the local summary path or authorized summary comment link in Live thread, and `/orchestrating #<n>` as Next session. Do not load `orchestrating` in this session. Tell the operator to open a new session, load `orchestrating`, and point it at the file.
 5. **Build here:** only on the operator's explicit go-ahead. When an existing issue governs the build, its body must already contain the confirmed requirements; otherwise offer route 3 before implementation. A standalone build needs no issue.
 
-The handoff document's Suggested skills section points to the summary's own. Done means the operator has picked a route and the route's artifact exists: the summary path or URL, the handoff file path in chat, or the build started. Choosing a route is not the handoff itself.
+The handoff document's Suggested skills section points to the summary's own. A chosen handoff is complete only when its file exists and its path is shown in chat. Choosing a route is not the handoff itself.
 
 Save durable artifacts, such as glossary entries, ADRs, and scripts, at agreed destinations. When they belong to a repository, commit on the issue's linked branch when one exists, otherwise by repository convention. A branch exists only once there is something to commit on it.
