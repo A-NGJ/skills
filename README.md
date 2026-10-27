@@ -74,7 +74,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `grill-with-research` calls it to save local progress and to hand off to `orchestrating` or `managing-projects`. |
 | `explain` | either | Explains a topic step by step with one concrete example before the general rule, pitched at the audience. Triggers on "explain" or "clarify". |
 
-`orchestrating` produces a PR: shared-environment deployments, migrations, and backfills are follow-ups for later assignments.
+`orchestrating` assumes one active orchestrator per issue, managed by the operator rather than a lock. Its destination is a PR: shared-environment deployments, migrations, and backfills are follow-ups for later assignments.
 
 ## Agents
 
