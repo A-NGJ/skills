@@ -1,84 +1,158 @@
-# skills
+# Skills for Staying in Charge
 
-Composable agent skills for working an issue tracker: researching, scoping, prioritizing and implementing issues. The issue tracker is the record: each issue body is its authoritative specification; briefs and handoffs link to it rather than maintain another contract. Skills read and write issues, labels and comments, and keep no state of their own.
+Composable agent skills for engineers, project managers and everyone else who works with a coding agent. Subagents start on the cheapest model tier that can do the job and escalate only with a stated reason. Every implementation step gets a fresh session, and a reviewer who did not write the code checks the result.
 
-Each skill stands alone. Start from whichever fits your situation and skip the rest.
+Each skill stands alone. Start from whichever fits your situation and skip the rest. They compose in any order, but none requires another.
 
-- **`research`**: you need facts from docs, APIs or code, gathered with citations.
-- **`grill-with-research`**: an idea or issue is still foggy and needs to become one fixed-scope work item. Works standalone; tracker and implementation handoffs are optional.
-- **`managing-projects`**: you don't know what to work on next, or the tracker needs re-ranking.
-- **`orchestrating`**: the issue is clear and you want it implemented, reviewed and opened as a pull request.
+## Installation
 
-They compose in any order, but none requires another. For example, `orchestrating` works on any issue you name, whether or not `grill-with-research` touched it first. `orchestrating` requires `setup-engineering-skills` once per repo; `grill-with-research` needs no repository policy, tracker setup, or issue.
+### 1. Get the skills
 
-## Requirements
-
-- `git`
-- `gh` for GitHub or `glab` for GitLab. A local markdown tracker (`.scratch/`) needs neither.
-- `uv`, only for `roadmap`. `render.py` declares its `python-pptx` dependency inline.
-- Four skills from [mattpocock/skills](https://github.com/mattpocock/skills). See [Upstream dependencies](#upstream-dependencies).
-
-## Install
-
-Install the [upstream dependencies](#upstream-dependencies) first:
+Install the upstream skills these depend on, then this repo.
 
 ```sh
 npx skills@latest add mattpocock/skills   # select grill-with-docs, grilling, domain-modeling, prototype
-```
-
-Then install this repo's skills with one of the two methods below, and configure the required agents in your runtime.
-
-### skills CLI
-
-```sh
 npx skills@latest add A-NGJ/skills
 ```
 
-### Manual
+Or install this repo manually:
 
 ```sh
 git clone git@github.com:A-NGJ/skills.git ~/src/a-ngj-skills
 cd ~/src/a-ngj-skills
-for s in skills/*/; do ln -s "$PWD/${s%/}" ~/.claude/skills/"$(basename "$s")"; done
+for s in skills/{engineering,productivity}/*/; do ln -s "$PWD/${s%/}" ~/.claude/skills/"$(basename "$s")"; done
 ```
 
 Use `~/.agents/skills/` instead of `~/.claude/skills/` if your agent harness reads that directory.
 
+Requirements: `git`, and `gh` for GitHub or `glab` for GitLab. A local markdown tracker (`.scratch/`) needs neither.
+
+`commit`, `explain`, `clinical-change`, `roast-me` and `grill-with-research` work after this step.
+
+### 2. Supply the agents and `.model-routing`
+
+Only `orchestrating`, `research` and `managing-projects` dispatch subagents. They need the agent profiles and a `.model-routing` file. See [Agents](#agents).
+
+### 3. Run `/setup-engineering-skills`
+
+Run it once per repo, only if you want the tracker workflow (`orchestrating`, `managing-projects`, `triage`, `to-tickets`). It asks what the project does, who it serves, and its main responsibilities and non-goals, suggesting answers from the repo for you to confirm. It puts the confirmed description under `## Project` in `AGENTS.md` or `CLAUDE.md`.
+
+It also configures your issue tracker (GitHub, GitLab or local markdown), label vocabulary and domain docs, writing `docs/agents/issue-tracker.md` and `docs/agents/domain.md`, plus `docs/agents/labels.md` when `triage` is installed and `docs/agents/verification.md` when `orchestrating` is installed. `orchestrating` refuses to start until `issue-tracker.md` has a **Workflow state** section.
+
+## Why These Skills Exist
+
+I built these skills to fix failure modes I see when working with coding agents.
+
+### #1: The Agent Didn't Build What I Meant
+
+**The Problem**. You think the agent knows what you want. Then you see what it built, and it did not understand you at all. The idea was still foggy when the work started.
+
+**The Fix** is to resolve the fog before any code is written:
+
+- [`/grill-with-research`](skills/productivity/grill-with-research/SKILL.md) turns a foggy idea or issue into one fixed-scope work item with testable acceptance criteria, through grilling, research and prototypes.
+- [`/roast-me`](skills/productivity/roast-me/SKILL.md) interviews you on each critical design choice in an existing implementation, until you can justify it or record it as unsettled.
+
+### #2: Every Subagent Runs on the Same Model
+
+**The Problem**. Delegating work to subagents does not help if every subagent is the most expensive model. A file search does not need what a security review needs, and the daily limit is gone after the first issue.
+
+**The Fix** is to route each assignment to a model tier. [`model-routing`](skills/engineering/model-routing/SKILL.md) reads the repository's `.model-routing` file, picks the lowest tier that can meet the assignment's completion boundary, and escalates only with a stated reason. Reviews have a tier floor. A missing or invalid route stops the dispatch, and there is no silent fallback to another model.
+
+### #3: The Agent Changed More Than I Asked
+
+**The Problem**. You ask for a rename and get a rename, reordered imports, a reformatted call site and a "fixed" comment. The diff is too big to review, and too tangled to revert.
+
+**The Fix** is to keep each change small and justified:
+
+- [`/clinical-change`](skills/productivity/clinical-change/SKILL.md) makes an edit where every hunk is necessary for the outcome and nothing else appears.
+- [`/commit`](skills/engineering/commit/SKILL.md) splits the work into atomic commits, with one reason to revert each.
+- [`/pr`](skills/engineering/pr/SKILL.md) writes a pull request body with a summary, before/after evidence, manual testing steps and a merge-danger call.
+
+### #4: I Don't Know What To Work On Next
+
+**The Problem**. The tracker grows faster than anyone reads it. Issues are duplicated, blocked on each other, or too big to start, and ranking them by hand takes the time you wanted to spend on the work.
+
+**The Fix** is to put the tracker through a small set of skills:
+
+- [`managing-projects`](skills/engineering/managing-projects/SKILL.md) ranks next actions, manages dependencies and duplicates, and prepares a brief for the next issue.
+- [`triage`](skills/engineering/triage/SKILL.md) moves each issue or external PR through triage roles and writes agent-ready briefs.
+- [`to-tickets`](skills/engineering/to-tickets/SKILL.md) splits a plan into tracer-bullet issues with blocking edges.
+
+### #5: The Context Window Ran Out Mid-Task
+
+**The Problem**. One session holds the plan, the implementation and the review. Its context fills with stale detail, quality drops, and you end up restarting sessions by hand and acting as the orchestrator yourself.
+
+**The Fix** is [`/orchestrating`](skills/engineering/orchestrating/SKILL.md). It plans one issue once, then runs each step in a fresh implementation-specialist session on one shared worktree branch. A fresh reviewer checks each checkpoint, and the run ends at a pull request. You answer decisions and nothing else. Model tiers come from `model-routing`, which is why #2 and #5 belong together. [`handoff`](skills/productivity/handoff/SKILL.md) covers the cases where you move between sessions by hand.
+
+### Typical flow
+
+None of these steps is required, and each skill works on its own:
+
+```text
+grill-with-research -> triage / to-tickets -> managing-projects -> orchestrating -> pull request
+```
+
+## How This Differs From Matt's Skills
+
+These skills build on [mattpocock/skills](https://github.com/mattpocock/skills), which are excellent, and they install next to them. Four of them are upstream dependencies. The rows below describe design differences, so you can pick the version that suits your situation.
+
+| Area | Upstream | This repo |
+| --- | --- | --- |
+| `triage`, `to-tickets` | Operator-invoked only. | Model-invokable, so `managing-projects` can call them. |
+| `handoff` | Operator-invoked only. Free-form document with a suggested-skills section. | Model-invokable. Fixed skeleton, stable path `$TMPDIR/handoff/<skill>-<target>.md`, and a receiving rule that re-reads every linked tracker record before acting. |
+| `research` | One background agent writes a Markdown file in the repo. | Fans the question out to parallel `researcher` subagents, each routed to a model tier, and reports cited findings. |
+| `pr` | Summary, Evidence and Merge Danger. | Adds a Manual Testing section and an Undo field, which `orchestrating` relies on. |
+| `grill-with-docs` and `grill-with-research` | `grill-with-docs` loads `grilling` and `domain-modeling`. | `grill-with-research` adds research and prototypes, and ends in a converged summary. It works without a tracker. |
+| `implement-spec` and `orchestrating` | Works a whole spec as a task graph on one integration branch, with parallel implementer subagents in their own worktrees. | Works one issue sequentially on one shared worktree branch, with a fresh reviewer at each checkpoint, and ends at a pull request. |
+| Model selection | Not part of `implement-spec`'s dispatch. | `model-routing` selects a tier for every dispatch from `.model-routing`. |
+| Only here | | `model-routing`, `managing-projects`, `clinical-change`, `roast-me`, `explain` |
+
+Use upstream's `implement-spec` when you want parallel throughput. Use `orchestrating` when you want a gated, sequential run.
+
+`triage`, `to-tickets`, `research`, `pr` and `handoff` share names with upstream. Do not install both copies, because the callers in this repo rely on the differences above. Upstream `grill-with-docs` also stops the model from loading it, so the skills here load `grilling` and `domain-modeling` directly. Run `/grill-with-docs` yourself when you want a grilling session that updates `GLOSSARY.md` and ADRs.
+
+## Reference
+
+Skills are grouped by who they serve. Within each group, **operator-invoked** skills set `disable-model-invocation`, so only you can start them with a slash command. **Model-invoked** skills can also be loaded by the model or by other skills.
+
+### Engineering
+
+**Operator-invoked**
+
+- **[orchestrating](skills/engineering/orchestrating/SKILL.md)**: Plans one issue into steps, implements each step in a fresh specialist session in one worktree, reviews the result, then opens a pull request. Requires a clean worktree before every dispatch and one active orchestrator per issue. Its rules, correction budget and exits are in the skill.
+- **[setup-engineering-skills](skills/engineering/setup-engineering-skills/SKILL.md)**: Captures project context and configures a repo: tracker, labels, domain docs, workflow states. Run once per repo.
+
+**Model-invoked**
+
+- **[commit](skills/engineering/commit/SKILL.md)**: Atomic commits with `type(scope):` subjects.
+- **[pr](skills/engineering/pr/SKILL.md)**: Template for pull request bodies: summary, evidence, manual testing, merge danger.
+- **[model-routing](skills/engineering/model-routing/SKILL.md)**: Resolves a required repository model route per agent and tier before dispatch.
+
+### Project management
+
+**Model-invoked**
+
+- **[managing-projects](skills/engineering/managing-projects/SKILL.md)**: Ranks priorities, manages dependencies and duplicates, and picks the next issue with a brief for the orchestrator.
+- **[triage](skills/engineering/triage/SKILL.md)**: Moves issues and external PRs through triage roles and writes agent-ready briefs.
+- **[to-tickets](skills/engineering/to-tickets/SKILL.md)**: Splits a plan into tracer-bullet issues with blocking edges.
+
+### Productivity
+
+**Operator-invoked**
+
+- **[grill-with-research](skills/productivity/grill-with-research/SKILL.md)**: Converges a foggy idea into one fixed-scope work item through grilling, research and prototypes. Works standalone, ending with a converged summary; tracker integrations are optional.
+- **[roast-me](skills/productivity/roast-me/SKILL.md)**: A relentless interview that challenges whether each design choice is justified.
+
+**Model-invoked**
+
+- **[handoff](skills/productivity/handoff/SKILL.md)**: Writes a handoff document to the OS temp directory so a fresh session can continue the work.
+- **[research](skills/productivity/research/SKILL.md)**: Fans a question out to parallel `researcher` subagents and reports cited findings.
+- **[explain](skills/productivity/explain/SKILL.md)**: Explains a topic step by step with one concrete example before the general rule, pitched at the audience.
+- **[clinical-change](skills/productivity/clinical-change/SKILL.md)**: Makes an edit that contains nothing beyond what the outcome requires.
+
 ### Agents
 
-This repository ships skills, not agent definitions. Supply the required agent profiles in your runtime, with one definition per role. A profile may omit a model or have a default; routed dispatches always use the explicit repository route instead. See [Agents](#agents-1) for the roles and setup requirements. The runtime must support explicit model selection at dispatch.
-
-### Per-repo setup
-
-In each repo you want to use these skills on, run `/setup-engineering-skills` once. It asks what the project does, who it serves, and its main responsibilities and non-goals, suggesting answers from the repo for you to confirm. It puts the confirmed 2–4 sentence description under `## Project` in `AGENTS.md` or `CLAUDE.md`, alongside the existing `## Agent skills` policy links. Existing project context is kept or revised only with your approval.
-
-The existing setup also configures your issue tracker (GitHub, GitLab or local markdown), label vocabulary and domain docs. It writes `docs/agents/issue-tracker.md` and `docs/agents/domain.md`, plus `docs/agents/labels.md` when `triage` is installed and `docs/agents/verification.md` (test and check commands) when `orchestrating` is installed. `orchestrating` refuses to start until `issue-tracker.md` has a **Workflow state** section.
-
-## Skills
-
-Skills marked "operator" set `disable-model-invocation`, so only you can start them with a slash command. The rest can also be loaded by the model or by other skills.
-
-| Skill | Started by | What it does |
-| --- | --- | --- |
-| `setup-engineering-skills` | operator | Captures project context and configures a repo: tracker, labels, domain docs, workflow states. |
-| `managing-projects` | either | Ranks priorities, manages dependencies and duplicates, and picks the next issue with a brief for the orchestrator. |
-| `grill-with-research` | operator | Converges a foggy idea into one fixed-scope work item through grilling, research and prototypes. Works standalone, ending with a converged summary; tracker integrations are optional. |
-| `orchestrating` | operator | Plans one issue into steps, implements each step in a fresh specialist session in one worktree, reviews the result, then opens a pull request; reports an existing open PR without changing it. The defect-correction budget is three `Changes Required` verdicts per session. |
-| `roadmap` | either | Builds a milestone roadmap from the tracker as theme swimlanes over weeks, in Markdown, HTML or PowerPoint. |
-| `model-routing` | either | Resolves a required repository model route per agent and tier before dispatch. |
-| `triage` | either | Moves issues and external PRs through triage roles and writes agent-ready briefs. |
-| `to-tickets` | either | Splits a plan into tracer-bullet issues with blocking edges. |
-| `research` | either | Fans a question out to parallel `researcher` subagents and reports cited findings. |
-| `pr` | either | Template for pull request bodies: summary, evidence, manual testing, merge danger. |
-| `commit` | either | Atomic commits with `type(scope):` subjects. |
-| `handoff` | either | Writes a handoff document to the OS temp directory so a fresh session can continue the work. `grill-with-research` calls it to save local progress and to hand off to `orchestrating` or `managing-projects`. |
-| `explain` | either | Explains a topic step by step with one concrete example before the general rule, pitched at the audience. Triggers on "explain" or "clarify". |
-
-`orchestrating` requires a clean worktree before every specialist or reviewer dispatch and assumes one active orchestrator per issue, managed by the operator rather than a lock. Recovery is best-effort after interruption. Its destination is a PR: shared-environment deployments, migrations, and backfills are follow-ups for later assignments. Clarification attempts are outside the defect-correction budget, which is not an overall effort cap.
-
-## Agents
-
-The skills expect these externally supplied roles, with one definition each. `model-routing` keeps the agent ID fixed and selects a model per assignment.
+The skills expect these externally supplied roles, with one definition each. This repository ships skills, not agent definitions, so supply the profiles in your runtime. A profile may omit a model or have a default; routed dispatches always use the explicit repository route instead.
 
 | Role | Permissions | Used by |
 | --- | --- | --- |
@@ -86,44 +160,35 @@ The skills expect these externally supplied roles, with one definition each. `mo
 | `reviewer` | Read-only. Returns `Accepted`, `Changes Required`, or `Needs clarification`. | `orchestrating` |
 | `researcher` | Read-only, no shell. Reads files and the web. | `research`, `managing-projects` |
 
-Configure `.model-routing` at the repository's main checkout as a JSON map from agent IDs to `fast`, `standard`, and `deep` model references. Built-in agents can have their own entries alongside custom roles. See [`model-routing`](skills/model-routing/SKILL.md) for the format, required-route gate, and reviewer tier floor. Missing or invalid routes block dispatch; agent defaults and global maps are not fallbacks.
+Configure `.model-routing` at the repository's main checkout as a JSON map from agent IDs to `fast`, `standard` and `deep` model references. The model references below are placeholders; agent IDs and reference syntax must match your runtime:
 
-The file is a skill convention, not native runtime configuration. The coordinator must be able to select the routed model explicitly when dispatching. Existing installations should keep one profile per role and remove old `-fast` and `-deep` copies after preserving their model choices in repository routes. Removing the templates from this repository does not migrate or delete installed profiles.
+```json
+{
+  "researcher": {
+    "fast": "provider/researcher-fast-model",
+    "standard": "provider/researcher-standard-model",
+    "deep": "provider/researcher-deep-model"
+  }
+}
+```
 
-## Upstream dependencies
+Add one entry per agent the coordinator will dispatch, including the built-in agents. See [`model-routing`](skills/engineering/model-routing/SKILL.md) for the required-route gate and the reviewer tier floor. The file is a skill convention, not native runtime configuration, so the runtime must support explicit model selection at dispatch.
 
-These skills come from [mattpocock/skills](https://github.com/mattpocock/skills) and are not copied here.
-
-| Skill | Used by |
-| --- | --- |
-| `grilling` | `grill-with-research`, `managing-projects`, `research`, `triage` |
-| `domain-modeling` | `grill-with-research`, `managing-projects`, `triage` |
-| `prototype` | `grill-with-research`, `managing-projects` |
-| `grill-with-docs` | You, as the entry point for design interviews. |
-
-Upstream `grill-with-docs` sets `disable-model-invocation`, which stops the model from loading it. For that reason the skills in this repo load `grilling` and `domain-modeling` directly instead of calling `grill-with-docs`. Run `/grill-with-docs` yourself when you want a grilling session that updates `GLOSSARY.md` and ADRs.
-
-Do not install upstream `triage`, `to-tickets`, `research`, `pr` or `handoff` next to this repo. They share names with the copies here, and the upstream versions differ:
-
-- `triage` and `to-tickets` set `disable-model-invocation`, so `managing-projects` cannot call them.
-- `research` runs one background agent and ignores the `researcher` tiers.
-- `pr` lacks the Manual Testing section and the Undo field that `orchestrating` relies on.
-- `handoff` sets `disable-model-invocation`, so other skills cannot call it, and it lacks the fixed skeleton and stable path the callers rely on.
-
-## Layout
+### Layout
 
 ```text
-skills/<name>/SKILL.md   one folder per skill
-skills/<name>/agents/    Codex display metadata (openai.yaml)
-skills/roadmap/render.py roadmap renderer (md, html, pptx)
-skills/setup-engineering-skills/
-                         templates for GitHub, GitLab and local trackers, labels and domain docs
-LICENSES/                upstream license texts
-GLOSSARY.md              shared vocabulary for handoff documents and their payloads
+skills/<group>/<name>/SKILL.md   one folder per skill, grouped engineering/ or productivity/
+skills/<group>/<name>/agents/    Codex display metadata (openai.yaml)
+skills/in-progress/              skills not yet ready for release
+skills/engineering/setup-engineering-skills/
+                                 templates for GitHub, GitLab and local trackers, labels and domain docs
+LICENSE                          MIT license for this repo
+LICENSES/                        upstream license texts
+GLOSSARY.md                      shared vocabulary for handoff documents and their payloads
 ```
 
 ## Credits and licenses
 
-`triage`, `to-tickets`, `research`, `pr` and `handoff` are adapted from [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT, see `LICENSES/mattpocock-skills.txt`). Each carries a `metadata.upstream` entry in its frontmatter. The `pr` summary section comes from Dex Horthy's [`show-me`](https://github.com/humanlayer/humanlayer), described in `skills/pr/CREDITS.md`.
+MIT, see [`LICENSE`](LICENSE).
 
-This repo has no license of its own yet.
+`triage`, `to-tickets`, `research`, `pr` and `handoff` are adapted from [Matt Pocock's skills](https://github.com/mattpocock/skills) (MIT, see `LICENSES/mattpocock-skills.txt`). Each carries a `metadata.upstream` entry in its frontmatter. The `pr` summary section comes from Dex Horthy's [`show-me`](https://github.com/humanlayer/humanlayer), described in `skills/engineering/pr/CREDITS.md`.
