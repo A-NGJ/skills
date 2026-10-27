@@ -12,7 +12,7 @@ How to run the tests for one file, module, or test name while editing:
 
 ## Full suite
 
-Run once before the final `done`, after any change to shared infrastructure or test fixtures, and once per reviewed head.
+The final reviewer runs this once per final-reviewed head. Specialists and checkpoint reviewers use targeted tests and relevant static checks, broadening to this suite when shared infrastructure or test fixtures make targeted verification insufficient.
 
 ```sh
 <full suite command>

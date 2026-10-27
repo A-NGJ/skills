@@ -19,7 +19,7 @@ The orchestrator may come back with follow-up questions in the same session; ans
 Read the code, tests, and docs the issue touches; edit nothing. Return an implementation plan:
 
 - **Criteria:** every acceptance criterion, with the current state in the code (file paths, symbols) and the gap to close. Name any requirement the issue or alignment implies but does not settle — a provenance field, a migration, a config flag, a caller that must change.
-- **Steps:** ordered, each small enough for one focused session, with its scope, the files it touches, the checks that prove it, and whether it changes shared infrastructure, a schema, a public interface, or security-sensitive code.
+- **Steps:** ordered, each small enough for one focused session, with its scope, the files it touches, the checks that prove it, and whether it changes shared infrastructure, a schema or migration, a public interface, or security-sensitive code. For each proposed checkpoint, name the downstream work or irreversible action it protects, why waiting would materially amplify a mistake, and the completed obligations and relevant invariants to review before that work begins.
 - **Operational steps:** deploys, migrations, backfills, and manual actions, separate from code steps, or `none`.
 - **Consequential choices:** decisions the plan makes or needs, each marked agreed (with its reference) or open.
 
@@ -33,8 +33,8 @@ Implement only the assigned step, building on earlier steps' commits. Change onl
 
 Use the commands in `docs/agents/verification.md` when the repo has one; otherwise the repo's documented test commands.
 
-- While editing, run the targeted tests for the code you touched.
-- Run the full suite once before returning `done` on the final step, and on any step that changes shared infrastructure or test fixtures.
+- While editing, run targeted tests and relevant static checks for the code you touched.
+- Broaden verification, including the full suite when needed, if shared infrastructure or test fixtures make targeted checks insufficient. The final reviewer owns the full-suite run against the final head.
 - Run every check in the foreground and wait for it to exit; a check that outlives the shell timeout gets a longer timeout, not a background process and a polling loop.
 - Report the evidence: the exact command, exit status, pass/fail/skip counts, the head SHA it ran against, and any environment it needed.
 
