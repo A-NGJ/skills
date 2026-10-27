@@ -63,7 +63,7 @@ Skills marked "operator" set `disable-model-invocation`, so only you can start t
 | `setup-engineering-skills` | operator | Captures project context and configures a repo: tracker, labels, domain docs, workflow states. |
 | `managing-projects` | either | Ranks priorities, manages dependencies and duplicates, and picks the next issue with a brief for the orchestrator. |
 | `grill-with-research` | operator | Converges a foggy idea into one fixed-scope work item through grilling, research and prototypes. Works standalone, ending with a converged summary; tracker integrations are optional. |
-| `orchestrating` | operator | Plans one issue into steps, implements each step in a fresh specialist session in one worktree, reviews the result, then opens a pull request. The defect-correction budget is three `Changes Required` verdicts per session. |
+| `orchestrating` | operator | Plans one issue into steps, implements each step in a fresh specialist session in one worktree, reviews the result, then opens a pull request; reports an existing open PR without changing it. The defect-correction budget is three `Changes Required` verdicts per session. |
 | `roadmap` | either | Builds a milestone roadmap from the tracker as theme swimlanes over weeks, in Markdown, HTML or PowerPoint. |
 | `model-routing` | either | Resolves a required repository model route per agent and tier before dispatch. |
 | `triage` | either | Moves issues and external PRs through triage roles and writes agent-ready briefs. |
