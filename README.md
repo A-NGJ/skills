@@ -158,7 +158,7 @@ The skills expect these externally supplied roles, with one definition each. Thi
 | --- | --- | --- |
 | `implementation-specialist` | Plan mode reads only and returns an implementation plan; step mode edits and commits one step in the issue worktree. Cannot dispatch other agents. | `orchestrating` |
 | `reviewer` | Read-only. Returns `Accepted`, `Changes Required`, or `Needs clarification`. | `orchestrating` |
-| `researcher` | Read-only, no shell. Reads files and the web. | `research`, `managing-projects` |
+| `researcher` | Read-only. Reads files, git history and the web. | `research`, `managing-projects` |
 
 Configure `.model-routing` at the repository's main checkout as a JSON map from agent IDs to `fast`, `standard` and `deep` model references. The model references below are placeholders; agent IDs and reference syntax must match your runtime:
 
