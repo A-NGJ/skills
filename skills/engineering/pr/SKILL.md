@@ -27,9 +27,9 @@ Use this template for writing the PR body:
 
 ## Manual Testing
 
-<only for user-facing changes; omit the heading otherwise>
+<only for user-facing changes or unperformed operational/environment verification; omit the heading otherwise>
 
-**Setup:** <branch, env, seed data, flags, URL>
+**Setup:** <working dir, branch, env/profile, prerequisite state, flags, URL>
 
 1. <action>. **Expect:** <observable result>
 2. ...
@@ -180,11 +180,15 @@ When the change is visual but you can't capture a screenshot, the Manual Testing
 
 ### Manual Testing
 
-Include this section when a person can see or touch the change: UI, CLI output, user-visible errors, emails, copy. Omit the heading entirely for refactors, internal APIs, and changes automated tests fully prove.
+Include this section when a person can see or touch the change (UI, CLI output, user-visible errors, emails, copy) or when live-environment / operational steps remain for a human to run. Omit the heading entirely for refactors, internal APIs, and changes automated tests fully prove.
 
-**Setup** lists only what the reviewer can't guess: the flag to enable, the data to seed, the role to log in as, the viewport or browser.
+If deployment or shared-environment steps have not been run yet, state that upfront before **Setup** so the reviewer knows the current state and whether the steps gate merge.
 
-Each step is one action and the result the reviewer should observe. Name the exact route, button label, and input value, so the reviewer never has to hunt:
+**Setup** establishes a single starting point so every step runs sequentially without guesswork: starting directory, branch/head, CLI profile or credentials, prerequisite state, values to look up upfront (`<JOB_ID>`), role to log in as, or viewport.
+
+Each step pairs one action with the concrete result the reviewer should observe:
+
+- **UI steps** stay inline. Name the exact route, button label, and input value so the reviewer never hunts:
 
 ```markdown
 **Setup:** `pnpm dev`, log in as `admin@example.com`
@@ -195,7 +199,35 @@ Each step is one action and the result the reviewer should observe. Name the exa
 4. Resize to 375px wide. **Expect:** the form stacks into one column with no horizontal scroll.
 ```
 
-Order the steps happy path first, then the edge cases your Blast Radius names: empty states, error paths, narrow viewports, keyboard navigation. Leave out anything a test in Evidence already covers. Past about 8 steps, split into separate flows, each under its own bold title.
+- **CLI and operational steps** stack an intent line, an indented copy-pasteable `sh` block, and an indented `**Expect:**` line. Maintain working-directory continuity (`cd ...`) across steps so the whole sequence runs in one terminal session, and thread runtime values across steps with explicit `<placeholders>` naming the step that produced them:
+
+````markdown
+**Mandatory before merge.** Nothing has been deployed or run in `dev` by this PR.
+
+**Setup:** repo root on the reviewed head, CLI profile `analytics-dev`. Obtain `<JOB_ID>` from step 1.
+
+1. Run the read-only deployment plan:
+   ```sh
+   .venv/bin/python scripts/deploy.py --profile analytics-dev --plan-only
+   ```
+   **Expect:** only `resources.jobs.ingest` changes; exits 0 with no upload, resource mutation, or job run.
+2. Trigger an update run and inspect its output:
+   ```sh
+   cd ingest
+   databricks bundle run ingest -t dev -p analytics-dev
+   databricks jobs get-run-output <task_run_id> -p analytics-dev -o json
+   ```
+   **Expect:** `SUCCESS` with `manifest=<64hex>.json` and `inventory_complete=True`.
+3. Replay the manifest `<64hex>.json` recorded in step 2:
+   ```sh
+   databricks bundle run ingest -t dev -p analytics-dev --params 'manifest=<64hex>.json'
+   ```
+   **Expect:** `records_added=0` and no external API requests.
+````
+
+In `**Expect:**`, name both the positive signal (exact status, output token, exit code, UI state) and the negative invariant when side effects are a risk (no duplicate rows, no network request, no state mutation).
+
+Order the steps from read-only/plan checks $\rightarrow$ happy path $\rightarrow$ idempotency/replay $\rightarrow$ edge cases and failure guards your Blast Radius names (empty states, error paths, narrow viewports). When triggering a failure in a shared environment is unsafe, use a dry-run flag or targeted local negative-path command instead. Leave out anything Evidence already proves, unless the step is the safe local substitute for a destructive shared-environment check. Past about 8 steps, split into separate flows, each under its own bold title.
 
 ### Merge Danger
 
