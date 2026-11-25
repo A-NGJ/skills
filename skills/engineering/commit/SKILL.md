@@ -1,6 +1,6 @@
 ---
 name: commit
-description: Commit working-tree changes as atomic commits (one reason to revert each), with subjects that match the repo's message convention and `type(scope): summary` as the default. Commits locally only: never pushes or opens pull requests. Use when committing changes, splitting work into several commits, amending the latest commit, or writing a commit message or subject line.
+description: "Commit working-tree changes as atomic commits (one reason to revert each), with subjects that match the repo's message convention and `type(scope): summary` as the default. Commits locally only: never pushes or opens pull requests. Use when committing changes, splitting work into several commits, amending the latest commit, or writing a commit message or subject line."
 ---
 
 A commit is **atomic**: one reason to revert, so one type and one scope. Reason-to-revert outranks type: tests, docs, fixtures, and migrations that exist only because of a change share its commit, and the type follows the production change. Use `test` for coverage of code that already exists and `docs` for documentation of behavior that already shipped.
