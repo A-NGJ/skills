@@ -8,35 +8,55 @@ Each skill stands alone. Start from whichever fits your situation and skip the r
 
 ### 1. Get the skills
 
-Choose one install method per harness to avoid duplicate skill names.
+Open the section for your harness. Choose one install method to avoid duplicate skill names. With `npx skills`, omit `--global` to install into the current project, and skip the in-progress `roadmap` skill if prompted.
 
-| Harness | `skills` installer ID | Manual skill directory (personal / project) | Example invocation |
-| --- | --- | --- | --- |
-| [Claude Code](https://code.claude.com/docs/en/skills) | `claude-code` | `~/.claude/skills/` / `.claude/skills/` | `/clinical-change` |
-| [OpenCode](https://opencode.ai/docs/skills/) | `opencode` | `~/.config/opencode/skills/` / `.opencode/skills/` (also reads the shared `.agents` paths) | Ask it to load `clinical-change` |
-| [Pi](https://pi.dev/) | `pi` | `~/.agents/skills/` / `.agents/skills/` | `/skill:clinical-change` |
-| Other `.agents`-compatible harnesses | Use your harness's ID if listed, or install manually | `~/.agents/skills/` if supported / `.agents/skills/` | Use your harness's skill command or ask it to load `clinical-change` |
-
-**With `skills`:** set `agent` to the installer ID above. Omit `--global` from both commands to install into the project you're working on. When prompted, select the skills you want from this repo; skip `roadmap`, which is still in progress.
+<details>
+<summary><strong>Claude Code</strong></summary>
 
 ```sh
-agent=claude-code  # or opencode or pi
-npx skills@latest add mattpocock/skills --global --agent "$agent" --skill grilling domain-modeling prototype
-npx skills@latest add A-NGJ/skills --global --agent "$agent"
+npx skills@latest add mattpocock/skills --global --agent claude-code --skill grilling domain-modeling prototype
+npx skills@latest add A-NGJ/skills --global --agent claude-code
 ```
 
-**As a Pi package:** run the upstream dependency command above with `agent=pi`, then use this **instead of** the second `skills` command:
+Try `/clinical-change`. For a manual install, use the last section with `~/.claude/skills/` or the project's `.claude/skills/` as the destination. See the [Claude Code skill docs](https://code.claude.com/docs/en/skills).
+
+</details>
+
+<details>
+<summary><strong>OpenCode</strong></summary>
 
 ```sh
+npx skills@latest add mattpocock/skills --global --agent opencode --skill grilling domain-modeling prototype
+npx skills@latest add A-NGJ/skills --global --agent opencode
+```
+
+Ask OpenCode to load `clinical-change`. For a manual install, use the shared `.agents` paths below or OpenCode's own `~/.config/opencode/skills/` or `.opencode/skills/`. See the [OpenCode skill docs](https://opencode.ai/docs/skills/).
+
+</details>
+
+<details>
+<summary><strong>Pi</strong></summary>
+
+```sh
+npx skills@latest add mattpocock/skills --global --agent pi --skill grilling domain-modeling prototype
 pi install git:github.com/A-NGJ/skills
 ```
 
-For a local checkout, run `pi install .` from the checkout root instead. The package loads the released skills and makes the agent profiles available to `pi-subagents`.
+For a local checkout, run `pi install .` from its root instead of the Git install. The Pi package loads the released skills and makes the profiles available for [optional delegation](#delegation-in-pi). If you only want the skill folders, use `npx skills@latest add A-NGJ/skills --global --agent pi` **instead of** `pi install`, or use the manual install below.
 
-**Manually:** also copy or link `grilling`, `domain-modeling` and `prototype` from [mattpocock/skills](https://github.com/mattpocock/skills) into the same destination. Run this from the project you're working on, replacing `dest` with the personal or project directory from the table:
+Try `/skill:clinical-change`.
+
+</details>
+
+<details>
+<summary><strong>Other .agents-compatible harnesses or manual install</strong></summary>
+
+If `npx skills` lists your harness, use its `--agent` ID in the two commands from the Claude Code section. Otherwise, run the commands below from your project root. The default destination is the project's `.agents/skills/`; use `$HOME/.agents/skills` for a personal install if your harness supports it.
+
+Also copy or link `grilling`, `domain-modeling` and `prototype` from [mattpocock/skills](https://github.com/mattpocock/skills) into the same destination.
 
 ```sh
-dest="$HOME/.agents/skills"  # or "$PWD/.agents/skills" for a project install
+dest="$PWD/.agents/skills"  # change this for a personal or harness-specific install
 src="$HOME/src/a-ngj-skills"
 mkdir -p "$(dirname "$src")" "$dest"
 git clone https://github.com/A-NGJ/skills.git "$src"
@@ -45,7 +65,11 @@ for s in "$src"/skills/engineering/*/ "$src"/skills/productivity/*/; do
 done
 ```
 
-Link or copy each whole skill folder so its supporting files stay alongside `SKILL.md`. Use the invocation style in the table wherever this README shows a shorthand like `/orchestrating`.
+Link or copy each whole skill folder so its supporting files stay alongside `SKILL.md`. Try asking your harness to load `clinical-change` or use its skill command.
+
+</details>
+
+Use your harness's invocation style wherever this README shows a shorthand like `/orchestrating`.
 
 Requirements: `git`, and `gh` for GitHub or `glab` for GitLab. A local markdown tracker (`.scratch/`) needs neither tracker CLI.
 
