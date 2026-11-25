@@ -44,13 +44,13 @@ For a PR, the same states read against the attached code: `ready-for-agent` mean
 
 Every triaged issue should carry exactly one category role and one state role. If state roles conflict, flag it and ask the maintainer before doing anything else.
 
-These are canonical role names. The actual label strings used in the issue tracker may differ. The mapping should have been provided to you. If not, tell the user to run `/setup-engineering-skills`.
+These are canonical role names. The actual label strings used in the issue tracker may differ. The mapping should have been provided to you. If not, tell the user to run `setup-engineering-skills` using the harness's skill command.
 
 State transitions: an unlabeled issue normally goes to `needs-triage` first; from there it moves to `needs-info`, `ready-for-agent`, `ready-for-human`, or `wontfix`. `needs-info` returns to `needs-triage` once the reporter replies. The maintainer can override at any time; flag transitions that look unusual and ask before proceeding.
 
 ## Invocation
 
-The maintainer can invoke `/triage`, or another skill can load it for a bounded request. Interpret the request and act within any inherited write boundary. Examples:
+The maintainer can invoke `triage`, or another skill can load it for a bounded request. Interpret the request and act within any inherited write boundary. Examples:
 
 - "Show me anything that needs my attention"
 - "Let's look at #42" (issue or PR)
@@ -77,10 +77,10 @@ Show counts and a one-line summary per item. Let the maintainer pick.
 
 3. **Verify the claim.** Before any grilling, check that the claim holds up. For a bug, reproduce it from the reporter's steps. For a PR, confirm the diff does what it claims: check it out, run the relevant tests or commands. Report what happened: confirmed (with code path), failed, or insufficient detail (a strong `needs-info` signal). A confirmed verification makes a much stronger agent brief.
 
-4. **Grill (if needed).** If the request needs fleshing out, call the Skill tool twice, for "grilling" and "domain-modeling", and grill it into shape a round of questions at a time, sharpening domain terms and updating `GLOSSARY.md`/ADRs inline as decisions land. When grilling pauses before an outcome is applied, call the Skill tool for "handoff" with `/triage #<n>` as Next session and the decisions so far plus the open questions in Live thread.
+4. **Grill (if needed).** If the request needs fleshing out, load `grilling` and `domain-modeling` and grill it into shape a round of questions at a time, sharpening domain terms and updating `GLOSSARY.md`/ADRs inline as decisions land. When grilling pauses before an outcome is applied, load `handoff` with `triage #<n>` as the next assignment and the decisions so far plus the open questions in Live thread.
 
 5. **Apply the outcome:**
-   - `ready-for-agent`: prepare the authoritative issue body with confirmed scope and testable acceptance criteria, following [AGENT-BRIEF.md](AGENT-BRIEF.md). For a PR without a governing issue, prepare its PR body instead. Get approval for the exact body edits within the inherited write boundary before marking it ready; if approval or requirements are missing, stop and ask. Post a brief comment linking to the body and verification evidence, without duplicating the specification. Then offer a fresh `orchestrating` session for an issue: on acceptance, call the Skill tool for "handoff" with a link to the issue body as Payload and `/orchestrating #<n>` as Next session.
+   - `ready-for-agent`: prepare the authoritative issue body with confirmed scope and testable acceptance criteria, following [AGENT-BRIEF.md](AGENT-BRIEF.md). For a PR without a governing issue, prepare its PR body instead. Get approval for the exact body edits within the inherited write boundary before marking it ready; if approval or requirements are missing, stop and ask. Post a brief comment linking to the body and verification evidence, without duplicating the specification. Then offer a fresh `orchestrating` session for an issue: on acceptance, load `handoff` with a link to the issue body as Payload and `orchestrating #<n>` as the next assignment.
    - `ready-for-human`: prepare the same authoritative body and pointer brief, noting why it can't be delegated (judgment calls, external access, design decisions, manual testing).
    - `needs-info`: post triage notes (template below).
    - For `wontfix`, close the issue, with the comment depending on *why*:

@@ -7,7 +7,7 @@ Keep one agent definition per role, with its instructions and permissions. The d
 
 ## Route before dispatch
 
-Re-read and validate `.model-routing` before every dispatch; the read is the validation. Reuse model-availability lookups within the same runtime; refresh them when the runtime or provider/model configuration changes, or the selected model becomes unavailable.
+On Pi, read [PI.md](PI.md) for model validation and subagent dispatch. Re-read and validate `.model-routing` before every dispatch; the read is the validation. Reuse model-availability lookups within the same runtime; refresh them when the runtime or provider/model configuration changes, or the selected model becomes unavailable.
 
 1. **Locate.** Identify the repository for the assignment, not necessarily the coordinator's working directory. The route lives at the repository's main checkout: from a linked worktree, find it with `git worktree list`; outside git, use the assignment's exact directory. Read and validate `.model-routing` there. It is a JSON map from agent IDs to tier-specific model references; see the example below.
 2. **Choose.** Select the lowest tier that can meet the assignment's completion boundary. Read-only assignments start at **fast**, including each parallel assignment and new follow-up; when uncertain, try fast with a bounded brief and check its result. Assignments that change state (edits, commits, effectful commands) get their tier from the work's difficulty before dispatch, because a failed attempt leaves its changes behind.

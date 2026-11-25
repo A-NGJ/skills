@@ -10,7 +10,7 @@ disable-model-invocation: true
 
 1. **Load the input.** For an issue, read [Tracker integration](TRACKER-INTEGRATION.md) for issue input and the publication boundary. For a handoff document or a pasted summary, resume from its open questions and fog. Otherwise take the loose idea as stated.
 2. **Choose the record.** Use local checkpoints by default; issue publication follows the tracker reference. Pass the chosen boundary to loaded skills.
-3. **Name the provisional destination.** Call the Skill tool for "grilling" and "domain-modeling". Fact-gathering within grilling follows the Research rule below. Without an agreed glossary or ADR destination, capture vocabulary and decisions in the summary. The first round establishes the desired outcome and constraints; the destination stays provisional while evidence-dependent decisions remain open.
+3. **Name the provisional destination.** Load `grilling` and `domain-modeling`. Fact-gathering within grilling follows the Research rule below. Without an agreed glossary or ADR destination, capture vocabulary and decisions in the summary. The first round establishes the desired outcome and constraints; the destination stays provisional while evidence-dependent decisions remain open.
 4. **Draft candidate research.** Tie each research question to the decision it informs and the facts needed to settle it.
 
 ## Converge
@@ -29,7 +29,7 @@ After about six rounds, offer to pause with a progress summary; the operator may
 1. Resolve straightforward facts directly through read-only inspection.
 2. For substantive investigations, propose the decision-linked question list in the current round and wait for approval.
 3. Check delegation prerequisites before choosing that path: valid assignment-specific routing configuration, an available researcher profile with usable source access, and runtime support for explicit model selection.
-   - **Available:** call the Skill tool for "research" with the already-approved list and access boundary; that approval satisfies its question-list approval step, while changed scope needs fresh approval. Actual dispatches must pass `model-routing` and research's Capability check.
+   - **Available:** load `research` with the already-approved list and access boundary; that approval satisfies its question-list approval step, while changed scope needs fresh approval. Actual dispatches must pass `model-routing` and research's Capability check.
    - **Absent or invalid:** report the limitation and perform the approved read-only investigation in-session instead.
 4. Both paths retain primary-source citations, evidence gaps, and the approved access boundary.
 5. Gather findings before asking the operator to choose an option that depends on them; continue independent frontier questions while research is pending. Findings land in chat and shape the next round.
@@ -38,7 +38,7 @@ After about six rounds, offer to pause with a progress summary; the operator may
 ## Prototype
 
 1. Use concrete scenarios for questions answerable in prose.
-2. When running or seeing something can resolve a named uncertainty, identify the question and the decision it will settle, then call the Skill tool for "prototype". The call is exploration-only: capture validated decisions in the summary; the prototype skill's production-integration step waits for a separately authorized build.
+2. When running or seeing something can resolve a named uncertainty, identify the question and the decision it will settle, then load `prototype`. The call is exploration-only: capture validated decisions in the summary; the prototype skill's production-integration step waits for a separately authorized build.
 3. Choose isolation before building, keeping the operator's checkout untouched:
    - **Repository-dependent prototypes:** use a separate worktree on a throwaway `prototype/<slug>` branch.
    - **Standalone demos:** use the scratchpad.
@@ -49,7 +49,7 @@ After about six rounds, offer to pause with a progress summary; the operator may
 
 Write the running summary before dispatching research or a prototype, after a session compaction, and at session end:
 
-- **Local:** call the Skill tool for "handoff" with the running summary as Payload and `/grill-with-research <issue-or-slug>` as Next session. The temp directory may lose it; for a lasting record, save the summary at an operator-chosen path and use a link to that record as Payload. A durable summary needs no issue.
+- **Local:** load `handoff` with the running summary as Payload and `grill-with-research <issue-or-slug>` as the next assignment. The temp directory may lose it; for a lasting record, save the summary at an operator-chosen path and use a link to that record as Payload. A durable summary needs no issue.
 - **Issue publication, when authorized:** follow [Tracker integration](TRACKER-INTEGRATION.md#checkpoints).
 
 After a session compaction, re-read the checkpoint before continuing; it is the record, and your memory of the session is a lossy copy of it.
@@ -81,7 +81,7 @@ A **progress summary** is a pause. It holds Destination, Decisions so far, Open 
 The exit criterion is an operator-confirmed converged summary recorded in the chosen checkpoint and shown in chat. This completes the interview. Offer relevant next steps without requiring a choice; execute a chosen handoff or explicitly authorized build as a separate assignment:
 
 1. **Stop or save for later:** leave the summary in the chosen checkpoint and name its path or URL. A lasting standalone record may live at an operator-chosen path without an issue.
-2. **Fresh standalone session:** call the Skill tool for "handoff" with the converged summary as Payload, or a link to its durable record, and the operator's next assignment as Next session. Continuing this interview uses `/grill-with-research <issue-or-slug>`; another assignment needs no tracker workflow.
+2. **Fresh standalone session:** load `handoff` with the converged summary as Payload, or a link to its durable record, and the operator's next assignment as Next session. Continuing this interview uses `grill-with-research <issue-or-slug>`; another assignment needs no tracker workflow.
 3. **Tracker-backed handoff, if chosen:** read [Tracker integration](TRACKER-INTEGRATION.md#handoffs) for `managing-projects` or `orchestrating`.
 4. **Build here:** only on the operator's explicit go-ahead. A standalone build needs no issue; when an existing issue governs the build, follow the tracker reference's [Implementation boundary](TRACKER-INTEGRATION.md#implementation-boundary).
 

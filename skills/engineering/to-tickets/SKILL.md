@@ -12,7 +12,7 @@ metadata:
 
 Break a plan, spec, or conversation into a set of **tickets**: tracer-bullet vertical slices, each declaring the tickets that **block** it.
 
-The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `/setup-engineering-skills`.
+The issue tracker and triage label vocabulary should have been provided to you. If not, tell the user to run `setup-engineering-skills` using the harness's skill command.
 
 ## Process
 
@@ -63,7 +63,7 @@ Iterate until the user approves the breakdown.
 
 Use caller-provided or repository issue-body guidance when present; the templates below are defaults. Each issue body (or per-ticket local file) holds the complete approved specification and testable acceptance criteria. Any brief or handoff links to it rather than maintaining another specification. Preserve blocking edges and local status in either format.
 
-Publish the approved tickets. **How** depends on the tracker `/setup-engineering-skills` configured; the tickets are the same either way, only the shape of the blocking edges changes:
+Publish the approved tickets. **How** depends on the tracker `setup-engineering-skills` configured; the tickets are the same either way, only the shape of the blocking edges changes:
 
 - **Local files** → write one file per ticket under `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01` in dependency order (blockers first). Each file's "Blocked by" lists the numbers/titles it depends on. Use the per-ticket file template below: one ticket per file, never a single combined file.
 - **A real issue tracker (GitHub, Linear, …)** → publish one issue per ticket in dependency order (blockers first) so each ticket's blocking edges can reference real identifiers. Use the platform's native blocking / sub-issue relationship where it has one; otherwise set each ticket's "Blocked by" to the blocking issues. Apply the `ready-for-agent` triage label unless instructed otherwise; the tickets are agent-grabbable by construction.

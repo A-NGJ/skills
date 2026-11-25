@@ -24,11 +24,11 @@ For an issue-backed summary, link to the body's criteria and list any proposed e
 
 ### Fresh session runs `managing-projects`, if chosen
 
-Use this when the operator wants an issue created or its body reconciled with the confirmed design. Call the Skill tool for "handoff" with the issue body link as Payload and the summary link and pending changes in Live thread; without an issue, link to the chosen summary checkpoint as Payload. Set `/managing-projects <issue-or-slug>` as Next session; it obtains approval for the exact body change before implementation handoff.
+Use this when the operator wants an issue created or its body reconciled with the confirmed design. Load `handoff` with the issue body link as Payload and the summary link and pending changes in Live thread; without an issue, link to the chosen summary checkpoint as Payload. Set `managing-projects <issue-or-slug>` as the next assignment; it obtains approval for the exact body change before implementation handoff.
 
 ### Fresh session runs `orchestrating`, if chosen
 
-Issue only, when the confirmed design agrees with the authoritative body. Call the Skill tool for "handoff" with a link to the issue body as Payload, the local summary path or authorized summary comment link in Live thread, and `/orchestrating #<n>` as Next session. Do not load `orchestrating` in this session. Tell the operator to open a new session, load `orchestrating`, and point it at the file.
+Issue only, when the confirmed design agrees with the authoritative body. Load `handoff` with a link to the issue body as Payload, the local summary path or authorized summary comment link in Live thread, and `orchestrating #<n>` as the next assignment. Do not load `orchestrating` in this session. Tell the operator to open a new session, load `orchestrating`, and point it at the file.
 
 ## Implementation boundary
 

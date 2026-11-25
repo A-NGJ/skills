@@ -19,7 +19,7 @@ Save to `$TMPDIR/handoff/<skill>-<target>.md`, using the OS temporary directory,
 
 ```markdown
 ## Next session
-<skill to load> <target>, e.g. `/orchestrating #42`
+<skill command for the receiving harness> <target>
 ## Payload
 <link to the authoritative issue body; without an issue, the calling skill's payload or a link to its artifact>
 ## Artifacts
@@ -27,10 +27,10 @@ Save to `$TMPDIR/handoff/<skill>-<target>.md`, using the OS temporary directory,
 ## Live thread
 <what was in flight and why: decisions, rejected options, operator preferences>
 ## Suggested skills
-<skills the next agent should call the Skill tool for>
+<skills the next agent should load>
 ```
 
-A calling skill names what goes in Payload and Next session. Called directly, leave Payload out unless the conversation produced one, and take Next session from the arguments.
+A calling skill names what goes in Payload and Next session. Called directly, leave Payload out unless the conversation produced one, and take Next session from the arguments. Use the receiving harness's skill syntax (e.g. `/skill:orchestrating #42` in Pi, `/orchestrating #42` where supported). If the receiving harness is unknown, give the skill name and target rather than guessing a command.
 
 ## Rules
 

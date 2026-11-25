@@ -1,0 +1,11 @@
+{
+  "name": "@a-ngj/skills",
+  "private": true,
+  "keywords": ["pi-package"],
+  "pi": {
+    "skills": ["./skills/engineering", "./skills/productivity"],
+    "subagents": {
+      "agents": ["./pi/agents"]
+    }
+  }
+}

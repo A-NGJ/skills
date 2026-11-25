@@ -8,7 +8,7 @@ Recovery is best-effort: Git preserves committed work, not the plan, review stat
 
 ## Handoff
 
-When the session ends at the defect-correction budget without an instruction to continue, or on a blocked exit, call the Skill tool for "handoff" with `/orchestrating #<n>` as Next session and `<repo-key>-<issue-id>` as its filename target.
+When the session ends at the defect-correction budget without an instruction to continue, or on a blocked exit, load `handoff` with `orchestrating #<n>` as the next assignment and `<repo-key>-<issue-id>` as its filename target.
 
 - **Payload:** the blocker or question, linking the tracker comment when there is one.
 - **Artifacts:** the worktree path, the branch, the commit range, and the implementation plan with each step's status.

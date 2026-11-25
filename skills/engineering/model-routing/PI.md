@@ -1,0 +1,9 @@
+# Dispatch in Pi
+
+Use a `subagent` extension that accepts a per-call model and working directory. The [README's Pi setup](https://github.com/A-NGJ/skills#delegation-in-pi) uses `pi-subagents`. An extension that only sets models at the profile level does not satisfy the required-route gate.
+
+- **Discover:** If Pi exposes `subagents_enable` instead of `subagent`, call it first. With `pi-subagents`, inspect the active profiles using `subagent` with `action: "list"` and `options: { agentScope: "user", capabilities: true }`. Resolve any profile collision before dispatch.
+- **Validate:** Match the resolved `provider/id` exactly against `pi --list-models` or the extension's available-model catalog before dispatch. Do not rely on fuzzy matching. A `:thinking` suffix is allowed only when the extension supports it and the chosen model supports that level.
+- **Single (`pi-subagents`):** Pass `{ agent, task, model, cwd, worktree: false, async: false, options: { context: "fresh", agentScope: "user" } }`. For `orchestrating`, `cwd` is the existing issue worktree; the extension must not create another worktree. Use this repo's profiles rather than same-name defaults or project overrides.
+- **Parallel research (`pi-subagents`):** Pass `{ workflow: "parallel", args: { tasks: [...] }, worktree: false, async: false, options: { context: "fresh", agentScope: "user" } }`. Each item has its own `{ agent: "researcher", task, model, cwd }`. Wait for all findings.
+- **Other compatible extensions:** Use their documented single and parallel inputs, passing `model` and `cwd` explicitly for each child. If a correction or clarification round cannot resume its original child, start a fresh one with the brief and the relevant findings or decisions. Final reviewers always start fresh without the coordinator's transcript.
