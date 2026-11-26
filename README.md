@@ -1,24 +1,21 @@
 # Skills for Staying in Charge
 
-Composable agent skills for engineers, project managers and everyone else who works with a coding agent. Subagents start on the cheapest model tier that can do the job and escalate only with a stated reason. Every implementation step gets a fresh session, and a reviewer who did not write the code checks the result.
+Skills for working with a coding agent, from making a small edit to taking an issue through implementation and review. Pick the skill that fits the job; you don't have to adopt the whole workflow.
 
-Each skill stands alone. Start from whichever fits your situation and skip the rest. They compose in any order, but none requires another.
+## Quick start
 
-## Installation
+### 1. Install
 
-### 1. Get the skills
-
-Open the section for your harness. Choose one install method to avoid duplicate skill names. With `npx skills`, omit `--global` to install into the current project, and skip the in-progress `roadmap` skill if prompted.
+Open the section for your coding agent. Use one install method and don't install [two copies of the same skill](#companion-skills). If `npx skills` prompts you to choose, include `clinical-change` and skip the in-progress `roadmap`. For other agents and install methods, see the [installation reference](#installation-reference).
 
 <details>
 <summary><strong>Claude Code</strong></summary>
 
 ```sh
-npx skills@latest add mattpocock/skills --global --agent claude-code --skill grilling domain-modeling prototype
 npx skills@latest add A-NGJ/skills --global --agent claude-code
 ```
 
-Try `/clinical-change`. For a manual install, use the last section with `~/.claude/skills/` or the project's `.claude/skills/` as the destination. See the [Claude Code skill docs](https://code.claude.com/docs/en/skills).
+In Claude Code, run `/clinical-change`.
 
 </details>
 
@@ -26,11 +23,10 @@ Try `/clinical-change`. For a manual install, use the last section with `~/.clau
 <summary><strong>OpenCode</strong></summary>
 
 ```sh
-npx skills@latest add mattpocock/skills --global --agent opencode --skill grilling domain-modeling prototype
 npx skills@latest add A-NGJ/skills --global --agent opencode
 ```
 
-Ask OpenCode to load `clinical-change`. For a manual install, use the shared `.agents` paths below or OpenCode's own `~/.config/opencode/skills/` or `.opencode/skills/`. See the [OpenCode skill docs](https://opencode.ai/docs/skills/).
+In OpenCode, ask: `Load the clinical-change skill.`
 
 </details>
 
@@ -38,22 +34,118 @@ Ask OpenCode to load `clinical-change`. For a manual install, use the shared `.a
 <summary><strong>Pi</strong></summary>
 
 ```sh
-npx skills@latest add mattpocock/skills --global --agent pi --skill grilling domain-modeling prototype
 pi install git:github.com/A-NGJ/skills
 ```
 
-For a local checkout, run `pi install .` from its root instead of the Git install. The Pi package loads the released skills and makes the profiles available for [optional delegation](#delegation-in-pi). If you only want the skill folders, use `npx skills@latest add A-NGJ/skills --global --agent pi` **instead of** `pi install`, or use the manual install below.
-
-Try `/skill:clinical-change`.
+In Pi, run `/skill:clinical-change`.
 
 </details>
 
-<details>
-<summary><strong>Other .agents-compatible harnesses or manual install</strong></summary>
+### 2. Try a skill
 
-If `npx skills` lists your harness, use its `--agent` ID in the two commands from the Claude Code section. Otherwise, run the commands below from your project root. The default destination is the project's `.agents/skills/`; use `$HOME/.agents/skills` for a personal install if your harness supports it.
+Open a project in your coding agent, load `clinical-change` as shown above, and ask for a small edit. For example: “Rename `formatDate` to `formatDisplayDate` without changing behavior.” The skill keeps the diff focused on the rename.
 
-Also copy or link `grilling`, `domain-modeling` and `prototype` from [mattpocock/skills](https://github.com/mattpocock/skills) into the same destination.
+**Optional next steps**
+
+- Using the issue-tracker workflow? Run `setup-engineering-skills` once in that project. See [Issue-tracker setup](#issue-tracker-setup).
+- Want skills to delegate work to other agents? See [Delegation and model routing](#delegation-and-model-routing).
+
+## Find a skill
+
+- **Clarify an idea before writing code.** [`grill-with-research`](skills/productivity/grill-with-research/SKILL.md) turns a rough idea into a scoped task with testable acceptance criteria. Use [`roast-me`](skills/productivity/roast-me/SKILL.md) to challenge the choices behind an existing design.
+- **Make a small, reviewable change.** [`clinical-change`](skills/productivity/clinical-change/SKILL.md) keeps the diff focused, [`commit`](skills/engineering/commit/SKILL.md) splits work into atomic commits, and [`pr`](skills/engineering/pr/SKILL.md) writes the pull request body.
+- **Decide what to work on next.** [`managing-projects`](skills/engineering/managing-projects/SKILL.md) ranks next actions, [`triage`](skills/engineering/triage/SKILL.md) prepares incoming issues, and [`to-tickets`](skills/engineering/to-tickets/SKILL.md) splits a plan into issues with dependencies.
+- **Run an issue through implementation and review.** [`orchestrating`](skills/engineering/orchestrating/SKILL.md) takes one issue to a pull request. If you're moving between sessions yourself, use [`handoff`](skills/productivity/handoff/SKILL.md).
+
+See the [skill reference](#skill-reference) for the full list. Some workflows need [companion skills](#companion-skills).
+
+## Issue-tracker setup
+
+Run [`setup-engineering-skills`](skills/engineering/setup-engineering-skills/SKILL.md) once in the project where you'll use `orchestrating`, `managing-projects`, `triage`, or `to-tickets`. GitHub uses `gh`, GitLab uses `glab`, and a local Markdown tracker under `.scratch/` needs neither tracker CLI.
+
+Use `/setup-engineering-skills` in Claude Code, `/skill:setup-engineering-skills` in Pi, or ask your coding agent to load `setup-engineering-skills` by name. The skill proposes a project description based on the repo and asks you to confirm the setup before writing:
+
+- Project context and links to policy in the root `AGENTS.md` or `CLAUDE.md`.
+- `docs/agents/issue-tracker.md` and `docs/agents/domain.md` for the tracker and domain docs.
+- `docs/agents/labels.md` if `triage` is installed, and `docs/agents/verification.md` if `orchestrating` is installed.
+
+With `orchestrating` installed, setup adds a **Workflow state** section to `docs/agents/issue-tracker.md`. `orchestrating` won't start without it: it needs to know how to move issues through the project's workflow and how to name issue branches.
+
+## Delegation and model routing
+
+`orchestrating`, `research`, and delegated investigation in `managing-projects` need agent profiles and a `.model-routing` file.
+
+### Agents
+
+The skills expect one active profile per role. Installing just the skill folders does not register these profiles.
+
+- **Claude Code:** adapt the role instructions and tool permissions in [`agents/`](agents/) to [Claude Code's subagent format](https://code.claude.com/docs/en/sub-agents); save them in `~/.claude/agents/` or `.claude/agents/`.
+- **OpenCode:** use [`agents/`](agents/) as the starting profiles in `~/.config/opencode/agents/` or `.opencode/agents/`. Check the [agent format](https://opencode.ai/docs/agents/) and tool permissions for your version.
+- **Pi:** see [Delegation in Pi](#delegation-in-pi) for the bundled profiles and extension.
+- **Other harnesses:** register the same role IDs in your harness's agent format. `.agents/skills/` provides skill discovery, not subagent dispatch.
+
+Routed dispatch requires explicit model selection for each call, even when an agent has a default. `orchestrating` also requires the ability to run children in the existing issue worktree. If your runtime cannot meet those requirements, use the non-delegating skills.
+
+| Role | Permissions | Used by |
+| --- | --- | --- |
+| `implementation-specialist` | Plan mode reads only and returns an implementation plan; step mode edits and commits one step in the issue worktree. Cannot dispatch other agents. | `orchestrating` |
+| `reviewer` | Read-only. Returns `Accepted`, `Changes Required`, or `Needs clarification`. | `orchestrating` |
+| `researcher` | Read-only. Reads files, git history and the web. | `research`, `managing-projects` |
+
+### Model routing
+
+[`model-routing`](skills/engineering/model-routing/SKILL.md) picks the lowest tier that can do the work and explains when a higher tier is needed. Reviewers must meet a minimum tier based on the work they're reviewing. If a route is missing or invalid, dispatch stops rather than silently falling back to another model.
+
+Configure `.model-routing` at the repository's main checkout as a JSON map from agent IDs to `fast`, `standard` and `deep` model references. The model references below are placeholders; agent IDs and reference syntax must match your runtime:
+
+```json
+{
+  "researcher": {
+    "fast": "provider/researcher-fast-model",
+    "standard": "provider/researcher-standard-model",
+    "deep": "provider/researcher-deep-model"
+  }
+}
+```
+
+Add one entry per agent the coordinator will dispatch, including any built-in agents it uses. See [`model-routing`](skills/engineering/model-routing/SKILL.md) for the required-route gate and the reviewer tier floor. The file is a skill convention, not native runtime configuration, so the runtime must support explicit model selection at dispatch.
+
+### Delegation in Pi
+
+Pi's skill loader does not provide subagents. Install this repository as a Pi package (not a duplicate skills-directory copy), then install [`pi-subagents`](https://github.com/nicobailon/pi-subagents) (tested with Pi 1.6.0 and extension 0.90.0):
+
+```sh
+pi install npm:pi-subagents@0.90.0
+```
+
+Restart Pi and check `/subagents` for `implementation-specialist`, `reviewer` and `researcher` from this package. The extension discovers the profiles in [`pi/agents/`](pi/agents/) automatically. If you already use a different `subagent` extension, run only one at a time. To keep your existing extension, it must support explicit per-call models, working directories and parallel dispatch; install the Pi profiles in its agent directory if it does not discover package profiles.
+
+Use `pi --list-models` to find available `provider/id` values for `.model-routing` in the **project you're working on**. The routes checked into this skills repository are for work on this repository, not defaults for other projects. See [Pi dispatch](skills/engineering/model-routing/PI.md) for how the coordinator passes the selected model and uses the existing issue worktree.
+
+The bundled Pi researcher has file tools only. The coordinator gathers web, git or authenticated evidence within the approved read boundary and passes a sanitized file when needed. The Pi reviewer has a shell to run tests, so its read-only review contract is an instruction, not an OS sandbox. Keep `pi-subagents` artifacts out of the issue worktree (`artifactDir: "session"`, the default) so orchestration's clean-worktree checks pass.
+
+## Installation reference
+
+With `npx skills`, omit `--global` to install into the current project. If your coding agent isn't in Quick start but is listed by `npx skills`, use its `--agent` ID in the Claude Code command. If prompted, skip the in-progress `roadmap` skill.
+
+### Companion skills
+
+`clinical-change` doesn't need companion skills. For `grill-with-research` and other workflows that call `grilling`, `domain-modeling`, or `prototype`, install those skills from [mattpocock/skills](https://github.com/mattpocock/skills):
+
+```sh
+agent=claude-code  # or opencode, pi, or another supported agent ID
+npx skills@latest add mattpocock/skills --global --agent "$agent" --skill grilling domain-modeling prototype
+```
+
+Install only those upstream skills with this command. `triage`, `to-tickets`, `research`, `pr`, and `handoff` share names with upstream; don't install both copies. The skills here expect this repo's versions when they call each other.
+
+### Pi install alternatives
+
+To install from a local checkout, run `pi install .` from its root instead of the Git install. The Pi package loads the released skills and makes the profiles available for [optional delegation](#delegation-in-pi). If you want only the skill folders, use `npx skills@latest add A-NGJ/skills --global --agent pi` **instead of** `pi install`, or use the manual install below.
+
+### Manual install
+
+With Git installed, run the commands below from your project root. The default destination is the project's `.agents/skills/`; use `$HOME/.agents/skills` for a personal install if your coding agent supports it. For [Claude Code](https://code.claude.com/docs/en/skills), use `~/.claude/skills/` or `.claude/skills/`. For [OpenCode](https://opencode.ai/docs/skills/), you can also use `~/.config/opencode/skills/` or `.opencode/skills/`.
 
 ```sh
 dest="$PWD/.agents/skills"  # change this for a personal or harness-specific install
@@ -65,99 +157,9 @@ for s in "$src"/skills/engineering/*/ "$src"/skills/productivity/*/; do
 done
 ```
 
-Link or copy each whole skill folder so its supporting files stay alongside `SKILL.md`. Try asking your harness to load `clinical-change` or use its skill command.
+Link or copy each whole skill folder so its supporting files stay alongside `SKILL.md`. If you need the companion skills, copy or link only `grilling`, `domain-modeling`, and `prototype` from upstream into the same destination. To try the install, ask your coding agent to load `clinical-change` or use its skill command.
 
-</details>
-
-Use your harness's invocation style wherever this README shows a shorthand like `/orchestrating`.
-
-Requirements: `git`, and `gh` for GitHub or `glab` for GitLab. A local markdown tracker (`.scratch/`) needs neither tracker CLI.
-
-`commit`, `explain`, `clinical-change`, `roast-me` and `grill-with-research` do not need delegation. `grill-with-research` can investigate in the current session when subagents are unavailable.
-
-### 2. Set up delegation and model routing (optional)
-
-`orchestrating`, `research` and delegated investigation in `managing-projects` need the agent profiles and a `.model-routing` file. See [Agents](#agents), or [Delegation in Pi](#delegation-in-pi) for Pi setup.
-
-### 3. Run `setup-engineering-skills`
-
-Use `/setup-engineering-skills` in Claude Code, `/skill:setup-engineering-skills` in Pi, or ask your harness to load `setup-engineering-skills` by name. Run it once per repo, only if you want the tracker workflow (`orchestrating`, `managing-projects`, `triage`, `to-tickets`). It asks what the project does, who it serves, and its main responsibilities and non-goals, suggesting answers from the repo for you to confirm. It puts the confirmed description under `## Project` in `AGENTS.md` or `CLAUDE.md`.
-
-It also configures your issue tracker (GitHub, GitLab or local markdown), label vocabulary and domain docs, writing `docs/agents/issue-tracker.md` and `docs/agents/domain.md`, plus `docs/agents/labels.md` when `triage` is installed and `docs/agents/verification.md` when `orchestrating` is installed. `orchestrating` refuses to start until `issue-tracker.md` has a **Workflow state** section.
-
-## Why These Skills Exist
-
-I built these skills to fix failure modes I see when working with coding agents.
-
-### #1: The Agent Didn't Build What I Meant
-
-**The Problem**. You think the agent knows what you want. Then you see what it built, and it did not understand you at all. The idea was still foggy when the work started.
-
-**The Fix** is to resolve the fog before any code is written:
-
-- [`/grill-with-research`](skills/productivity/grill-with-research/SKILL.md) turns a foggy idea or issue into one fixed-scope work item with testable acceptance criteria, through grilling, research and prototypes.
-- [`/roast-me`](skills/productivity/roast-me/SKILL.md) interviews you on each critical design choice in an existing implementation, until you can justify it or record it as unsettled.
-
-### #2: Every Subagent Runs on the Same Model
-
-**The Problem**. Delegating work to subagents does not help if every subagent is the most expensive model. A file search does not need what a security review needs, and the daily limit is gone after the first issue.
-
-**The Fix** is to route each assignment to a model tier. [`model-routing`](skills/engineering/model-routing/SKILL.md) reads the repository's `.model-routing` file, picks the lowest tier that can meet the assignment's completion boundary, and escalates only with a stated reason. Reviews have a tier floor. A missing or invalid route stops the dispatch, and there is no silent fallback to another model.
-
-### #3: The Agent Changed More Than I Asked
-
-**The Problem**. You ask for a rename and get a rename, reordered imports, a reformatted call site and a "fixed" comment. The diff is too big to review, and too tangled to revert.
-
-**The Fix** is to keep each change small and justified:
-
-- [`/clinical-change`](skills/productivity/clinical-change/SKILL.md) makes an edit where every hunk is necessary for the outcome and nothing else appears.
-- [`/commit`](skills/engineering/commit/SKILL.md) splits the work into atomic commits, with one reason to revert each.
-- [`/pr`](skills/engineering/pr/SKILL.md) writes a pull request body with a summary, before/after evidence, manual testing steps and a merge-danger call.
-
-### #4: I Don't Know What To Work On Next
-
-**The Problem**. The tracker grows faster than anyone reads it. Issues are duplicated, blocked on each other, or too big to start, and ranking them by hand takes the time you wanted to spend on the work.
-
-**The Fix** is to put the tracker through a small set of skills:
-
-- [`managing-projects`](skills/engineering/managing-projects/SKILL.md) ranks next actions, manages dependencies and duplicates, and prepares a brief for the next issue.
-- [`triage`](skills/engineering/triage/SKILL.md) moves each issue or external PR through triage roles and writes agent-ready briefs.
-- [`to-tickets`](skills/engineering/to-tickets/SKILL.md) splits a plan into tracer-bullet issues with blocking edges.
-
-### #5: The Context Window Ran Out Mid-Task
-
-**The Problem**. One session holds the plan, the implementation and the review. Its context fills with stale detail, quality drops, and you end up restarting sessions by hand and acting as the orchestrator yourself.
-
-**The Fix** is [`/orchestrating`](skills/engineering/orchestrating/SKILL.md). It plans one issue once, then runs each step in a fresh implementation-specialist session on one shared worktree branch. A fresh reviewer checks each checkpoint, and the run ends at a pull request. You answer decisions and nothing else. Model tiers come from `model-routing`, which is why #2 and #5 belong together. [`handoff`](skills/productivity/handoff/SKILL.md) covers the cases where you move between sessions by hand.
-
-### Typical flow
-
-None of these steps is required, and each skill works on its own:
-
-```text
-grill-with-research -> triage / to-tickets -> managing-projects -> orchestrating -> pull request
-```
-
-## How This Differs From Matt's Skills
-
-These skills build on [mattpocock/skills](https://github.com/mattpocock/skills), which are excellent, and they install next to them. `grilling`, `domain-modeling` and `prototype` are used directly; `grill-with-docs` is an optional standalone workflow. The rows below describe design differences, so you can pick the version that suits your situation.
-
-| Area | Upstream | This repo |
-| --- | --- | --- |
-| `triage`, `to-tickets` | Operator-invoked only. | Model-invokable, so `managing-projects` can call them. |
-| `handoff` | Operator-invoked only. Free-form document with a suggested-skills section. | Model-invokable. Fixed skeleton, stable path `$TMPDIR/handoff/<skill>-<target>.md`, and a receiving rule that re-reads every linked tracker record before acting. |
-| `research` | One background agent writes a Markdown file in the repo. | Fans the question out to parallel `researcher` subagents, each routed to a model tier, and reports cited findings. |
-| `pr` | Summary, Evidence and Merge Danger. | Adds a Manual Testing section and an Undo field, which `orchestrating` relies on. |
-| `grill-with-docs` and `grill-with-research` | `grill-with-docs` loads `grilling` and `domain-modeling`. | `grill-with-research` adds research and prototypes, and ends in a converged summary. It works without a tracker. |
-| `implement-spec` and `orchestrating` | Works a whole spec as a task graph on one integration branch, with parallel implementer subagents in their own worktrees. | Works one issue sequentially on one shared worktree branch, with a fresh reviewer at each checkpoint, and ends at a pull request. |
-| Model selection | Not part of `implement-spec`'s dispatch. | `model-routing` selects a tier for every dispatch from `.model-routing`. |
-| Only here | | `model-routing`, `managing-projects`, `clinical-change`, `roast-me`, `explain` |
-
-Use upstream's `implement-spec` when you want parallel throughput. Use `orchestrating` when you want a gated, sequential run.
-
-`triage`, `to-tickets`, `research`, `pr` and `handoff` share names with upstream. Do not install both copies, because the callers in this repo rely on the differences above. Upstream `grill-with-docs` also stops the model from loading it, so the skills here load `grilling` and `domain-modeling` directly. Run `/grill-with-docs` yourself when you want a grilling session that updates `GLOSSARY.md` and ADRs.
-
-## Reference
+## Skill reference
 
 Skills are grouped by who they serve. Within each group, **operator-invoked** skills set `disable-model-invocation`, so only you can start them with a slash command. **Model-invoked** skills can also be loaded by the model or by other skills.
 
@@ -165,7 +167,7 @@ Skills are grouped by who they serve. Within each group, **operator-invoked** sk
 
 **Operator-invoked**
 
-- **[orchestrating](skills/engineering/orchestrating/SKILL.md)**: Plans one issue into steps, implements each step in a fresh specialist session in one worktree, reviews the result, then opens a pull request. Requires a clean worktree before every dispatch and one active orchestrator per issue. Its rules, correction budget and exits are in the skill.
+- **[orchestrating](skills/engineering/orchestrating/SKILL.md)**: Plans one issue, runs each step in a fresh specialist session on one shared worktree branch, and opens a pull request. A fresh reviewer who did not write the code checks the work at checkpoints and before the pull request opens. Requires a clean worktree before every dispatch and one active orchestrator per issue.
 - **[setup-engineering-skills](skills/engineering/setup-engineering-skills/SKILL.md)**: Captures project context and configures a repo: tracker, labels, domain docs, workflow states. Run once per repo.
 
 **Model-invoked**
@@ -196,52 +198,34 @@ Skills are grouped by who they serve. Within each group, **operator-invoked** sk
 - **[explain](skills/productivity/explain/SKILL.md)**: Explains a topic step by step with one concrete example before the general rule, pitched at the audience.
 - **[clinical-change](skills/productivity/clinical-change/SKILL.md)**: Makes an edit that contains nothing beyond what the outcome requires.
 
-### Agents
+### Example workflow
 
-The skills expect one active profile per role. Installing just the skill folders does not register these profiles.
+Use only the steps that fit your work:
 
-- **Claude Code:** adapt the role instructions and tool permissions in [`agents/`](agents/) to [Claude Code's subagent format](https://code.claude.com/docs/en/sub-agents); save them in `~/.claude/agents/` or `.claude/agents/`.
-- **OpenCode:** use [`agents/`](agents/) as the starting profiles in `~/.config/opencode/agents/` or `.opencode/agents/`. Check the [agent format](https://opencode.ai/docs/agents/) and tool permissions for your version.
-- **Pi:** see [Delegation in Pi](#delegation-in-pi) for the bundled profiles and extension.
-- **Other harnesses:** register the same role IDs in your harness's agent format. `.agents/skills/` provides skill discovery, not subagent dispatch.
+```text
+grill-with-research -> triage / to-tickets -> managing-projects -> orchestrating -> pull request
+```
 
-Routed dispatch requires explicit model selection for each call, even when an agent has a default. `orchestrating` also requires the ability to run children in the existing issue worktree. If your runtime cannot meet those requirements, use the non-delegating skills.
+## How this differs from Matt's skills
 
-| Role | Permissions | Used by |
+These skills build on [mattpocock/skills](https://github.com/mattpocock/skills) and install next to the [companion skills](#companion-skills). The rows below describe design differences, so you can pick the version that suits your situation.
+
+| Area | Upstream | This repo |
 | --- | --- | --- |
-| `implementation-specialist` | Plan mode reads only and returns an implementation plan; step mode edits and commits one step in the issue worktree. Cannot dispatch other agents. | `orchestrating` |
-| `reviewer` | Read-only. Returns `Accepted`, `Changes Required`, or `Needs clarification`. | `orchestrating` |
-| `researcher` | Read-only. Reads files, git history and the web. | `research`, `managing-projects` |
+| `triage`, `to-tickets` | Operator-invoked only. | Model-invokable, so `managing-projects` can call them. |
+| `handoff` | Operator-invoked only. Free-form document with a suggested-skills section. | Model-invokable. Fixed skeleton, stable path `$TMPDIR/handoff/<skill>-<target>.md`, and a receiving rule that re-reads every linked tracker record before acting. |
+| `research` | One background agent writes a Markdown file in the repo. | Fans the question out to parallel `researcher` subagents, each routed to a model tier, and reports cited findings. |
+| `pr` | Summary, Evidence and Merge Danger. | Adds a Manual Testing section and an Undo field, which `orchestrating` relies on. |
+| `grill-with-docs` and `grill-with-research` | `grill-with-docs` loads `grilling` and `domain-modeling`. | `grill-with-research` adds research and prototypes, and ends in a converged summary. It works without a tracker. |
+| `implement-spec` and `orchestrating` | Works a whole spec as a task graph on one integration branch, with parallel implementer subagents in their own worktrees. | Works one issue sequentially on one shared worktree branch, with fresh reviewers, and ends at a pull request. |
+| Model selection | Not part of `implement-spec`'s dispatch. | `model-routing` selects a tier for every dispatch from `.model-routing`. |
+| Only here | | `model-routing`, `managing-projects`, `clinical-change`, `roast-me`, `explain` |
 
-Configure `.model-routing` at the repository's main checkout as a JSON map from agent IDs to `fast`, `standard` and `deep` model references. The model references below are placeholders; agent IDs and reference syntax must match your runtime:
+Use upstream's `implement-spec` when you want parallel throughput. Use `orchestrating` when you want a gated, sequential run.
 
-```json
-{
-  "researcher": {
-    "fast": "provider/researcher-fast-model",
-    "standard": "provider/researcher-standard-model",
-    "deep": "provider/researcher-deep-model"
-  }
-}
-```
+Upstream `grill-with-docs` stops the model from loading it, so the skills here load `grilling` and `domain-modeling` directly. Run `/grill-with-docs` yourself when you want a grilling session that updates `GLOSSARY.md` and ADRs.
 
-Add one entry per agent the coordinator will dispatch, including any built-in agents it uses. See [`model-routing`](skills/engineering/model-routing/SKILL.md) for the required-route gate and the reviewer tier floor. The file is a skill convention, not native runtime configuration, so the runtime must support explicit model selection at dispatch.
-
-### Delegation in Pi
-
-Pi's skill loader does not provide subagents. Install this repository as a Pi package (not a duplicate skills-directory copy), then install [`pi-subagents`](https://github.com/nicobailon/pi-subagents) (tested with Pi 1.6.0 and extension 0.90.0):
-
-```sh
-pi install npm:pi-subagents@0.90.0
-```
-
-Restart Pi and check `/subagents` for `implementation-specialist`, `reviewer` and `researcher` from this package. The extension discovers the profiles in [`pi/agents/`](pi/agents/) automatically. If you already use a different `subagent` extension, run only one at a time. To keep your existing extension, it must support explicit per-call models, working directories and parallel dispatch; install the Pi profiles in its agent directory if it does not discover package profiles.
-
-Use `pi --list-models` to find available `provider/id` values for `.model-routing` in the **project you're working on**. The routes checked into this skills repository are for work on this repository, not defaults for other projects. See [Pi dispatch](skills/engineering/model-routing/PI.md) for how the coordinator passes the selected model and uses the existing issue worktree.
-
-The bundled Pi researcher has file tools only. The coordinator gathers web, git or authenticated evidence within the approved read boundary and passes a sanitized file when needed. The Pi reviewer has a shell to run tests, so its read-only review contract is an instruction, not an OS sandbox. Keep `pi-subagents` artifacts out of the issue worktree (`artifactDir: "session"`, the default) so orchestration's clean-worktree checks pass.
-
-### Layout
+## Repository layout
 
 ```text
 skills/<group>/<name>/SKILL.md   one folder per skill, grouped engineering/ or productivity/
