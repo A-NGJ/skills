@@ -1,6 +1,6 @@
 # ![Skills for Staying in Charge — Sharper Plans. Smaller Diffs. Less Babysitting.](assets/repo-banner.svg)
 
-Composable skills for coding agents, from a single focused edit to a reviewed pull request.
+Build software and lead the project, not just write the code. These composable skills for coding agents help you decide what to build next, break it into reviewable pieces, and coordinate the work through to a pull request.
 
 ## Quick start
 
