@@ -195,7 +195,7 @@ Add one entry per agent the coordinator will dispatch, including any built-in ag
 
 Pi's skill loader does not provide subagents; follow the [Pi agent profile installation steps](#agent-profiles). If you already use a different `subagent` extension, run only one at a time. To keep your existing extension, it must support explicit per-call models, working directories and parallel dispatch; install the Pi profiles in its agent directory if it does not discover package profiles.
 
-Use `pi --list-models` to find available `provider/id` values for `.model-routing` in the **project you're working on**. The routes checked into this skills repository are for work on this repository, not defaults for other projects. See [Pi dispatch](skills/engineering/model-routing/PI.md) for how the coordinator passes the selected model and uses the existing issue worktree.
+Use `pi --list-models` to find available `provider/id` values for `.model-routing` in the **project you're working on**. See [Pi dispatch](skills/engineering/model-routing/PI.md) for how the coordinator passes the selected model and uses the existing issue worktree.
 
 The bundled Pi researcher has file tools only. The coordinator gathers web, git or authenticated evidence within the approved read boundary and passes a sanitized file when needed. The Pi reviewer has a shell to run tests, so its read-only review contract is an instruction, not an OS sandbox. Keep `pi-subagents` artifacts out of the issue worktree (`artifactDir: "session"`, the default) so orchestration's clean-worktree checks pass.
 

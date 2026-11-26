@@ -1,3 +1,4 @@
 *.pyc
 *.local
 .DS_Store
+/.model-routing
