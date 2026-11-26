@@ -125,7 +125,7 @@ After installing the profiles, [configure `.model-routing`](#model-routing) in t
 
 ### 2. Try a skill
 
-Open a project in your coding agent, load `clinical-change` as shown above, and ask for a small edit. For example: “Rename `formatDate` to `formatDisplayDate` without changing behavior.” The skill keeps the diff focused on the rename.
+Open a project in your coding agent, load `clinical-change` as shown above, and ask for a concrete outcome. For example: “Add an ‘Export CSV’ button to the orders list that exports all orders matching the current filters, not just the current page.” That may take changes to the UI, API, query, and tests. The diff can span all of them and still be minimal: every change serves the export, and the orders list otherwise works as before.
 
 **Optional next steps**
 
@@ -135,7 +135,7 @@ Open a project in your coding agent, load `clinical-change` as shown above, and 
 ## Find a skill
 
 - **Clarify an idea before writing code.** [`grill-with-research`](skills/productivity/grill-with-research/SKILL.md) turns a rough idea into a scoped task with testable acceptance criteria. Use [`roast-me`](skills/productivity/roast-me/SKILL.md) to challenge the choices behind an existing design.
-- **Make a small, reviewable change.** [`clinical-change`](skills/productivity/clinical-change/SKILL.md) keeps the diff focused, [`commit`](skills/engineering/commit/SKILL.md) splits work into atomic commits, and [`pr`](skills/engineering/pr/SKILL.md) writes the pull request body.
+- **Make a focused, reviewable change.** [`clinical-change`](skills/productivity/clinical-change/SKILL.md) keeps the diff focused, [`commit`](skills/engineering/commit/SKILL.md) splits work into atomic commits, and [`pr`](skills/engineering/pr/SKILL.md) writes the pull request body.
 - **Decide what to work on next.** [`managing-projects`](skills/engineering/managing-projects/SKILL.md) ranks next actions, [`triage`](skills/engineering/triage/SKILL.md) prepares incoming issues, and [`to-tickets`](skills/engineering/to-tickets/SKILL.md) splits a plan into issues with dependencies.
 - **Run an issue through implementation and review.** [`orchestrating`](skills/engineering/orchestrating/SKILL.md) takes one issue to a pull request. If you're moving between sessions yourself, use [`handoff`](skills/productivity/handoff/SKILL.md).
 
