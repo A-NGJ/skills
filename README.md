@@ -1,6 +1,6 @@
-# Skills for Staying in Charge
+# Sharper Plans. Smaller Diffs. Less Babysitting.
 
-Skills for working with a coding agent, from making a small edit to taking an issue through implementation and review. Pick the skill that fits the job; you don't have to adopt the whole workflow.
+Composable skills for coding agents, from a single focused edit to a reviewed pull request. No all-or-nothing workflow.
 
 ## Quick start
 
