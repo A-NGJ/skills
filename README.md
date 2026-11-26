@@ -41,6 +41,26 @@ In Pi, run `/skill:clinical-change`.
 
 </details>
 
+<a name="manual-install"></a>
+<details>
+<summary><strong>Manual installation</strong></summary>
+
+With Git installed, run the commands below from your project root. The default destination is the project's `.agents/skills/`; use `$HOME/.agents/skills` for a personal install if your coding agent supports it. For [Claude Code](https://code.claude.com/docs/en/skills), use `~/.claude/skills/` or `.claude/skills/`. For [OpenCode](https://opencode.ai/docs/skills/), you can also use `~/.config/opencode/skills/` or `.opencode/skills/`.
+
+```sh
+dest="$PWD/.agents/skills"  # change this for a personal or harness-specific install
+src="$HOME/src/a-ngj-skills"
+mkdir -p "$(dirname "$src")" "$dest"
+git clone https://github.com/A-NGJ/skills.git "$src"
+for s in "$src"/skills/engineering/*/ "$src"/skills/productivity/*/; do
+  ln -s "${s%/}" "$dest/$(basename "$s")"
+done
+```
+
+Link or copy each whole skill folder so its supporting files stay alongside `SKILL.md`. If you need [companion skills](#companion-skills), copy or link only the ones listed there into the same destination. To try the install, ask your coding agent to load `clinical-change` or use its skill command.
+
+</details>
+
 ### 2. Try a skill
 
 Open a project in your coding agent, load `clinical-change` as shown above, and ask for a small edit. For example: “Rename `formatDate` to `formatDisplayDate` without changing behavior.” The skill keeps the diff focused on the rename.
@@ -141,23 +161,7 @@ Install only those upstream skills with this command. `triage`, `to-tickets`, `r
 
 ### Pi install alternatives
 
-To install from a local checkout, run `pi install .` from its root instead of the Git install. The Pi package loads the released skills and makes the profiles available for [optional delegation](#delegation-in-pi). If you want only the skill folders, use `npx skills@latest add A-NGJ/skills --global --agent pi` **instead of** `pi install`, or use the manual install below.
-
-### Manual install
-
-With Git installed, run the commands below from your project root. The default destination is the project's `.agents/skills/`; use `$HOME/.agents/skills` for a personal install if your coding agent supports it. For [Claude Code](https://code.claude.com/docs/en/skills), use `~/.claude/skills/` or `.claude/skills/`. For [OpenCode](https://opencode.ai/docs/skills/), you can also use `~/.config/opencode/skills/` or `.opencode/skills/`.
-
-```sh
-dest="$PWD/.agents/skills"  # change this for a personal or harness-specific install
-src="$HOME/src/a-ngj-skills"
-mkdir -p "$(dirname "$src")" "$dest"
-git clone https://github.com/A-NGJ/skills.git "$src"
-for s in "$src"/skills/engineering/*/ "$src"/skills/productivity/*/; do
-  ln -s "${s%/}" "$dest/$(basename "$s")"
-done
-```
-
-Link or copy each whole skill folder so its supporting files stay alongside `SKILL.md`. If you need the companion skills, copy or link only `grilling`, `domain-modeling`, and `prototype` from upstream into the same destination. To try the install, ask your coding agent to load `clinical-change` or use its skill command.
+To install from a local checkout, run `pi install .` from its root instead of the Git install. The Pi package loads the released skills and makes the profiles available for [optional delegation](#delegation-in-pi). If you want only the skill folders, use `npx skills@latest add A-NGJ/skills --global --agent pi` **instead of** `pi install`, or [install manually](#manual-install).
 
 ## Skill reference
 
