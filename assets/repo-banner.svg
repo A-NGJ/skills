@@ -14,13 +14,11 @@
     <path d="M24 37h46l29-18h61M24 53h65l30-18h58" stroke="#baabff"/>
     <path d="M936 190h-46l-29 14h-61m136-29h-65l-30 14h-58" stroke="#8ce6cd"/>
   </g>
-  <g stroke-width="4" stroke-linecap="round">
-    <path d="M450 51h14" stroke="#baabff"/>
-    <path d="M473 51h14" stroke="#a7c9ff"/>
-    <path d="M496 51h14" stroke="#8ce6cd"/>
-  </g>
   <g font-family="Arial, Helvetica, sans-serif" text-anchor="middle">
-    <text x="480" y="117" font-size="58" font-weight="700" fill="#f5f7ff">Skills for Staying in Charge</text>
-    <text x="480" y="166" font-size="35" font-weight="600" fill="#b3eadb">Sharper Plans. Smaller Diffs. Less Babysitting.</text>
+    <text x="480" y="109" font-size="58" font-weight="700" fill="#f5f7ff"><tspan fill="none">S</tspan><tspan dx="8">kills for Staying in Charge</tspan></text>
+    <text x="480" y="158" font-size="35" font-weight="600" fill="#b3eadb">Sharper Plans. Smaller Diffs. Less Babysitting.</text>
+  </g>
+  <g transform="translate(98.9 68.6) scale(1.25)" fill="#b3eadb">
+    <rect width="32" height="4"/><rect y="7" width="17" height="4"/><rect y="14" width="32" height="4"/><rect x="15" y="21" width="17" height="4"/><rect y="28" width="32" height="4"/>
   </g>
 </svg>
