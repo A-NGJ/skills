@@ -33,8 +33,9 @@ _(Used by `/orchestrating`. Keep one of the two state options and delete the oth
 - **State (board):** issue board `<name>`; in progress = list `<label backing the In Progress list>`. Moving a card is swapping that label.
 - **State (labels):** `todo`, `in-progress`. Swap with `glab issue update <number> --label in-progress --unlabel todo`. A closed issue is done; there is no `done` label.
 - **Branch naming:** `<type>/<issue-id>-<slug>`, type `feature` | `bugfix` | `hotfix`.
-- **Create and link a branch:** create it from the default branch and push it; the merge request's `Closes #<number>` links it to the issue.
-- **Merge request:** `glab mr create --source-branch <branch> --description "..."`, with `Closes #<number>` in the description.
+- **Integration base:** `<integration-branch>` (the branch issue changes merge into).
+- **Create and link a branch:** create it from the integration base and push it; the merge request's `Closes #<number>` links it to the issue.
+- **Merge request:** `glab mr create --source-branch <branch> --target-branch <integration-branch> --description "..."`, with `Closes #<number>` in the description.
 - **On merge request open:** board, leave the card; labels, remove `in-progress`.
 
 ## When a skill says "publish to the issue tracker"

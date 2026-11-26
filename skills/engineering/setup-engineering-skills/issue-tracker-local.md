@@ -16,8 +16,9 @@ _(Used by `/orchestrating`.)_
 
 - **State:** a `State:` line under the `Status:` line: `todo`, `in-progress`, or `done`.
 - **Branch naming:** `<type>/<issue-id>-<slug>`, type `feature` | `bugfix` | `hotfix`.
-- **Create and link a branch:** create it from the default branch and record it as a `Branch:` line in the issue file.
-- **Pull request:** open one when the repo has a remote that supports them; otherwise report the branch for the operator to merge.
+- **Integration base:** `<integration-branch>` (the branch issue changes merge into).
+- **Create and link a branch:** create it from the integration base and record it as a `Branch:` line in the issue file.
+- **Pull request:** target the integration base when the repo has a remote that supports pull requests; otherwise report both branches for the operator to merge.
 - **On pull request open:** leave `State: in-progress`; the operator sets `State: done` after merging.
 
 ## When a skill says "publish to the issue tracker"

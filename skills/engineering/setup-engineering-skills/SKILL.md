@@ -30,7 +30,7 @@ Look at the current repo to understand its starting state. Read whatever exists;
 - `.scratch/`: a sign that a local-markdown issue tracker convention is already in use
 - Existing tracker labels (`gh label list` / `glab label list`, or ask if neither CLI is available): do labels beyond the five triage roles already exist — a bug/enhancement/decision-style category split, or a priority scale? Their presence decides whether Section B offers those extra tiers.
 - Is the `triage` skill installed? (a `triage` skill folder alongside this one, or `triage` in your available skills.) This decides whether Section B runs at all.
-- Is the `orchestrating` skill installed? This decides whether Section D runs. If it is, also check for a GitHub Project linked to the repo (`gh project list --owner <owner>`), existing `todo` / `in-progress` labels, and any documented branch naming convention (`CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`), plus test and check commands for Section E.
+- Is the `orchestrating` skill installed? This decides whether Section D runs. If it is, also check for a GitHub Project linked to the repo (`gh project list --owner <owner>`), existing `todo` / `in-progress` labels, and the documented branch naming and merge policy (`CONTRIBUTING.md`, `AGENTS.md`, `CLAUDE.md`, CI), plus test and check commands for Section E.
 
 ### 2. Present findings and ask
 
@@ -83,6 +83,7 @@ If neither tier's labels exist in the tracker, skip both silently — don't crea
 
 - **State.** If exploration found a project board, propose recording it: its name or URL and its in-progress column. Otherwise propose the fallback labels `todo` and `in-progress`; a closed issue counts as done, so there is no `done` label. Create any missing fallback labels once the user confirms.
 - **Branch naming.** If exploration found a documented convention, propose recording it. Otherwise propose the fallback `<type>/<issue-id>-<slug>`, where type is `feature`, `bugfix`, or `hotfix`.
+- **Integration base.** Propose the branch issue work merges into from the documented policy, or the verified repository default if no policy specifies one. For a local-only repository, confirm the local integration branch. Resolve conflicting evidence with the user and use the confirmed base consistently in the branch and PR instructions.
 
 **Section E: Verification.** Skip this section entirely if the `orchestrating` skill isn't installed. Propose the targeted-test, full-suite, and static-check commands found in exploration (`package.json` scripts, `Makefile`, `pyproject.toml`, CI workflows, `CONTRIBUTING.md`), and ask for the full suite's typical duration and any environment needs or slow, flaky, or interfering fixtures. Record them in `docs/agents/verification.md`; specialists and reviewers run these instead of rediscovering them.
 

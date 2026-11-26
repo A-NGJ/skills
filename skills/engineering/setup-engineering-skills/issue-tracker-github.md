@@ -34,8 +34,9 @@ _(Used by `/orchestrating`. Keep one of the two state options and delete the oth
 - **State (board):** GitHub Project `<name or URL>`; in progress = column `<In Progress>`. Move the card with `gh project item-edit`. Done is the board's automation on issue close.
 - **State (labels):** `todo`, `in-progress`. Swap with `gh issue edit <number> --add-label in-progress --remove-label todo`. A closed issue is done; there is no `done` label.
 - **Branch naming:** `<type>/<issue-id>-<slug>`, type `feature` | `bugfix` | `hotfix`.
-- **Create and link a branch:** `gh issue develop <number> --name <branch> --base <default-branch>`. Find a linked branch with `gh issue develop <number> --list`.
-- **Pull request:** `gh pr create --base <default-branch> --head <branch> --title "..." --body-file <file>`, with `Closes #<number>` in the body.
+- **Integration base:** `<integration-branch>` (the branch issue changes merge into).
+- **Create and link a branch:** `gh issue develop <number> --name <branch> --base <integration-branch>`. Find a linked branch with `gh issue develop <number> --list`.
+- **Pull request:** `gh pr create --base <integration-branch> --head <branch> --title "..." --body-file <file>`, with `Closes #<number>` in the body. GitHub auto-closes linked issues only for merges into the repository default branch.
 - **On pull request open:** board, leave the card; labels, remove `in-progress`.
 
 ## When a skill says "publish to the issue tracker"
