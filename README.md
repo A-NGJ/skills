@@ -8,7 +8,7 @@ Composable skills for coding agents, from a single focused edit to a reviewed pu
 
 ### 1. Install
 
-Open the section for your coding agent, then install the [companion skills](#companion-skills) and [agent profiles](#agent-profiles) your workflows need. If you only want to try `clinical-change`, you can skip both. Use one install method. If `npx skills` prompts you to choose, include `clinical-change`. For other agents and install methods, see the [installation reference](#installation-reference).
+Open the section for your coding agent, then install the [companion skills](#companion-skills) and [agent profiles](#agent-profiles) your workflows need. For other agents and install methods, see the [installation reference](#installation-reference).
 
 <details>
 <summary><strong>Claude Code</strong></summary>
@@ -17,7 +17,7 @@ Open the section for your coding agent, then install the [companion skills](#com
 npx skills@latest add A-NGJ/skills --global --agent claude-code
 ```
 
-In Claude Code, run `/clinical-change`.
+In Claude Code, run `/explain`.
 
 </details>
 
@@ -28,7 +28,7 @@ In Claude Code, run `/clinical-change`.
 npx skills@latest add A-NGJ/skills --global --agent opencode
 ```
 
-In OpenCode, ask: `Load the clinical-change skill.`
+In OpenCode, ask: `Load the explain skill.`
 
 </details>
 
@@ -39,7 +39,7 @@ In OpenCode, ask: `Load the clinical-change skill.`
 pi install git:github.com/A-NGJ/skills
 ```
 
-In Pi, run `/skill:clinical-change`.
+In Pi, run `/skill:explain`.
 
 </details>
 
@@ -59,7 +59,7 @@ for s in "$src"/skills/engineering/*/ "$src"/skills/productivity/*/; do
 done
 ```
 
-Link or copy each whole skill folder so its supporting files stay alongside `SKILL.md`. If you need [companion skills](#companion-skills), copy or link only the ones listed there into the same destination. To try the install, ask your coding agent to load `clinical-change` or use its skill command.
+Link or copy each whole skill folder so its supporting files stay alongside `SKILL.md`. If you need [companion skills](#companion-skills), copy or link only the ones listed there into the same destination. To try the install, ask your coding agent to load `explain` or use its skill command.
 
 </details>
 
@@ -125,7 +125,11 @@ After installing the profiles, [configure `.model-routing`](#model-routing) in t
 
 ### 2. Try a skill
 
-Open a project in your coding agent, load `clinical-change` as shown above, and ask for a concrete outcome. For example: “Add an ‘Export CSV’ button to the orders list that exports all orders matching the current filters, not just the current page.” That may take changes to the UI, API, query, and tests. The diff can span all of them and still be minimal: every change serves the export, and the orders list otherwise works as before.
+Load `explain` as shown above and ask:
+
+> Why can the same file show up as both staged and unstaged in `git status`? Walk me through an example.
+
+Expect a step-by-step example that shows why Git reports both kinds of changes after you edit a file, stage it, and edit it again.
 
 **Optional next steps**
 
