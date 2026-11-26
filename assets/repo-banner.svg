@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="184" viewBox="0 0 960 184">
+  <defs>
+    <linearGradient id="panel" x1="0" y1="0" x2="960" y2="184" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1a1b35"/>
+      <stop offset=".53" stop-color="#111c2c"/>
+      <stop offset="1" stop-color="#102d2e"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="278" y1="92" x2="614" y2="92" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a59aff"/>
+      <stop offset="1" stop-color="#6de7be"/>
+    </linearGradient>
+    <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1" fill="#c8dcff" opacity=".14"/>
+    </pattern>
+  </defs>
+
+  <rect x=".5" y=".5" width="959" height="183" rx="16" fill="url(#panel)" stroke="#60758a"/>
+  <rect x="12" y="12" width="936" height="160" rx="10" fill="url(#grid)"/>
+
+  <!-- Three independent tracks merge into one selected change. -->
+  <g fill="none" stroke="url(#signal)" stroke-width="3" stroke-linecap="round">
+    <path d="M316 40h35c40 0 43 52 82 52" opacity=".65"/>
+    <path d="M278 92h155" opacity=".85"/>
+    <path d="M316 144h35c40 0 43-52 82-52" opacity=".65"/>
+    <path d="M473 92h141"/>
+  </g>
+
+  <g stroke-width="1.5">
+    <rect x="150" y="20" width="166" height="40" rx="8" fill="#272644" stroke="#686294"/>
+    <rect x="112" y="72" width="166" height="40" rx="8" fill="#222d4a" stroke="#536d9e"/>
+    <rect x="150" y="124" width="166" height="40" rx="8" fill="#20383e" stroke="#547f80"/>
+  </g>
+  <g fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m166 40 10-8 10 8-10 8z" stroke="#b7aaff"/>
+    <path d="m128 96 6-9 6 5 8-7" stroke="#94b9ff"/>
+    <path d="m166 145 7 7 13-15" stroke="#80e4cb"/>
+  </g>
+  <g fill="none" stroke-linecap="round" stroke-width="4">
+    <path d="M203 36h59m-59 8h37" stroke="#b7aaff" opacity=".55"/>
+    <path d="M165 88h52m-52 8h29" stroke="#94b9ff" opacity=".55"/>
+    <path d="M203 140h45m-45 8h68" stroke="#80e4cb" opacity=".55"/>
+  </g>
+  <circle cx="316" cy="40" r="3.5" fill="#b7aaff"/>
+  <circle cx="278" cy="92" r="3.5" fill="#94b9ff"/>
+  <circle cx="316" cy="144" r="3.5" fill="#80e4cb"/>
+
+  <circle cx="453" cy="92" r="27" fill="#a6ead8" opacity=".09"/>
+  <circle cx="453" cy="92" r="20" fill="#192c36" stroke="#a6ead8" stroke-width="2"/>
+  <path d="m445 92 6 6 10-12" fill="none" stroke="#a6ead8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m589 85 7 7-7 7" fill="none" stroke="#6de7be" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- A two-line diff, without any language-specific code or lettering. -->
+  <rect x="614" y="24" width="234" height="136" rx="12" fill="#14262d" stroke="#5c9c91" stroke-width="1.5"/>
+  <path d="M615 53h232" stroke="#3c5a60"/>
+  <g fill="#82adae">
+    <circle cx="631" cy="39" r="2.5"/>
+    <circle cx="642" cy="39" r="2.5"/>
+    <circle cx="653" cy="39" r="2.5"/>
+  </g>
+  <rect x="628" y="65" width="206" height="34" rx="6" fill="#382a37"/>
+  <rect x="628" y="107" width="206" height="34" rx="6" fill="#1d3d37"/>
+  <g fill="none" stroke-linecap="round" stroke-width="3.5">
+    <path d="M642 82h14" stroke="#ff9eac"/>
+    <path d="M642 124h14m-7-7v14" stroke="#80e4cb"/>
+    <path d="M674 82h49m10 0h67" stroke="#ff9eac" opacity=".64"/>
+    <path d="M674 124h37m10 0h39" stroke="#80e4cb" opacity=".72"/>
+  </g>
+  <circle cx="614" cy="92" r="3.5" fill="#6de7be"/>
+</svg>
