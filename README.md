@@ -78,16 +78,40 @@ Install only those upstream skills with this command. `triage`, `to-tickets`, `r
 
 Install these for `orchestrating`, `research`, and delegated investigation in `managing-projects`. Installing the skill folders alone does not register the profiles.
 
-- **Claude Code:** Run [`/agents`](https://code.claude.com/docs/en/sub-agents) and create `implementation-specialist`, `reviewer`, and `researcher`. Use the descriptions and instructions in [`agents/`](agents/) and select tools using the [role permissions](#agents) below. These source files use OpenCode frontmatter, so don't copy them directly into Claude Code's agents directory.
-- **OpenCode:** Copy the bundled profiles into your global agents directory (or set `dest` to `.opencode/agents` from the project where you'll use them). If you already cloned this repo, skip the clone and set `src` to that checkout.
+- **Claude Code and OpenCode:** Clone this repo, then copy the profiles for your harness. If you already cloned it, skip the clone and set `src` to that checkout.
 
   ```sh
   src="$HOME/src/a-ngj-skills"
-  dest="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/agents"
-  mkdir -p "$(dirname "$src")" "$dest"
+  mkdir -p "$(dirname "$src")"
   git clone https://github.com/A-NGJ/skills.git "$src"
-  cp -n "$src"/agents/*.md "$dest/"
   ```
+
+  **Claude Code** (use `.claude/agents` for a project install):
+
+  ```sh
+  harness=claude-code
+  dest="$HOME/.claude/agents"
+  ```
+
+  **OpenCode** (use `.opencode/agents` for a project install):
+
+  ```sh
+  harness=opencode
+  dest="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/agents"
+  ```
+
+  Copy the profiles without replacing any already installed:
+
+  ```sh
+  mkdir -p "$dest"
+  for profile in "$src/$harness/agents/"*.md; do
+    target="$dest/${profile##*/}"
+    if [ ! -e "$target" ] && [ ! -L "$target" ]; then
+      cp "$profile" "$target"
+    fi
+  done
+  ```
+
 
 - **Pi:** After installing this repo as a Pi package above, install the [`pi-subagents`](https://github.com/nicobailon/pi-subagents) extension (tested with Pi 1.6.0 and extension 0.90.0):
 
@@ -250,8 +274,10 @@ Upstream `grill-with-docs` stops the model from loading it, so the skills here l
 ```text
 skills/<group>/<name>/SKILL.md   one folder per skill, grouped engineering/ or productivity/
 skills/<group>/<name>/agents/    Codex display metadata (openai.yaml)
-agents/                          agent profiles for other harnesses to use or adapt
-pi/agents/                       Pi subagent profiles (keep role instructions in sync with agents/)
+claude-code/agents/              Claude Code subagent profiles
+opencode/agents/                 OpenCode subagent profiles
+pi/agents/                       Pi subagent profiles
+                                 Keep role instructions in sync across all three directories.
 package.json                    Pi package manifest
 skills/engineering/setup-engineering-skills/
                                  templates for GitHub, GitLab and local trackers, labels and domain docs
