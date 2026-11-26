@@ -8,7 +8,7 @@ Composable skills for coding agents, from a single focused edit to a reviewed pu
 
 ### 1. Install
 
-Open the section for your coding agent. Use one install method and don't install [two copies of the same skill](#companion-skills). If `npx skills` prompts you to choose, include `clinical-change` and skip the in-progress `roadmap`. For other agents and install methods, see the [installation reference](#installation-reference).
+Open the section for your coding agent. Use one install method and don't install [two copies of the same skill](#companion-skills). If `npx skills` prompts you to choose, include `clinical-change`. For other agents and install methods, see the [installation reference](#installation-reference).
 
 <details>
 <summary><strong>Claude Code</strong></summary>
@@ -148,7 +148,7 @@ The bundled Pi researcher has file tools only. The coordinator gathers web, git 
 
 ## Installation reference
 
-With `npx skills`, omit `--global` to install into the current project. If your coding agent isn't in Quick start but is listed by `npx skills`, use its `--agent` ID in the Claude Code command. If prompted, skip the in-progress `roadmap` skill.
+With `npx skills`, omit `--global` to install into the current project. If your coding agent isn't in Quick start but is listed by `npx skills`, use its `--agent` ID in the Claude Code command.
 
 ### Companion skills
 
@@ -236,7 +236,6 @@ Upstream `grill-with-docs` stops the model from loading it, so the skills here l
 ```text
 skills/<group>/<name>/SKILL.md   one folder per skill, grouped engineering/ or productivity/
 skills/<group>/<name>/agents/    Codex display metadata (openai.yaml)
-skills/in-progress/              skills not yet ready for release
 agents/                          agent profiles for other harnesses to use or adapt
 pi/agents/                       Pi subagent profiles (keep role instructions in sync with agents/)
 package.json                    Pi package manifest

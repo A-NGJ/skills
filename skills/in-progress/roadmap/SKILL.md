@@ -1,15 +1,17 @@
 ---
 name: roadmap
 description: Build a stakeholder roadmap of milestones from the issue tracker, as theme swimlanes over a weekly time axis, in Markdown, HTML, or PowerPoint. Use when the operator or a project manager wants a roadmap, a milestone timeline for stakeholders, or roadmap slides.
+metadata:
+  internal: "true"
 ---
 
 A **roadmap** shows stakeholders when each milestone is expected to start and finish. It draws one swimlane per theme on an axis of weeks that start on Monday. It shows dates only: no progress, status, issue numbers, or blockers.
 
-The tracker is read-only for this skill. Every value you can't read from it comes from the operator: suggest it, say where the suggestion came from, and let the operator settle it. Never invent a date. When an answer would be worth keeping in the tracker, such as a milestone you proposed, a theme, or a start date, list it as a suggestion for the operator or `managing-projects` to apply.
+The tracker is read-only for this skill. Every value you can't read from it comes from the operator: suggest it, say where the suggestion came from, and let the operator settle it. Never invent a date. When an answer would be worth keeping in the tracker, such as a milestone you proposed, a theme, or a start date, list it as a suggestion for the operator to apply.
 
 ## Per request
 
-1. **Load policy.** Read the `## Roadmap data` section of `docs/agents/issue-tracker.md` and the label tables in `docs/agents/labels.md`. If the section is missing, use the matching template's section from the `setup-engineering-skills` skill folder (`issue-tracker-github.md`, `issue-tracker-gitlab.md`, or `issue-tracker-local.md`), choosing the tracker from `git remote -v`. Then suggest re-running that skill so the repo records its own section.
+1. **Identify the tracker.** Read `docs/agents/issue-tracker.md` if present; otherwise check `git remote -v` and `.scratch/`. Follow any project-specific `## Roadmap data` instructions, or use the matching [tracker reference](TRACKERS.md) for GitHub, GitLab, or local Markdown. Ask the operator if the source is unclear or none of the instructions cover it. Read `docs/agents/labels.md` if present. If workflow labels aren't documented, ask which labels to exclude before suggesting themes.
 2. **Read the tracker.** Fetch every milestone with its dates and description, the issues in each milestone with their labels and creation dates, and the open issues with no milestone along with their parents.
 3. **First round: lanes, milestones, and window.** Ask these together, then wait for the answers:
    - **Lanes.** Ask which work streams stakeholders think in. A lane is a work stream, and the tracker often doesn't record them. Offer label-derived themes (see [Theme](#derivation)) only as suggestions. Done when every lane is a work stream the operator named or confirmed.
@@ -48,7 +50,7 @@ The tracker is read-only for this skill. Every value you can't read from it come
 Work through each list in order until a source gives a value.
 
 - **Name.** Rewrite the milestone title in plain terms a stakeholder recognizes, e.g. "v2.3 auth refactor" becomes "Faster, safer sign-in". The operator confirms every rewrite in the gap table.
-- **Theme.** The lane the operator named in the first round. As a suggestion, the most common label on the milestone's issues, counting only labels that don't appear in the `labels.md` tables. Those tables hold workflow labels such as triage, category, priority, and state, which never name an outcome. If two labels tie or none qualifies, mark the theme as a gap and offer the top candidates. Rename the label for stakeholders the same way as the name.
+- **Theme.** The lane the operator named in the first round. As a suggestion, use the most common label on the milestone's issues after excluding the workflow labels identified in step 1 (such as triage, category, priority, and state). If two labels tie or none qualifies, mark the theme as a gap and offer the top candidates. Rename the label for stakeholders the same way as the name.
 - **Start.**
   1. The milestone's recorded start date. GitLab has one; GitHub doesn't.
   2. A suggestion: the Monday of the week the milestone's earliest issue was created. When these suggestions collapse onto one or two dates, the backlog was probably created in one batch, and the dates say nothing. Flag the collapse under the gap table and ask for real dates. Done when the gap table states the collapse or the suggestions spread over more than two dates.
