@@ -6,9 +6,9 @@
 
 The verdict counts toward the defect-correction budget. Start a correction round after any decisions needed for the correction are settled:
 
-1. Dispatch `implementation-specialist` with the findings, resuming the session of the step the findings concern when its route is unchanged and the harness supports it.
+1. Group findings that need the same fix. Apply **Small slices** in `SKILL.md` to dispatch `implementation-specialist` for one correction outcome at a time. Resume the session of the step the findings concern when its route is unchanged and the harness supports it.
 2. Route the correction under model-routing's capability-escalation rules: keep the same tier for routine omissions, mechanical fixes, or missing context; escalate only when findings or a failed correction demonstrate a specific reasoning gap, and report that reason.
-3. Review again, supplying the updated head SHA, the review range extended through the correction, and the diff since the last reviewed head. The reviewer checks the corrections and possible regressions against the same review boundary.
+3. After all findings from this verdict are addressed, review again, supplying the updated head SHA, the review range extended through the corrections, and the diff since the last reviewed head. The reviewer checks the corrections and possible regressions against the same review boundary.
 
 ## Needs clarification
 

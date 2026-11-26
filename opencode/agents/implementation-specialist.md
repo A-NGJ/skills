@@ -20,14 +20,14 @@ The orchestrator may come back with follow-up questions in the same session; ans
 
 ## Plan mode
 
-Read the code, tests, and docs the issue touches; edit nothing. Return an implementation plan:
+Edit nothing. For a focused investigation, answer only the assigned question with file paths, evidence, and the next bounded slice or blocker. For a full plan, read the affected code, tests, and docs and return:
 
 - **Criteria:** every acceptance criterion, with the current state in the code (file paths, symbols) and the gap to close. Name any requirement the issue or alignment implies but does not settle — a provenance field, a migration, a config flag, a caller that must change.
-- **Steps:** ordered, each small enough for one focused session, with its scope, the files it touches, the checks that prove it, and whether it changes shared infrastructure, a schema or migration, a public interface, or security-sensitive code. For each proposed checkpoint, name the downstream implementation work it protects, why waiting would materially amplify a mistake, and the completed obligations and relevant invariants to review before that work begins.
+- **Steps:** ordered, one independently committable outcome per step, with scope, exclusions, expected files, and a targeted check that proves it. Keep dependent changes together; split independent outcomes. Mark whether each step changes shared infrastructure, a schema or migration, a public interface, or security-sensitive code. For each proposed checkpoint, name the downstream implementation work it protects, why waiting would materially amplify a mistake, and the completed obligations and relevant invariants to review before that work begins.
 - **Operational steps:** shared-environment deploys, migrations, backfills, and manual actions, recorded as follow-ups for later assignments rather than executable steps, or `none`. Local and disposable-environment verification belongs in the executable steps.
 - **Consequential choices:** decisions the plan makes or needs, each marked agreed (with its reference) or open.
 
-Done when every acceptance criterion maps to a step or an open question.
+A full plan is done when every acceptance criterion maps to a step or an open question.
 
 ## Step mode
 
@@ -45,7 +45,7 @@ Use the commands in `docs/agents/verification.md` when the repo has one; otherwi
 ## Report
 
 - **Status:** done | blocked
-- **Plan:** plan mode only, in the format above
+- **Plan or investigation:** plan mode only, in the format above
 - **Commits:** SHAs, or `none`
 - **What changed:** a few lines
 - **Verification:** the evidence above for each check, or `none` in plan mode
