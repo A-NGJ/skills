@@ -8,7 +8,7 @@ Composable skills for coding agents, from a single focused edit to a reviewed pu
 
 ### 1. Install
 
-Open the section for your coding agent. Use one install method and don't install [two copies of the same skill](#companion-skills). If `npx skills` prompts you to choose, include `clinical-change`. For other agents and install methods, see the [installation reference](#installation-reference).
+Open the section for your coding agent, then install the [companion skills](#companion-skills) and [agent profiles](#agent-profiles) your workflows need. If you only want to try `clinical-change`, you can skip both. Use one install method. If `npx skills` prompts you to choose, include `clinical-change`. For other agents and install methods, see the [installation reference](#installation-reference).
 
 <details>
 <summary><strong>Claude Code</strong></summary>
@@ -63,6 +63,42 @@ Link or copy each whole skill folder so its supporting files stay alongside `SKI
 
 </details>
 
+#### Companion skills
+
+For `grill-with-research` and other workflows that call `grilling`, `domain-modeling`, or `prototype`, install those skills from [mattpocock/skills](https://github.com/mattpocock/skills):
+
+```sh
+agent=claude-code  # or opencode, pi, or another supported agent ID
+npx skills@latest add mattpocock/skills --global --agent "$agent" --skill grilling domain-modeling prototype
+```
+
+Install only those upstream skills with this command. `triage`, `to-tickets`, `research`, `pr`, and `handoff` share names with upstream; don't install both copies. The skills here expect this repo's versions when they call each other.
+
+#### Agent profiles
+
+Install these for `orchestrating`, `research`, and delegated investigation in `managing-projects`. Installing the skill folders alone does not register the profiles.
+
+- **Claude Code:** Run [`/agents`](https://code.claude.com/docs/en/sub-agents) and create `implementation-specialist`, `reviewer`, and `researcher`. Use the descriptions and instructions in [`agents/`](agents/) and select tools using the [role permissions](#agents) below. These source files use OpenCode frontmatter, so don't copy them directly into Claude Code's agents directory.
+- **OpenCode:** Copy the bundled profiles into your global agents directory (or set `dest` to `.opencode/agents` from the project where you'll use them). If you already cloned this repo, skip the clone and set `src` to that checkout.
+
+  ```sh
+  src="$HOME/src/a-ngj-skills"
+  dest="${XDG_CONFIG_HOME:-$HOME/.config}/opencode/agents"
+  mkdir -p "$(dirname "$src")" "$dest"
+  git clone https://github.com/A-NGJ/skills.git "$src"
+  cp -n "$src"/agents/*.md "$dest/"
+  ```
+
+- **Pi:** After installing this repo as a Pi package above, install the [`pi-subagents`](https://github.com/nicobailon/pi-subagents) extension (tested with Pi 1.6.0 and extension 0.90.0):
+
+  ```sh
+  pi install npm:pi-subagents@0.90.0
+  ```
+
+  Restart Pi and check `/subagents` for `implementation-specialist`, `reviewer`, and `researcher`. The extension discovers the bundled [`pi/agents/`](pi/agents/) profiles automatically.
+
+After installing the profiles, [configure `.model-routing`](#model-routing) in the project where you'll use them.
+
 ### 2. Try a skill
 
 Open a project in your coding agent, load `clinical-change` as shown above, and ask for a small edit. For example: “Rename `formatDate` to `formatDisplayDate` without changing behavior.” The skill keeps the diff focused on the rename.
@@ -99,12 +135,7 @@ With `orchestrating` installed, setup adds a **Workflow state** section to `docs
 
 ### Agents
 
-The skills expect one active profile per role. Installing just the skill folders does not register these profiles.
-
-- **Claude Code:** adapt the role instructions and tool permissions in [`agents/`](agents/) to [Claude Code's subagent format](https://code.claude.com/docs/en/sub-agents); save them in `~/.claude/agents/` or `.claude/agents/`.
-- **OpenCode:** use [`agents/`](agents/) as the starting profiles in `~/.config/opencode/agents/` or `.opencode/agents/`. Check the [agent format](https://opencode.ai/docs/agents/) and tool permissions for your version.
-- **Pi:** see [Delegation in Pi](#delegation-in-pi) for the bundled profiles and extension.
-- **Other harnesses:** register the same role IDs in your harness's agent format. `.agents/skills/` provides skill discovery, not subagent dispatch.
+The skills expect one active profile per role. Follow the [agent profile installation steps](#agent-profiles), or register the same role IDs in your harness's agent format. `.agents/skills/` provides skill discovery, not subagent dispatch.
 
 Routed dispatch requires explicit model selection for each call, even when an agent has a default. `orchestrating` also requires the ability to run children in the existing issue worktree. If your runtime cannot meet those requirements, use the non-delegating skills.
 
@@ -134,13 +165,7 @@ Add one entry per agent the coordinator will dispatch, including any built-in ag
 
 ### Delegation in Pi
 
-Pi's skill loader does not provide subagents. Install this repository as a Pi package (not a duplicate skills-directory copy), then install [`pi-subagents`](https://github.com/nicobailon/pi-subagents) (tested with Pi 1.6.0 and extension 0.90.0):
-
-```sh
-pi install npm:pi-subagents@0.90.0
-```
-
-Restart Pi and check `/subagents` for `implementation-specialist`, `reviewer` and `researcher` from this package. The extension discovers the profiles in [`pi/agents/`](pi/agents/) automatically. If you already use a different `subagent` extension, run only one at a time. To keep your existing extension, it must support explicit per-call models, working directories and parallel dispatch; install the Pi profiles in its agent directory if it does not discover package profiles.
+Pi's skill loader does not provide subagents; follow the [Pi agent profile installation steps](#agent-profiles). If you already use a different `subagent` extension, run only one at a time. To keep your existing extension, it must support explicit per-call models, working directories and parallel dispatch; install the Pi profiles in its agent directory if it does not discover package profiles.
 
 Use `pi --list-models` to find available `provider/id` values for `.model-routing` in the **project you're working on**. The routes checked into this skills repository are for work on this repository, not defaults for other projects. See [Pi dispatch](skills/engineering/model-routing/PI.md) for how the coordinator passes the selected model and uses the existing issue worktree.
 
@@ -149,17 +174,6 @@ The bundled Pi researcher has file tools only. The coordinator gathers web, git 
 ## Installation reference
 
 With `npx skills`, omit `--global` to install into the current project. If your coding agent isn't in Quick start but is listed by `npx skills`, use its `--agent` ID in the Claude Code command.
-
-### Companion skills
-
-`clinical-change` doesn't need companion skills. For `grill-with-research` and other workflows that call `grilling`, `domain-modeling`, or `prototype`, install those skills from [mattpocock/skills](https://github.com/mattpocock/skills):
-
-```sh
-agent=claude-code  # or opencode, pi, or another supported agent ID
-npx skills@latest add mattpocock/skills --global --agent "$agent" --skill grilling domain-modeling prototype
-```
-
-Install only those upstream skills with this command. `triage`, `to-tickets`, `research`, `pr`, and `handoff` share names with upstream; don't install both copies. The skills here expect this repo's versions when they call each other.
 
 ### Pi install alternatives
 
