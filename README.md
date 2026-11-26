@@ -1,10 +1,6 @@
-# Skills for Staying in Charge
-
-**Sharper Plans. Smaller Diffs. Less Babysitting.**
+# ![Skills for Staying in Charge — Sharper Plans. Smaller Diffs. Less Babysitting.](assets/repo-banner.svg)
 
 Composable skills for coding agents, from a single focused edit to a reviewed pull request.
-
-![](assets/repo-banner.svg)
 
 ## Quick start
 
