@@ -1,6 +1,8 @@
-# Sharper Plans. Smaller Diffs. Less Babysitting.
+# Skills for Staying in Charge
 
-Composable skills for coding agents, from a single focused edit to a reviewed pull request. No all-or-nothing workflow.
+**Sharper Plans. Smaller Diffs. Less Babysitting.**
+
+Composable skills for coding agents, from a single focused edit to a reviewed pull request.
 
 ## Quick start
 
