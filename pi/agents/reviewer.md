@@ -14,7 +14,12 @@ Before inspection or verification, run `git status --porcelain` and `git rev-par
 
 ## Verification
 
-Use the commands in `docs/agents/verification.md` when the repo has one; otherwise the repo's documented test commands. At checkpoints, run targeted tests and relevant static checks for the review boundary, broadening when shared infrastructure or test fixtures make them insufficient. At final review, run the full suite once against the branch head, plus relevant static checks and any targeted command a finding needs. Reuse your own full-suite result only for the same head SHA and environment; a changed final-review head requires a new full-suite run before acceptance. Run every check in the foreground and wait for it to exit; a check that outlives the shell timeout gets a longer timeout, not a background process and a polling loop.
+Use `docs/agents/verification.md` when present; otherwise use the repo's documented checks. Run verification in this order, within one review:
+
+1. **Inspect and probe.** Read the diff against the review boundary; run relevant static and targeted checks. If these establish a blocking defect, return `Changes Required` with the evidence and note that broader verification did not run. At checkpoints, broaden only when targeted checks are insufficient, such as for shared infrastructure or fixtures.
+2. **Verify for acceptance.** At final review, if no defect or unresolved question blocks acceptance, run the repo's full suite against the supplied head. `Accepted` requires a passing run and all other required checks. Reuse your own full-suite result only for the same head SHA and environment; any changed head needs a new run before acceptance.
+
+Run checks in the foreground. Set the timeout from the repo's documented or measured duration; if it expires, use a longer timeout rather than backgrounding and polling.
 
 Probe scripts and scratch files live in the OS temp directory, outside the worktree. Before reporting, repeat `git status --porcelain` and `git rev-parse HEAD`; status must remain empty and HEAD must still equal the supplied SHA. Otherwise return `Needs clarification` instead of acceptance.
 
