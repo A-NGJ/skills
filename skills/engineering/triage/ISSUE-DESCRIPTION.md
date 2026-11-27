@@ -1,111 +1,224 @@
 # Issue descriptions
 
-The issue body is the authoritative specification. See [External PR](#external-pr) for where to specify remaining PR work. Follow repository requirements and templates first. Use the compact default below otherwise; preserve required fields and disclaimers.
+The issue body is the authoritative specification. Follow repository requirements and templates first. Use the default below otherwise; preserve required fields and disclaimers.
 
-- **Goal:** State the intended outcome and essential established context. Use the [guidance by kind](#guidance-and-examples-by-kind) to decide which details matter.
-- **Scope:** Describe the concrete technical work in terms of durable behavior and contracts. Give a developer enough detail to act, scaled to the work. Name interfaces, types, or config shapes when they clarify the contract; avoid file paths, line numbers, and procedural steps that will go stale or prescribe an unapproved design.
-- **Acceptance criteria:** State observable outcomes a developer can verify independently. Include relevant edge cases and failure behavior.
-- **Optional sections:** Add **Out of scope** when an adjacent change might look included. Add a [worked example](#worked-examples) when prose alone leaves an invariant easy to misread. Add prerequisites, open questions, coordination, or approvals only when the request or known constraints require them. Omit **Related** when there are no useful links. Preserve genuine blocking relationships when drafting or delegating issue writing, including through `to-tickets`.
+For an external PR governed by an issue, use the issue body and link it from the PR. Without a governing issue, the PR body specifies what remains to finish or fix in the existing diff.
 
-Reconcile prior briefs and discussion with the body. Preserve confirmed facts and requirements; surface conflicts and unapproved scope before updating it. Merge confirmed requirements into the body only after approval of the exact edit. Briefs and handoffs link to the body and carry evidence, decisions, or history rather than a second specification.
+Add prerequisites, open questions, coordination, or approvals only when the request or known constraints require them. Omit **Related** when there are no useful links. Preserve genuine blocking relationships when drafting or delegating issue writing, including through `to-tickets`.
 
-## Default template
+## Prepare the body
 
-```markdown
-## Goal
+Read existing briefs and discussion for confirmed requirements. Merge them into the authoritative body within the approved write boundary before marking work ready. Present conflicts or unapproved requirements to the operator; neither silently discard them nor promote them into scope. Keep older comments as history, and add a pointer to the body when an old brief would otherwise look current.
 
-<Short intended outcome and essential established context.>
+Use caller-provided or repository issue-body guidance. The template and examples below are body drafts, not brief comments.
 
-## Scope
+Merge confirmed requirements into the body only after approval of the exact edit. Briefs and handoffs link to the body and carry evidence, decisions, or history rather than a second specification.
 
-- <Concrete technical work.>
+## Body principles
 
-## Acceptance criteria
+### Durability over precision
 
-- [ ] <Observable outcome a developer can verify.>
+The issue may sit in `ready-for-agent` for days or weeks. The codebase will change in the meantime. Write the body so it stays useful even as files are renamed, moved, or refactored.
 
-## Related
+- **Do** describe interfaces, types, and behavioral contracts
+- **Do** name specific types, function signatures, or config shapes that the agent should look for or modify
+- **Don't** reference file paths: they go stale
+- **Don't** reference line numbers
+- **Don't** assume the current implementation structure will remain the same
 
-<Useful issue or reference links; omit this section if there are none.>
-```
+### Behavioral, not procedural
 
-## Guidance and examples by kind
+Describe **what** the system should do, not **how** to implement it. The agent will explore the codebase fresh and make its own implementation decisions.
 
-Use the same template for each kind. The examples below are illustrative drafts.
+- **Good:** "The `SkillConfig` type should accept an optional `schedule` field of type `CronExpression`"
+- **Bad:** "Open src/types/skill.ts and add a schedule field on line 42"
+- **Good:** "When a user runs `/triage` with no arguments, they should see a summary of issues needing attention"
+- **Bad:** "Add a switch statement in the main handler function"
 
-### Bug
+### Complete acceptance criteria
 
-Record the conditions and steps needed to reproduce the problem, and distinguish observed behavior from expected behavior. Make the acceptance criteria check the original failure and the behavior that should stay unchanged.
+The agent needs to know when it's done. Every authoritative body must have concrete, testable acceptance criteria. Each criterion should be independently verifiable.
 
-```markdown
-## Goal
+- **Good:** "Running `gh issue list --label needs-triage` returns issues that have been through initial classification"
+- **Bad:** "Triage should work correctly"
 
-Skill descriptions should remain readable when shortened. Load a skill whose
-`description` is `word ` repeated 204 times followed by `boundary`. The
-1,024-character cutoff displays only `boun` of the final word.
+### Explicit scope boundaries
 
-## Scope
+State what is out of scope. This prevents the agent from gold-plating or making assumptions about adjacent features.
 
-- Shorten over-limit descriptions at a word boundary when one fits, reserving
-  space for `...` within the existing limit.
-
-## Acceptance criteria
-
-- [ ] A description of exactly 1,024 characters is unchanged.
-- [ ] In the reported case, the result keeps all 204 complete words, ends in
-      `word...`, and is at most 1,024 characters.
-```
-
-### Enhancement
-
-Name who needs the improvement and why, what the current behavior prevents or makes harder, and what they should be able to do after the change.
+## Default body template
 
 ```markdown
-## Goal
+## Specification
 
-Maintainers need to recover why a feature was declined when someone requests it
-again. Today the reason is only in the closed issue's discussion.
+**Category:** bug / enhancement
+**Summary:** one-line description of what needs to happen
 
-## Scope
+**Current behavior:**
+Describe what happens now. For bugs, this is the broken behavior.
+For enhancements, this is the status quo the feature builds on.
 
-- Keep a concept-based record of each rejected enhancement in `.out-of-scope/`
-  so triage can surface the prior decision for a similar request.
+**Desired behavior:**
+Describe what should happen after the agent's work is complete.
+Be specific about edge cases and error conditions.
 
-## Acceptance criteria
+**Key interfaces:**
+- `TypeName`: what needs to change and why
+- `functionName()` return type: what it currently returns vs what it should return
+- Config shape: any new configuration options needed
 
-- [ ] Rejecting an enhancement creates or updates a record with the decision,
-      its rationale, and a link to the issue.
-- [ ] Triaging the same request under different wording surfaces the prior record.
-- [ ] Closing a bug does not create a rejection record.
+**Acceptance criteria:**
+- [ ] Specific, testable criterion 1
+- [ ] Specific, testable criterion 2
+- [ ] Specific, testable criterion 3
+
+**Out of scope:**
+- Thing that should NOT be changed or addressed in this issue
+- Adjacent feature that might seem related but is separate
 ```
 
-### External PR
+## Examples
 
-Describe what the diff already delivers, what remains to be finished or corrected, and what behavior must stay unchanged. Put these requirements in the governing issue body when one exists; otherwise put them in the PR body, as in the example below.
+### Good body specification (bug)
 
 ```markdown
-## Goal
+## Specification
 
-The PR adds `triage list --json`, and successful runs already emit JSON.
-Errors still emit human-readable text, so scripts cannot parse failed runs
-using the same format.
+**Category:** bug
+**Summary:** Skill description truncation drops mid-word, producing broken output
 
-## Scope
+**Current behavior:**
+When a skill description exceeds 1024 characters, it is truncated at exactly
+1024 characters regardless of word boundaries. This produces descriptions
+that end mid-word (e.g. "Use when the user wants to confi").
 
-- Finish the JSON error path without changing the existing success payload,
-  exit codes, or output when `--json` is absent.
+**Desired behavior:**
+Truncation should break at the last word boundary before 1024 characters
+and append "..." to indicate truncation.
 
-## Acceptance criteria
+**Key interfaces:**
+- The `SkillMetadata` type's `description` field: no type change needed,
+  but the validation/processing logic that populates it needs to respect
+  word boundaries
+- Any function that reads SKILL.md frontmatter and extracts the description
 
-- [ ] Successful runs with `--json` still emit the existing JSON payload.
-- [ ] With the tracker unavailable, `--json` emits `{"error":"<message>"}` on
-      stdout and retains the existing nonzero exit code.
-- [ ] Without `--json`, success and failure output and exit codes are unchanged.
+**Acceptance criteria:**
+- [ ] Descriptions under 1024 chars are unchanged
+- [ ] Descriptions over 1024 chars are truncated at the last word boundary
+      before 1024 chars
+- [ ] Truncated descriptions end with "..."
+- [ ] The total length including "..." does not exceed 1024 chars
+
+**Out of scope:**
+- Changing the 1024 char limit itself
+- Multi-line description support
 ```
+
+### Good body specification (enhancement)
+
+```markdown
+## Specification
+
+**Category:** enhancement
+**Summary:** Add `.out-of-scope/` directory support for tracking rejected feature requests
+
+**Current behavior:**
+When a feature request is rejected, the issue is closed with a `wontfix` label
+and a comment. There is no persistent record of the decision or reasoning.
+Future similar requests require the maintainer to recall or search for the
+prior discussion.
+
+**Desired behavior:**
+Rejected feature requests should be documented in `.out-of-scope/<concept>.md`
+files that capture the decision, reasoning, and links to all issues that
+requested the feature. When triaging new issues, these files should be
+checked for matches.
+
+**Key interfaces:**
+- Markdown file format in `.out-of-scope/`: each file should have a
+  `# Concept Name` heading, a `**Decision:**` line, a `**Reason:**` line,
+  and a `**Prior requests:**` list with issue links
+- The triage workflow should read all `.out-of-scope/*.md` files early
+  and match incoming issues against them by concept similarity
+
+**Acceptance criteria:**
+- [ ] Closing a feature as wontfix creates/updates a file in `.out-of-scope/`
+- [ ] The file includes the decision, reasoning, and link to the closed issue
+- [ ] If a matching `.out-of-scope/` file already exists, the new issue is
+      appended to its "Prior requests" list rather than creating a duplicate
+- [ ] During triage, existing `.out-of-scope/` files are checked and surfaced
+      when a new issue matches a prior rejection
+
+**Out of scope:**
+- Automated matching (human confirms the match)
+- Reopening previously rejected features
+- Bug reports (only enhancement rejections go to `.out-of-scope/`)
+```
+
+### Good body specification (PR)
+
+For a PR without a governing issue, "Current behavior" describes the state of the diff, and the PR body asks the agent to finish or fix it rather than build from scratch. With a governing issue, put the requirements in that issue's body instead.
+
+```markdown
+## Specification
+
+**Category:** enhancement
+**Summary:** Finish the contributor's `--json` output flag for `triage list`
+
+**Current behavior:**
+The PR adds a `--json` flag that serializes the issue list to JSON. The happy
+path works and the diff matches the project's command structure. Two gaps
+remain: errors are still printed as human text (not JSON), and the new flag has
+no test coverage.
+
+**Desired behavior:**
+With `--json`, all output (including errors) is well-formed JSON on stdout,
+and the command's exit codes are unchanged. The existing human-readable output
+is untouched when the flag is absent.
+
+**Key interfaces:**
+- The command's error path should emit `{ "error": string }` under `--json`
+  instead of the plain-text error
+- Reuse the existing serializer the PR already added; don't introduce a second
+
+**Acceptance criteria:**
+- [ ] `triage list --json` emits valid JSON for both success and error cases
+- [ ] Exit codes match the non-JSON command
+- [ ] A test covers the `--json` success output and one error case
+- [ ] Default (non-JSON) output is byte-for-byte unchanged
+
+**Out of scope:**
+- Adding `--json` to any other command
+- Changing the JSON shape of the success payload the PR already defined
+```
+
+### Bad body specification
+
+```markdown
+## Specification
+
+**Summary:** Fix the triage bug
+
+**What to do:**
+The triage thing is broken. Look at the main file and fix it.
+The function around line 150 has the issue.
+
+**Files to change:**
+- src/triage/handler.ts (line 150)
+- src/types.ts (line 42)
+```
+
+This is bad because:
+- No category
+- Vague description ("the triage thing is broken")
+- References file paths and line numbers that will go stale
+- No acceptance criteria
+- No scope boundaries
+- No description of current vs desired behavior
 
 ## Worked examples
 
-Add a worked example between Scope and Acceptance criteria when an implementer must reason about a non-obvious data shape, grain, calculation, state transition, tie-breaker, or other invariant. Examples include one logical entity spread across multiple rows or sections, a derived numerator and denominator, deduplication precedence, or an input-to-output transformation a naive approach would get wrong. Omit it for straightforward work.
+Add a worked example before Acceptance criteria when an implementer must reason about a non-obvious data shape, grain, calculation, state transition, tie-breaker, or other invariant. Examples include one logical entity spread across multiple rows or sections, a derived numerator and denominator, deduplication precedence, or an input-to-output transformation a naive approach would get wrong. Omit it for straightforward work.
 
 - **Walk one concrete instance end to end.** Within the approved read boundary, choose one real record or scenario with verified identifiers and values from the data, codebase, or issue evidence. Trace it across every relevant section, version, or step so the invariant is visible. Never invent plausible-looking records; use a clearly labeled minimal synthetic case when no real data exists yet.
 - **Show how the parts reconcile and identify the trap.** Demonstrate how counts sum, partition, or transform, and explain the tempting mistake: for example, why an unweighted average across unequal denominators gives the wrong headline figure, or why averaging same-date reruns is wrong when only one version should count.
