@@ -1,6 +1,6 @@
 ---
 name: triage
-description: Move issues and external PRs through a state machine of triage roles, categorise, verify, grill if needed, and write agent-ready briefs. Use when an issue or external PR needs evaluation, verification, or an agent-ready brief.
+description: Evaluate and verify issues and external PRs, recommend or apply their triage state, and prepare readiness briefs. Use to assess a request or list items by triage state. Use managing-projects to rank work against competing priorities.
 metadata:
   upstream:
     repo: "https://github.com/mattpocock/skills"
@@ -22,7 +22,8 @@ Every comment or issue posted to the issue tracker during triage **must** start 
 
 ## Reference docs
 
-- [AGENT-BRIEF.md](AGENT-BRIEF.md): how to write durable agent briefs
+- [ISSUE-DESCRIPTION.md](ISSUE-DESCRIPTION.md): authoritative issue and PR bodies
+- [AGENT-BRIEF.md](AGENT-BRIEF.md): verification and pointer comments
 - [OUT-OF-SCOPE.md](OUT-OF-SCOPE.md): how the `.out-of-scope/` knowledge base works
 
 ## Roles
@@ -50,14 +51,18 @@ State transitions: an unlabeled issue normally goes to `needs-triage` first; fro
 
 ## Invocation
 
-The maintainer can invoke `triage`, or another skill can load it for a bounded request. Interpret the request and act within any inherited write boundary. Examples:
+The maintainer can invoke `triage`, or another skill can load it for a bounded request. Read the repo's issue-tracker, label, and domain policy. Continue read-only if relevant policy is missing. Before proposing or making tracker or repository writes, read the [shared write approval rules](WRITE-APPROVAL.md); they apply to direct triage and to delegated triage, including any policy docs updated during grilling.
 
-- "Show me anything that needs my attention"
-- "Let's look at #42" (issue or PR)
+Examples:
+
+- "Which incoming reports need triage?"
+- "Verify the report on #42" (issue or PR)
 - "Move #42 to ready-for-agent"
-- "What's ready for agents to pick up?"
+- "Which issues are marked ready-for-agent?"
 
-## Show what needs attention
+List a requested triage state as recorded. Route decisions that rank one item against competing work to `managing-projects`; a state label is neither a priority nor clearance to start.
+
+## Show the triage queue
 
 Query the issue tracker and present three buckets, oldest first:
 
@@ -75,23 +80,27 @@ Show counts and a one-line summary per item. Let the maintainer pick.
 
 2. **Recommend.** Tell the maintainer your category and state recommendation with reasoning, plus a brief codebase summary relevant to the request (including whether it's already implemented). Wait for direction.
 
-3. **Verify the claim.** Before any grilling, check that the claim holds up. For a bug, reproduce it from the reporter's steps. For a PR, confirm the diff does what it claims: check it out, run the relevant tests or commands. Report what happened: confirmed (with code path), failed, or insufficient detail (a strong `needs-info` signal). A confirmed verification makes a much stronger agent brief.
+3. **Verify the claim.** Before any grilling, check that the claim holds up. For a bug, reproduce it from the reporter's steps. For a PR, review the diff and run relevant checks in a disposable checkout, leaving the operator's checkout untouched. Use the write approval rules if verification would modify the target repository. Report what happened: confirmed (with code path), failed, or insufficient detail (a strong `needs-info` signal). A confirmed verification makes a much stronger agent brief.
 
-4. **Grill (if needed).** If the request needs fleshing out, load `grilling` and `domain-modeling` and grill it into shape a round of questions at a time, sharpening domain terms and updating `GLOSSARY.md`/ADRs inline as decisions land. When grilling pauses before an outcome is applied, load `handoff` with `triage #<n>` as the next assignment and the decisions so far plus the open questions in Live thread.
+4. **Grill (if needed).** If the request needs fleshing out, load `grilling` and `domain-modeling` and grill it into shape a round of questions at a time, sharpening domain terms and proposing exact `GLOSSARY.md`/ADR changes as decisions land. When grilling pauses before an outcome is applied, load `handoff` with `triage #<n>` as the next assignment and the decisions so far plus the open questions in Live thread.
 
-5. **Apply the outcome:**
-   - `ready-for-agent`: prepare the authoritative issue body with confirmed scope and testable acceptance criteria, following [AGENT-BRIEF.md](AGENT-BRIEF.md). For a PR without a governing issue, prepare its PR body instead. Get approval for the exact body edits within the inherited write boundary before marking it ready; if approval or requirements are missing, stop and ask. Post a brief comment linking to the body and verification evidence, without duplicating the specification. Then offer a fresh `orchestrating` session for an issue: on acceptance, load `handoff` with a link to the issue body as Payload and `orchestrating #<n>` as the next assignment.
-   - `ready-for-human`: prepare the same authoritative body and pointer brief, noting why it can't be delegated (judgment calls, external access, design decisions, manual testing).
+5. **Apply the approved outcome.** Propose the affected records and all side effects under the write approval rules before acting. Agreement with a recommendation is not approval to mutate records unless the proposal named the writes.
+   - `ready-for-agent`: check the authoritative body for confirmed scope and testable acceptance criteria. Use [ISSUE-DESCRIPTION.md](ISSUE-DESCRIPTION.md) for any draft or update. For a PR without a governing issue, use its PR body instead. Stop if requirements or approval for necessary edits are missing. Apply approved body edits before setting the role, and post a pointer comment using [AGENT-BRIEF.md](AGENT-BRIEF.md).
+   - `ready-for-human`: use the same body guide and pointer brief. Note the action that needs a human, such as manual testing, a judgment call, or merging a verified PR.
    - `needs-info`: post triage notes (template below).
-   - For `wontfix`, close the issue, with the comment depending on *why*:
-     - **Already implemented**: the change already exists in the codebase. Point to where it lives; do **not** write to `.out-of-scope/` (that KB is for *rejected* requests, not built ones).
-     - **Rejected (bug)**: give a polite explanation, then close.
-     - **Rejected (enhancement)**: write to `.out-of-scope/`, link to it from a comment, then close ([OUT-OF-SCOPE.md](OUT-OF-SCOPE.md)).
+   - For `wontfix`, get explicit approval for the exact outcome, including the role change, closure, comment, and any repository edit. Apply the approved changes according to *why*:
+     - **Already implemented**: point to where the behavior exists and close the triaged item. Record only rejections in `.out-of-scope/`.
+     - **Rejected (bug)**: explain why and close the triaged item.
+     - **Rejected (enhancement)**: update `.out-of-scope/`, link to it from a comment, and close the triaged item ([OUT-OF-SCOPE.md](OUT-OF-SCOPE.md)).
    - `needs-triage`: apply the role. Optional comment if there's partial progress.
 
 ## Quick state override
 
-If the maintainer says "move #42 to ready-for-agent", skip grilling and check the authoritative body for confirmed scope and testable acceptance criteria. If it is missing requirements or conflicts with confirmed discussion, present the required body edit and ask for approval before marking it ready. Otherwise confirm the role change and any pointer brief, then act.
+If the maintainer says "move #42 to ready-for-agent", skip grilling and check the authoritative body for confirmed scope and testable acceptance criteria. If it is missing requirements or conflicts with confirmed discussion, present the required body edit and ask for approval before marking it ready. Use step 5 to confirm and apply the role change, any body edit, and the pointer brief; the override skips grilling, not write approval.
+
+## Start implementation only on request
+
+Triage ends at the requested evaluation or state update by default. When the operator explicitly asks to start implementation on an issue, follow the [shared implementation handoff preflight](IMPLEMENTATION-HANDOFF.md) without ranking the queue. For “triage #42 and start it if ready,” finish the requested triage first and proceed only if it establishes readiness for agent implementation. A PR triage outcome does not launch issue implementation.
 
 ## Needs-info template
 

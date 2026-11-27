@@ -70,7 +70,7 @@ agent=claude-code  # or opencode, pi, or another supported agent ID
 npx skills@latest add mattpocock/skills --global --agent "$agent" --skill grilling domain-modeling prototype
 ```
 
-Install only those upstream skills with this command. `triage`, `to-tickets`, `research`, `pr`, and `handoff` share names with upstream; don't install both copies. The skills here expect this repo's versions when they call each other.
+Install only those upstream skills with this command. `triage`, `to-tickets`, `research`, `pr`, and `handoff` share names with upstream; don't install both copies. The skills here expect this repo's versions when they call each other. For a selective install, include `triage` alongside `managing-projects` for its shared tracker references; `triage` does not require `managing-projects`.
 
 #### Agent profiles
 
@@ -138,7 +138,8 @@ Expect a step-by-step example that shows why Git reports both kinds of changes a
 
 - **Clarify an idea before writing code.** [`grill-with-research`](skills/productivity/grill-with-research/SKILL.md) turns a rough idea into a scoped task with testable acceptance criteria. Use [`roast-me`](skills/productivity/roast-me/SKILL.md) to challenge the choices behind an existing design.
 - **Make a focused, reviewable change.** [`clinical-change`](skills/productivity/clinical-change/SKILL.md) keeps the diff focused, [`commit`](skills/engineering/commit/SKILL.md) splits work into atomic commits, and [`pr`](skills/engineering/pr/SKILL.md) writes the pull request body.
-- **Decide what to work on next.** [`managing-projects`](skills/engineering/managing-projects/SKILL.md) ranks next actions, [`triage`](skills/engineering/triage/SKILL.md) prepares incoming issues, and [`to-tickets`](skills/engineering/to-tickets/SKILL.md) splits a plan into issues with dependencies.
+- **Evaluate incoming work.** [`triage`](skills/engineering/triage/SKILL.md) verifies issues and external PRs and determines their triage state. [`to-tickets`](skills/engineering/to-tickets/SKILL.md) splits a plan into issues with dependencies.
+- **Decide what to work on next.** [`managing-projects`](skills/engineering/managing-projects/SKILL.md) ranks next actions against competing priorities.
 - **Run an issue through implementation and review.** [`orchestrating`](skills/engineering/orchestrating/SKILL.md) takes one issue to a pull request. If you're moving between sessions yourself, use [`handoff`](skills/productivity/handoff/SKILL.md).
 
 See the [skill reference](#skill-reference) for the full list. Some workflows need [companion skills](#companion-skills).
@@ -226,8 +227,8 @@ Skills are grouped by who they serve. Within each group, **operator-invoked** sk
 
 **Model-invoked**
 
-- **[managing-projects](skills/engineering/managing-projects/SKILL.md)**: Ranks priorities, manages dependencies and duplicates, and picks the next issue with a brief for the orchestrator.
-- **[triage](skills/engineering/triage/SKILL.md)**: Moves issues and external PRs through triage roles and writes agent-ready briefs.
+- **[managing-projects](skills/engineering/managing-projects/SKILL.md)**: Ranks priorities, manages dependencies and duplicates, and prepares a handoff for work the operator chooses to start.
+- **[triage](skills/engineering/triage/SKILL.md)**: Evaluates issues and external PRs and prepares them for the appropriate triage state. Hands off an issue for implementation only on explicit request.
 - **[to-tickets](skills/engineering/to-tickets/SKILL.md)**: Splits a plan into tracer-bullet issues with blocking edges.
 
 ### Productivity

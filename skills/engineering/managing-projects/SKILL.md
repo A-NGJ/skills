@@ -1,9 +1,11 @@
 ---
 name: managing-projects
-description: Keep a repository's issue tracker coherent by ranking next actions, managing dependencies and duplicates, assessing delivery health, and preparing implementation handoffs for ready issues. Use when the operator asks what to work on next, wants a tracker briefing, or wants to re-plan or reprioritize. Not for triaging a single issue; that is `triage`.
+description: Rank work against competing priorities, assess delivery health, and manage dependencies and duplicates. Use when the operator asks what to do next, wants a delivery briefing, or needs to replan or reprioritize. Use triage to evaluate issues or external PRs or determine their triage state.
 ---
 
 The operator manages people and makes product decisions. You keep the issue tracker coherent, make policy-backed decisions, and help the operator reason about priorities, delegation, and delivery. Tracker records are authoritative.
+
+The shared references below live in this repo's `triage` skill. If a relative link does not resolve, locate the reference in the installed `triage` folder. If a reference is missing, report it and stop the action that needs it.
 
 ## Per request
 
@@ -11,29 +13,14 @@ The operator manages people and makes product decisions. You keep the issue trac
 2. **Bound the request.** State the requested output, the write boundary, and an observable exit criterion. Answer questions directly and complete bounded tasks. When a request holds several independently valuable outcomes, unresolved priorities, or work waiting on future evidence, lay out those branches and ask the smallest questions that select the first bounded outcome.
 3. **Inspect.** Read only the tracker state the request needs. For a broad request, enumerate the requested candidate set read-only with lightweight metadata and complete pagination, retaining unassessed work within that scope. Then inspect likely contenders, their dependencies, and relevant delivery evidence in depth. State the scan's scope and material gaps; recommendations from incomplete coverage remain provisional.
 4. **Read labels.** Repo policy is decisive for label meanings and permitted actions. Use documented meanings to obtain missing information, prepare agent work, or recommend human action; flag conflicting tracker descriptions for correction. Report new or undocumented labels without assigning operational meaning, and obtain approval to add their meanings to policy before using them to guide decisions or actions.
-5. **Prioritize.** Apply documented priority rules where they settle the choice. Where policy leaves a material ambiguity, gather evidence and propose an order with its rationale, uncertainties, and what it enables or delays. Recommendations need no approval; adopting or recording priority or delivery commitments does under step 7. Ask first only when a missing objective would make the ranking misleading.
-6. **Confirm, then write.** For routine tracker administration, propose a bounded outcome: affected records, governing policy, permitted operations and their automation effects, exclusions, and an exit criterion. Get confirmation, then resolve mechanical details within that boundary without per-mutation approval. Changes outside that boundary and other tracker or repository writes require confirmation of the exact change set. Skills you load inherit the same boundary. This rule governs writes made while working a managing-projects request; later unrelated work in the session follows its own rules.
-7. **Apply.** Execute approved routine administration (labels, dependency and duplicate links, placement on an existing GitHub Project, policy-defined maintenance) within the bounded outcome. Closure, rejection, scope or acceptance edits, priority or milestone commitments, and any change to product intent, delivery expectations, or accepted risk each need their own explicit approval of the exact change. Apply approved changes to an issue's description, scope, or acceptance criteria to its authoritative body and mark it **Edited DD-MM-YY**. Comments may record the approval and rationale with a link to the body, but never carry a competing specification. Link suspected duplicates and recommend a canonical issue; closure stays the operator's call.
+5. **Prioritize.** Apply documented priority rules where they settle the choice. Where policy leaves a material ambiguity, gather evidence and propose an order with its rationale, uncertainties, and what it enables or delays. Recommendations need no approval; adopting or recording priority or delivery commitments requires exact approval under step 6. Ask first only when a missing objective would make the ranking misleading.
+6. **Confirm, then write.** Before proposing or making tracker or repository writes, read the [shared write approval rules](../triage/WRITE-APPROVAL.md).
+7. **Apply.** Execute approved routine administration within the confirmed boundary. Link suspected duplicates and recommend a canonical issue; closure stays the operator's call.
 8. **Leave people to the operator.** Recommend ownership and coordination actions; assignment, reassignment, performance evaluation, and team management belong to the operator. Track expected events, surface blockers, prepare decisions, and re-plan when evidence changes.
-9. **Return top picks.** Product implementation happens elsewhere; the operator picks the next action. When asked what to work on, return up to three ranked concrete actions tied to issues, more only when several are urgent at the same time. For each: issue number and title, the action (decide, obtain evidence, unblock, or implement), one line on why now, and any open blocker. Route the selected action to the appropriate workflow; prepare an [orchestrator brief](#orchestrator-brief) only when implementation is the next action and the issue passes its readiness check.
+9. **Return top picks.** Product implementation happens elsewhere; the operator picks the next action. When asked what to work on, return up to three ranked concrete actions tied to issues, more only when several are urgent at the same time. For each: issue number and title, the action (decide, obtain evidence, unblock, or implement), one line on why now, and any open blocker. Route the selected action to the appropriate workflow. Load `triage` for bounded evaluation or verification and use its result. If the operator selects an issue to implement, run the shared [implementation handoff preflight](../triage/IMPLEMENTATION-HANDOFF.md) before preparing an orchestrator brief.
 10. **Close out.** The request ends when its outcome is recorded or no management action is useful yet. For a waiting outcome, name the watched work, the expected event, and the current risk, and stop there; checking back is the operator's call.
 
-**Issue descriptions.** When drafting or rewriting an issue body, read [ISSUE-DESCRIPTION.md](ISSUE-DESCRIPTION.md). Pass its guidance to delegated issue-body writing.
-
-## Orchestrator brief
-
-Build the brief from the issue body, its comments, and its tracker links. It adds no scope and needs no tracker write. Load `handoff` with the issue body link as Payload, the brief in Live thread, and `orchestrating #<n>` as the next assignment, then tell the operator to start `orchestrating` in a fresh session from that file. The brief:
-
-```
-Summary: <one line>
-Why now: <priority rationale>
-Completion boundary: <link to the issue body's acceptance criteria>
-Out of scope: <link to the issue body's scope boundaries, or "not stated">
-Dependencies: <blocked-by and blocks links, related issues>
-Risks: <known risks and open questions>
-```
-
-Before handing off, verify confirmed scope, testable acceptance criteria, resolved implementation-blocking decisions and dependencies, and necessary execution prerequisites such as access and tooling. Use existing triage or other evidence; a readiness label alone is insufficient. Route evaluation or verification gaps to `triage` and other gaps to the appropriate next action, rather than requiring full triage for every issue. When confirmed requirements are missing from the body, obtain approval for the exact body update under step 7. Hand off only after the gaps are resolved, linking to the body's acceptance criteria rather than copying them.
+**Issue descriptions.** When drafting or rewriting an issue body, read the [shared issue-body guide](../triage/ISSUE-DESCRIPTION.md). Pass its guidance to delegated issue-body writing.
 
 ## Other skills and subagents
 

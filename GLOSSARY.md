@@ -13,7 +13,7 @@ The contract a skill passes inside a handoff document: one of the named briefs o
 _Avoid_: content, body
 
 **Orchestrator brief**:
-A payload that tells an orchestrator which issue to implement, why now, and its completion boundary quoted from the issue.
+Handoff context identifying the issue selected for implementation, why now, and the link to its completion boundary.
 _Avoid_: brief block, start prompt
 
 **Alignment gate**:
@@ -29,7 +29,7 @@ One ordered unit of an implementation plan, implemented by a fresh implementatio
 _Avoid_: subtask, phase
 
 **Agent brief**:
-A tracker comment that is the authoritative specification an AFK agent works from when an issue is ready for an agent.
+A tracker comment linking an agent to the authoritative issue or PR body and summarizing verification evidence and constraints.
 _Avoid_: spec comment, ticket brief
 
 **Converged summary**:

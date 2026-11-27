@@ -77,8 +77,8 @@ During triage (Step 1: Gather context), read all files in `.out-of-scope/`. When
 
 The maintainer may:
 
-- **Confirm**: the new issue gets added to the existing file's "Prior requests" list, then closed
-- **Reconsider**: the out-of-scope file gets deleted or updated, and the issue proceeds through normal triage
+- **Confirm**: propose adding the new issue to the existing file's "Prior requests" list and closing it
+- **Reconsider**: propose deleting or updating the out-of-scope file, and proceed through normal triage
 - **Disagree**: the issues are related but distinct, proceed with normal triage
 
 ## When to write to `.out-of-scope/`
@@ -89,17 +89,15 @@ Do **not** write here when something is closed as `wontfix` because it's **alrea
 
 The flow:
 
-1. Maintainer decides a feature request is out of scope
-2. Check if a matching `.out-of-scope/` file already exists
-3. If yes: append the new issue to the "Prior requests" list
-4. If no: create a new file with the concept name, decision, reason, and first prior request
-5. Post a comment on the issue explaining the decision and mentioning the `.out-of-scope/` file
-6. Close the issue with the `wontfix` label
+1. Maintainer decides a feature request is out of scope.
+2. Find a matching file to update, or draft a new one with the concept, decision, reason, and first prior request.
+3. Confirm the exact file edit, tracker comment, role change, and closure under [write approval](WRITE-APPROVAL.md).
+4. Apply the approved file edit, post the comment linking to it, apply `wontfix`, and close the triaged issue or PR.
 
 ## Updating or removing out-of-scope files
 
 If the maintainer changes their mind about a previously rejected concept:
 
-- Delete the `.out-of-scope/` file
+- Confirm the exact file deletion or update under [write approval](WRITE-APPROVAL.md) before applying it.
 - The skill does not need to reopen old issues; they're historical records
 - The new issue that triggered the reconsideration proceeds through normal triage
